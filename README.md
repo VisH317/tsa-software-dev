@@ -19,5 +19,20 @@
  * Backend - Flask/FastAPI for the AI processing, same or another for other features
  * Authentication - OAuth and normal auth through database
 
+**Organization:**
+The best way to organize the server would be in a microservices so we can develop and create each part separately for each of us
+Microservice divisions:
+ * Chat API websocket-based api
+ * database access api - separate service for users, doctors, and previous appointments
+ * AI processing API - can be done with AWS lambda to allocate resources and each in separate functions
+ * video call API - separate API using webRTC
+ * caching API - redis
+ * authentication API - OAuth and normal authentication separate microservices
+ * we can organize with Docker and Kubernetes
+
+Frontend Organization
+ * SvelteKit can handle organization for us
+
+
 **Extras:**
  * Web3 storage for prescription documents
