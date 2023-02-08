@@ -14,12 +14,10 @@ router.post("/auth/local", async (req, res, next) => {
                 const error = new Error("Error bruh")
                 return next(error)
             }
-            req.login(user, { session: false }, async (error) => {
-                if(error) return next(error)
-                const body = { _id: user._id, email: user.email, expiresIn: '12h' }
-                const token = jwt.sign({ user: body }, "SECRET_POG")
-                res.json({ token, user: req.user })
-            })
+            // req.login(user, { session: false }, async (error) => {
+            //     res.
+            // })
+            res.redirect()
         } catch(error) {return next(error)}
     })
 })
@@ -41,17 +39,19 @@ router.post("/auth/signup", async (req, res, next) => {
 router.get('/auth/logout', (req, res) => {
     req.session.destroy()
     req.logout()
+    res.redirect('/')
 })
 
-router.get("/auth/google", passport.authenticate('google', { scope: ['profile', 'email'], session: true}))
+router.get("/auth/google", passport.authenticate('google', { scope: ['profile', 'email']}))
 
 router.get("/auth/google/callback", passport.authenticate('google', { failureMessage: "/auth/google/err" }), (req, res) => {
-    const body = { _id: user._id, email: user.email, expiresIn: '12h' }
-    const token = jwt.sign({ user: body }, "SECRET_POG")
-    res.cookie('auth-token', token)
     res.redirect("/")
 })
 
-router.get("/auth/test", (req, res) => res.send("hola como estas"))
+router.get("/auth/test", passport.authorize('google'), (req, res) => res.send("hola como estas"))
+
+router.get('/', (req, res) => {
+    res.send(req.user)
+})
 
 module.exports = router

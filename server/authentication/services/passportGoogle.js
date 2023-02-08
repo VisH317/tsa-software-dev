@@ -9,11 +9,13 @@ passport.use(
         clientID: "832381466881-qv7vrcbf65h1kjmfvrr647oe6ob7u295.apps.googleusercontent.com",
         clientSecret: "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",
         callbackURL: "/auth/google/callback",
-        proxy: true
+        proxy: true,
     },
     async (accessToken, refreshToken, profile, done) => {
         const existingUser = await User.findOne({ googleId: profile.id })
-        if(existingUser) return done(null, user)
+        if(existingUser) {
+            return done(null, existingUser)
+        }
         
         const user = await new User({
             provider: 'google',
