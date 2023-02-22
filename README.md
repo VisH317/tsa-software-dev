@@ -36,3 +36,33 @@ Frontend Organization
 
 **Extras:**
  * Web3 storage for prescription documents
+
+**Our new idea:** A better version of google classroom that has a better student and teacher experience as well as lecture, test, and group work sessions
+
+**General Features and Improvements for Students:**
+ * Lecture mode: area where students can see and navigate lecture materials, take notes, and be monitored by teachers for involvement (questions and analysis features, surveys, checks for understanding, worksheets)
+ * Test mode: area where students can securely take tests and be monitored whenever the tab is changed for security (not like locked mode for google forms and integrated within the classroom website instead of separate)
+ * Group mode: easily able to organize work between groups by creating the groups online, setting up chats between students (can be monitored unlike others), participation monitoring
+ * Planning mode: calendars and to-do-list organization for each project individually
+ * Teacher contact: easily able to contact teachers through the app (given notifications for the teacher to respond quickly in a text format instead of emails, which are usually ignored after a certain amount of time)
+ * Chatbot for homework and concept help: thinking maybe an OpenAI API call or ChatGPT selenium worker to ask for information through chatgpt without giving the answer directly (maybe can only ask for general information as a prompt amendment)
+ * Hub: communication with other people in class and sharing of study materials through the website
+ * Rewards: measure of engagement and grades for analysis (teacher could implement a prize system)
+
+**Improvements for Teachers:**
+ * Lecture and content creation: access to previous content materials uploaded by other teachers, and organization of these materials to work in in-person and online cases
+ * Analysis: can monitor students and provide extra-help automatically when needed
+ * Lecture mode monitoring: can see students and how well they are performing
+
+_This is temporary!!!_ these ideas are currently scattered kinda all over the place, but we'd need some selling point that would bring all the ideas together, probably something like making hybrid learning smoother and easier integration of technology
+_Note:_ Our original plan was to include AI in this, and we don't have many ideas for that right now, which would be nice to implement
+
+**Feature Implementations: (btw microservices is still our best bet here prob)**
+ * Classrooms database: stores different classrooms including teachers, students, assignments (in respective categories)
+ * Lecture mode: websocket server with the `socket.io` rooms feature is probably our best bet, sends regular information to events based on the action that might have occurred and notify the teacher accordingly
+ * Chatbot: need to integrate OpenAI API (we might run out of API Calls), instead we can try ChatGPT with a selenium worker
+ * Hub: can use websocket messaging, if we want to integrate voice calls on the website we can do it through webRTC
+ * Teacher contact: more websocket messaging along with notifications on phone
+ * Group mode/Planning mode/Rewards: specific to students in each classroom
+ * Analysis: need to implement with a graphing and data analysis API probably
+ * Content creation: separate database that can be filtered by topic and subject
