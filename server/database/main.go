@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"github.com/gofiber/fiber/v2"
+	"github.com/VisH317/db/models"
 )
 
 // setup db connection string
