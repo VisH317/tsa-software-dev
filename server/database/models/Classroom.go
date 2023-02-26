@@ -8,10 +8,10 @@ import (
 
 type Classroom struct {
 	name string
-	teachers[] int
-	students[] int
-	materials[] Material
-	assignments[] Assignment
-	lectures[] Lecture
-	tests[] Test
+	teachers string
+	students[] string
+	// materials[] Material
+	// assignments[] Assignment
+	// lectures[] Lecture
+	// tests[] Test
 }

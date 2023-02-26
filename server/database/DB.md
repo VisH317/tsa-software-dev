@@ -7,6 +7,7 @@
  * Assignments:
    * Material: contains title, text, comments
      * Comments: user ref and text
+   * Lecture: stores name and notes for each student (later include dates and monitoring statistics)
    * Classwork/Homework: title, text, files, due date, attaching files for each person
    * Test: student records and progress (preferably websocket updated for monitoring and later pushed to a database)
    * Group assignment: groups list, title, text, files for each
@@ -29,4 +30,10 @@ _IMPORTANT:_ we're going to need a blob store to save the files sent by each (fo
  * Google classroom uses BigTable (similar to MongoDB bc its document oriented)
  * Probably we will stick to MongoDB just because of the difficulty of organizing this crazy amount of data as well as blob store links
  * Other options to look into
- * Postgres: always a solid option and the read and write consistency will be helpful (however not as important bc most of the important data will be coming from the blob store)
+ * Postgres: always a solid option and the read and write consistency will be helpful 
+
+**Routes:**
+ * Create, read, delete classrooms
+   * Add/remove students from classroom
+   * Create, read lectures
+     * Add note to lecture (once submitted by student)

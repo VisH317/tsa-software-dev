@@ -2,16 +2,15 @@ package main
 
 import (
 	"database/sql"
-	"github.com/lib/pq"
 	"fmt"
 	"log"
 	"os"
 	"github.com/gofiber/fiber/v2"
-	"github.com/VisH317/db/models"
+	_ "github.com/lib/pq"
 )
 
 // setup db connection string
-var connStr = "postgresql://<username to be configured>:<pw to be configured>@localhost:5432/classroom"
+var connStr = "postgresql://postgres:password@localhost:5432/classroom?sslmode=disable"
 
 
 func main() {
@@ -26,6 +25,28 @@ func main() {
 	// test route
 	app.Get("/test", func(c *fiber.Ctx) error {
 		return c.SendString("hello")
+	})
+
+	// classroom CRUD routes
+	app.Post("/api/classes/create", func(c *fiber.Ctx) error {
+		return createClass(c, db)
+	})
+
+	app.Get("/api/classes/get", func(c *fiber.Ctx) error {
+		return getClasses(c, db)
+	})
+
+	app.Delete("/api/classes/delete", func(c *fiber.Ctx) error {
+		return deleteClass(c, db)
+	})
+
+	// student update routes
+	app.Post("/api/classes/students/add", func(c *fiber.Ctx) error {
+		return addStudent(c, db)
+	})
+
+	app.Delete("/api/classes/students/remove", func(c *fiber.Ctx) error {
+		return deleteStudent(c, db)
 	})
 
 	port :=  os.Getenv("PORT")
