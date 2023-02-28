@@ -1,19 +1,17 @@
 \c classroom;
 
 -- CREATE USER classroom;
--- CREATE DATABSE IF NOT EXISTS classroom;
+-- CREATE DATABASE IF NOT EXISTS classroom;
 -- GRANT ALL PRIVILEGES ON DATABASE classroom TO classroom;
 
 
 -- GRANT ALL ON SCHEMA public TO public;
 
-
-
-create table classes if not exists (
+create table classes (
     id serial primary key,
     name varchar(255),
     teacher varchar(255),
-    students text[],
+    students text[]
 );
 
 -- MATERIALS FOR EACH CLASS
@@ -26,22 +24,22 @@ create table classes if not exists (
 
 -- )
 
--- create table lectures if not exists (
---     id serial primary key,
---     classID int,
---     name varchar(255),
---     description text,
---     materialURL text,
---     foreign key (classID) references classes(id)
--- );
+create table lectures (
+    id serial primary key,
+    classID int,
+    name varchar(255),
+    description text,
+    materialURL text,
+    foreign key (classID) references classes(id)
+);
 
--- create table notes if not exists (
---     id serial primary key,
---     lectureID int,
---     title varchar(255),
---     content text,
---     foreign key (lectureID) references lectures(id)
--- );
+create table notes (
+    id serial primary key,
+    lectureID int,
+    title varchar(255),
+    content text,
+    foreign key (lectureID) references lectures(id)
+);
 
 -- create table TESTS if not exists (
     
