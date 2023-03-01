@@ -6,12 +6,13 @@ import (
 	"database/sql"
 	"github.com/gofiber/fiber/v2"
 	"github.com/lib/pq"
+	"fmt"
 )
 
 type Classroom struct {
-	name string
-	teachers string
-	students[] string
+	Nm string
+	Teachers string
+	Students[] string
 	// materials[] Material
 	// assignments[] Assignment
 	// lectures[] Lecture
@@ -24,8 +25,11 @@ func createClass(c *fiber.Ctx, db *sql.DB) error {
 	if err:=c.BodyParser(&newClass); err!=nil {
 		return c.SendString(err.Error())
 	}
+	fmt.Println("name: ",newClass.Nm)
+	fmt.Println("teachers: ",newClass.Teachers)
+	fmt.Println(newClass.Students)
 	// later: check for empty students and insert empty array automatically
-	_, err := db.Exec("INSERT into classes VALUES($1, $2, $3)", newClass.name, newClass.teachers, pq.Array(newClass.students))
+	_, err := db.Exec("INSERT into classes VALUES($1, $2, $3)", newClass.Nm, newClass.Teachers, pq.Array(newClass.Students))
 	if err!=nil {c.SendString(err.Error())}
 	
 	return c.Redirect("/")

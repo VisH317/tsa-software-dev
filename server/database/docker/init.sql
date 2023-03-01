@@ -9,8 +9,8 @@
 
 create table classes (
     id serial primary key,
-    name varchar(255),
-    teacher varchar(255),
+    nm text,
+    teacher text,
     students text[]
 );
 
