@@ -29,7 +29,7 @@ func createClass(c *fiber.Ctx, db *sql.DB) error {
 	fmt.Println("teachers: ",newClass.Teachers)
 	fmt.Println(newClass.Students)
 	// later: check for empty students and insert empty array automatically
-	_, err := db.Exec("INSERT into classes VALUES($1, $2, $3)", newClass.Nm, newClass.Teachers, pq.Array(newClass.Students))
+	_, err := db.Exec("INSERT into classes (nm, teacher, students) VALUES($1, $2, $3)", newClass.Nm, newClass.Teachers, pq.Array(newClass.Students))
 	if err!=nil {c.SendString(err.Error())}
 	
 	return c.Redirect("/")

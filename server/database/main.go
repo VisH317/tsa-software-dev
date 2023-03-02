@@ -28,15 +28,15 @@ func main() {
 	})
 
 	// classroom CRUD routes
-	app.Post("/api/classes/create", func(c *fiber.Ctx) error {
+	app.Post("/api/classes", func(c *fiber.Ctx) error {
 		return createClass(c, db)
 	})
 
-	app.Get("/api/classes/get", func(c *fiber.Ctx) error {
+	app.Get("/api/classes", func(c *fiber.Ctx) error {
 		return getClasses(c, db)
 	})
 
-	app.Delete("/api/classes/delete", func(c *fiber.Ctx) error {
+	app.Delete("/api/classes", func(c *fiber.Ctx) error {
 		return deleteClass(c, db)
 	})
 
