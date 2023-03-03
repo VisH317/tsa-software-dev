@@ -34,6 +34,7 @@ _IMPORTANT:_ we're going to need a blob store to save the files sent by each (fo
 
 **Routes:**
  * Create, read, delete classrooms
+   * Get all classrooms for teacher and for student
    * Add/remove students from classroom
    * Create, read lectures
      * Add note to lecture (once submitted by student)
