@@ -41,11 +41,11 @@ func main() {
 	})
 
 	// student update routes
-	app.Post("/api/classes/students/add", func(c *fiber.Ctx) error {
+	app.Post("/api/classes/students", func(c *fiber.Ctx) error {
 		return addStudent(c, db)
 	})
 
-	app.Delete("/api/classes/students/remove", func(c *fiber.Ctx) error {
+	app.Delete("/api/classes/students", func(c *fiber.Ctx) error {
 		return deleteStudent(c, db)
 	})
 

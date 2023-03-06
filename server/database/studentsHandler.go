@@ -20,7 +20,7 @@ func addStudent(c *fiber.Ctx, db *sql.DB) error {
 	}
 	fmt.Println(student.Stud)
 	fmt.Println(student.Class)
-	_, err := db.Exec("update classes set students = array_append(students, $1) where id =$2", student.Stud, student.Class)
+	_, err := db.Exec("UPDATE classes SET students = ARRAY_APPEND(students, $1) where id = $2;", student.Stud, student.Class)
 	if err!=nil {
 		c.SendString(err.Error())
 	}
@@ -31,10 +31,10 @@ func addStudent(c *fiber.Ctx, db *sql.DB) error {
 func deleteStudent(c *fiber.Ctx, db *sql.DB) error {
 	student := Student{}
 	if err := c.BodyParser(&student); err!=nil {
-		c.SendString("error parsing request body")
+		c.SendString("error")
 	}
 
-	_, err := db.Exec("update classes set students = array_remove(students, $1) where id = $2", student.Stud, student.Class)
+	_, err := db.Exec("UPDATE classes SET students = array_remove(students, $1) where id = $2", student.Stud, student.Class)
 	if err!=nil {
 		c.SendString("db error")
 	}

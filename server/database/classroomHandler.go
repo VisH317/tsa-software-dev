@@ -11,7 +11,7 @@ import (
 
 type Classroom struct {
 	Nm string
-	Teachers string
+	Teacher string
 	Students[] string
 	// materials[] Material
 	// assignments[] Assignment
@@ -26,10 +26,10 @@ func createClass(c *fiber.Ctx, db *sql.DB) error {
 		return c.SendString(err.Error())
 	}
 	fmt.Println("name: ",newClass.Nm)
-	fmt.Println("teachers: ",newClass.Teachers)
+	fmt.Println("teachers: ",newClass.Teacher)
 	fmt.Println(newClass.Students)
 	// later: check for empty students and insert empty array automatically
-	_, err := db.Exec("INSERT into classes (nm, teacher, students) VALUES($1, $2, $3)", newClass.Nm, newClass.Teachers, pq.Array(newClass.Students))
+	_, err := db.Exec("INSERT into classes (nm, teacher, students) VALUES($1, $2, $3)", newClass.Nm, newClass.Teacher, pq.Array(newClass.Students))
 	if err!=nil {c.SendString(err.Error())}
 	
 	return c.Redirect("/")
@@ -37,7 +37,7 @@ func createClass(c *fiber.Ctx, db *sql.DB) error {
 
 func getClasses(c *fiber.Ctx, db *sql.DB) error {
 	user := c.Query("user")
-	rows, err := db.Query("SELECT * FROM classes WHERE teacher=$1", user)
+	rows, err := db.Query("SELECT nm, teacher, students FROM classes WHERE teacher=$1", user)
 	defer rows.Close()
 	if err!=nil {
 		return c.SendString("error fetching query")
@@ -46,8 +46,12 @@ func getClasses(c *fiber.Ctx, db *sql.DB) error {
 	var classes[] Classroom
 
 	for rows.Next() {
-		var cl Classroom
-		rows.Scan(&cl)
+		var nm string
+		var teacher string
+		var students []string
+		rows.Scan(&nm, &teacher, (*pq.StringArray)(&students))
+		fmt.Println("students:", students)
+		cl := Classroom{nm, teacher, students}
 		classes = append(classes, cl)
 	}
 
