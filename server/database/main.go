@@ -40,6 +40,10 @@ func main() {
 		return deleteClass(c, db)
 	})
 
+	app.Get("api/classes/id", func(c *fiber.Ctx) error {
+		return getClassByID(c, db)
+	})
+
 	// student update routes
 	app.Post("/api/classes/students", func(c *fiber.Ctx) error {
 		return addStudent(c, db)

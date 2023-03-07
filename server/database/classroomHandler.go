@@ -58,6 +58,26 @@ func getClasses(c *fiber.Ctx, db *sql.DB) error {
 	return c.JSON(classes)
 }
 
+func getClassByID(c *fiber.Ctx, db *sql.DB) error {
+	id := c.Query("id")
+	rows, err := db.Query("SELECT nm, teacher, students FROM classes WHERE id=$1", id)
+	if err!=nil {
+		fmt.Println(err)
+	}
+
+	var class Classroom
+
+	for rows.Next() {
+		var nm string
+		var teacher string
+		var students []string
+		rows.Scan(&nm, &teacher, &students)
+		class = Classroom{nm, teacher, students}
+	}
+
+	return c.JSON(class)
+}
+
 // delete a class - requires to pass a query string named class that has the class id from the database
 func deleteClass(c *fiber.Ctx, db *sql.DB) error {
 	class := c.Query("class")

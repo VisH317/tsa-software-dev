@@ -25,3 +25,7 @@ _Summary:_ a feature of the classroom website where teachers can initialize lect
  * Students:
    * ask questions posed to teacher (or chatbot to answer [in separate microservice])
    * take notes for saving later
+
+**Creating and Deleting Rooms:**
+ * Create a lecture: takes the userID of the teacher and creates a UUID for the thing and adds to redis
+ * Delete a lecture: checks for userID of the teacher and removes from redis - emit event to everyone in room to leave
