@@ -23,7 +23,7 @@ io.on('connection', function (socket) {
 
     // question creation
 
-    questions(socket, client)
+    questions(io, socket, client)
 
     // TODOS: handlers for student asking questions, handler for teacher asking question, handler for adding materials (text for now)
     // Analysis updates

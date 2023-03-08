@@ -1,5 +1,5 @@
 //types
-import type { Socket } from "socket.io"
+import type { Server, Socket } from "socket.io"
 import type { Lecture } from "../types"
 
 // imports
@@ -8,16 +8,36 @@ import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDa
 import { convertToLectureType } from "../redis"
 
 
-export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client: RedisClientType): void => {
+export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
     socket.on("createTeacherQuestion", async (userEmail: string, classroomID: string, questionPrompt: string) => {
-        const isTeacher: boolean = await checkTeacher(userEmail, classroomID)
-        if(!isTeacher) {
-            socket.emit('unauthorized')
-            return
-        }
+        if(!await checkTeacher(socket, userEmail, classroomID)) return
+        
+        socket.to(classroomID).emit("receiveTeacherQuestion", questionPrompt)
+        //io.sockets[lecture.socketID].emit("sendTeacherQuestion", questionPrompt)
+    })
+
+    socket.on("answerTeacherQuestion", async (userEmail: string, classroomID: string, questionAnswer: string) => {
+        if(!await checkStudent(socket, userEmail, classroomID)) return
+
 
         const res = await client.hGetAll(`classroom:lectures${classroomID}`)
         const lecture: Lecture = convertToLectureType(res)
         
+        io.sockets[lecture.socketID].emit("sendTeacherQuestionResponse", questionAnswer)
+    })
+
+    socket.on("createStudentQuestion", async (userEmail: string, classroomID: string, questionPrompt: string) => {
+        if(!await checkStudent(socket, userEmail, classroomID)) return
+
+        const res = await client.hGetAll(`classroom:lectures${classroomID}`)
+        const lecture: Lecture = convertToLectureType(res)
+
+        io.sockets[lecture.socketID].emit("receiveStudentQuestion", questionPrompt, socket.id)
+    })
+
+    socket.on("answerStudentQuestion", async (userEmail: string, classroomID: string, questionAnswer: string, socketID: string) => {
+        if(!await checkTeacher(socket, userEmail, classroomID)) return
+
+        io.sockets[socketID].emit("sendStudentQuestionResponse", questionAnswer)
     })
 }
