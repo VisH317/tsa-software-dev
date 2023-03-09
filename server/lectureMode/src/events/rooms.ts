@@ -10,16 +10,15 @@ export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, Inter
     socket.on("createRoom", async (userEmail: string, classroomID: string, name: string, description: string) => {
         if(!await checkTeacher(socket, userEmail, classroomID)) return
 
-        await client.hSet(`classroom:lectures:${classroomID}`, { teacher: userEmail, studentCount: 0, socketID: socket.id })
-        socket.join(classroomID)
-
-        const lecture: LecturePersist = {
-            classID: parseInt(classroomID),
+        const res = await axios.post("http://localhost:3000/api/lectures", {
+            classID: classroomID,
             name,
             description
-        }
+        })
+        const lectureID: number = res.data.lectureID
 
-        await axios.post("http://localhost:3000/api/lectures", lecture)
+        await client.hSet(`classroom:lectures:${classroomID}`, { teacher: userEmail, studentCount: 0, socketID: socket.id, lectureID  })
+        socket.join(classroomID)
     })
 
 
@@ -40,19 +39,22 @@ export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, Inter
     })
 
 
-    socket.on("leaveRoom", async (userEmail: string, classroomID: string, notes: Note) => {
+    socket.on("leaveRoom", async (userEmail: string, classroomID: string, title: string, content: string) => {
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
         await client.hIncrBy(`classroom:lectures:${classroomID}`, 'studentCount', -1)
         socket.leave(classroomID)
 
+        const lectureID: number = client.hGet(`classroom:lectures:${classroomID}`, 'lectureID')
+
         const note: Note = {
-            // unfinished
+            lectureID,
+            studentEmail: userEmail,
+            title,
+            content
         }
 
         // save the notes to the database
-        await axios.post("http://localhost:3000/api/notes", {
-
-        })
+        await axios.post("http://localhost:3000/api/notes", note)
     })
 }

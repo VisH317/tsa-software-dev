@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	_"github.com/lib/pq"
 	"fmt"
+	"time"
 )
 
 type Lecture struct {
@@ -13,6 +14,11 @@ type Lecture struct {
 	Name string
 	Description string
 	Isstopped bool
+	creationDate time.Time
+}
+
+type CreateLectureOutput struct {
+	LectureID int
 }
 
 func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
@@ -28,7 +34,18 @@ func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
-	return c.Redirect("/")
+	rows, err := db.Query("SELECT classID FROM lectures WHERE classid=$1 ORDER BY creationdate DESC", newLecture.ClassID)
+	if err!=nil {
+		fmt.Println(err)
+	}
+
+	var lectureID int
+
+	rows.Next()
+	rows.Scan(&lectureID)
+	ret := CreateLectureOutput{lectureID}	
+
+	return c.JSON(ret)
 }
 
 func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
@@ -37,7 +54,7 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 		class := c.Query("class", "")
 		if class=="" {fmt.Println("Something went wrong")}
 
-		rows, err := db.Query("SELECT id, classID, name, description, isstopped FROM lectures WHERE classid=$1", class)
+		rows, err := db.Query("SELECT id, classID, name, description, isstopped, creationdate FROM lectures WHERE classid=$1", class)
 		if err!=nil {
 			fmt.Println(err)
 		}
@@ -50,14 +67,15 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 			var name string
 			var description string
 			var isStopped bool
-			rows.Scan(&id, &classID, &name, &description, &isStopped)
-			l := Lecture{id, classID, name, description, isStopped}
+			var creationDate time.Time
+			rows.Scan(&id, &classID, &name, &description, &isStopped, &creationDate)
+			l := Lecture{id, classID, name, description, isStopped, creationDate}
 			lectures = append(lectures, l)
 		}
 
 		return c.JSON(lectures)
 	} else {
-		rows, err := db.Query("SELECT id, classID, name, description FROM lectures WHERE id=$1", id)
+		rows, err := db.Query("SELECT id, classID, name, description, isstopped, creationdate FROM lectures WHERE id=$1", id)
 		if err!=nil {
 			fmt.Println(err)
 		}
@@ -69,8 +87,9 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 			var name string
 			var description string
 			var isStopped bool
-			rows.Scan(&id, &classID, &name, &description, &isStopped)
-			l := Lecture{id, classID, name, description, isStopped}
+			var creationDate time.Time
+			rows.Scan(&id, &classID, &name, &description, &isStopped, &creationDate)
+			l := Lecture{id, classID, name, description, isStopped, creationDate}
 			lectures = append(lectures, l)
 		}
 

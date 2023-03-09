@@ -10,7 +10,8 @@ export default async () => {
         await client.ft.create('idx:lectures', {
             teacher: SchemaFieldTypes.TEXT,
             studentCount: SchemaFieldTypes.NUMERIC,
-            socketID: SchemaFieldTypes.TEXT
+            socketID: SchemaFieldTypes.TEXT,
+            lectureID: SchemaFieldTypes.NUMERIC
         }, {
             ON: "HASH",
             PREFIX: "classroom:lectures"

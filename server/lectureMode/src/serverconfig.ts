@@ -1,5 +1,3 @@
-import type { Note } from "./types"
-
 export interface ServerToClientEvents {
     // room management & error events
     roomClosed: () => void
@@ -23,7 +21,7 @@ export interface ClientToServerEvents {
     createRoom: (userEmail: string, classroomID: string, name: string, description: string) => void
     deleteRoom: (userEmail: string, classroomID: string) => void
     joinRoom: (userEmail: string, classroomID: string) => void
-    leaveRoom: (userEmail: string, classroomID: string, notes: Note) => void
+    leaveRoom: (userEmail: string, classroomID: string, title: string, content: string) => void
 
     // teacher questions
     createTeacherQuestion: (userEmail: string, classroomID: string, questionPrompt: string) => void

@@ -26,11 +26,12 @@ create table classes (
 
 create table lectures (
     id serial primary key,
-    classid int,
-    name varchar(255),
-    description text,
-    isstopped boolean,
+    classid INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    isstopped BOOLEAN,
     --materialURL text,
+    creationdate DATE NOT NULL DEFAULT CURRENT_DATE,
     foreign key (classID) references classes(id)
 );
 

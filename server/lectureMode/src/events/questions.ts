@@ -21,7 +21,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
 
 
         const res = await client.hGetAll(`classroom:lectures${classroomID}`)
-        const lecture: Lecture = convertToLectureType(res)
+        const lecture: Lecture = convertToLectureType(res.data)
         
         io.sockets[lecture.socketID].emit("sendTeacherQuestionResponse", questionAnswer)
     })
@@ -30,7 +30,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
         const res = await client.hGetAll(`classroom:lectures${classroomID}`)
-        const lecture: Lecture = convertToLectureType(res)
+        const lecture: Lecture = convertToLectureType(res.data)
 
         io.sockets[lecture.socketID].emit("receiveStudentQuestion", questionPrompt, socket.id)
     })
