@@ -26,17 +26,19 @@ create table classes (
 
 create table lectures (
     id serial primary key,
-    classID int,
+    classid int,
     name varchar(255),
     description text,
-    materialURL text,
+    isstopped boolean,
+    --materialURL text,
     foreign key (classID) references classes(id)
 );
 
 create table notes (
     id serial primary key,
-    lectureID int,
-    title varchar(255),
+    lectureid int,
+    studentemail text,
+    title text,
     content text,
     foreign key (lectureID) references lectures(id)
 );

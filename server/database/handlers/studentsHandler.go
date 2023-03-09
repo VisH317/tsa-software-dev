@@ -13,7 +13,7 @@ type Student struct {
 }
 
 // accepts student ID (from mongodb) and class ID and appends to array of students for class
-func addStudent(c *fiber.Ctx, db *sql.DB) error {
+func AddStudent(c *fiber.Ctx, db *sql.DB) error {
 	student := Student{}
 	if err := c.BodyParser(&student); err!=nil {
 		c.SendString(err.Error())
@@ -28,7 +28,7 @@ func addStudent(c *fiber.Ctx, db *sql.DB) error {
 	return c.Redirect("/")
 }
 
-func deleteStudent(c *fiber.Ctx, db *sql.DB) error {
+func DeleteStudent(c *fiber.Ctx, db *sql.DB) error {
 	student := Student{}
 	if err := c.BodyParser(&student); err!=nil {
 		c.SendString("error")

@@ -10,6 +10,7 @@ import (
 )
 
 type Classroom struct {
+	Id int
 	Nm string
 	Teacher string
 	Students[] string
@@ -20,7 +21,7 @@ type Classroom struct {
 }
 
 // create a class: requires the class name, teacher user id, and student user ids (pass as empty string if nothing)
-func createClass(c *fiber.Ctx, db *sql.DB) error {
+func CreateClass(c *fiber.Ctx, db *sql.DB) error {
 	newClass := Classroom{}
 	if err:=c.BodyParser(&newClass); err!=nil {
 		return c.SendString(err.Error())
@@ -35,9 +36,9 @@ func createClass(c *fiber.Ctx, db *sql.DB) error {
 	return c.Redirect("/")
 }
 
-func getClasses(c *fiber.Ctx, db *sql.DB) error {
+func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 	user := c.Query("user")
-	rows, err := db.Query("SELECT nm, teacher, students FROM classes WHERE teacher=$1", user)
+	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE teacher=$1", user)
 	defer rows.Close()
 	if err!=nil {
 		return c.SendString("error fetching query")
@@ -47,20 +48,21 @@ func getClasses(c *fiber.Ctx, db *sql.DB) error {
 
 	for rows.Next() {
 		var nm string
+		var id int
 		var teacher string
 		var students []string
-		rows.Scan(&nm, &teacher, (*pq.StringArray)(&students))
+		rows.Scan(&id, &nm, &teacher, (*pq.StringArray)(&students))
 		fmt.Println("students:", students)
-		cl := Classroom{nm, teacher, students}
+		cl := Classroom{id, nm, teacher, students}
 		classes = append(classes, cl)
 	}
 
 	return c.JSON(classes)
 }
 
-func getClassByID(c *fiber.Ctx, db *sql.DB) error {
+func GetClassByID(c *fiber.Ctx, db *sql.DB) error {
 	id := c.Query("id")
-	rows, err := db.Query("SELECT nm, teacher, students FROM classes WHERE id=$1", id)
+	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE id=$1", id)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -68,18 +70,19 @@ func getClassByID(c *fiber.Ctx, db *sql.DB) error {
 	var class Classroom
 
 	for rows.Next() {
+		var id int
 		var nm string
 		var teacher string
 		var students []string
-		rows.Scan(&nm, &teacher, &students)
-		class = Classroom{nm, teacher, students}
+		rows.Scan(&id, &nm, &teacher, &students)
+		class = Classroom{id, nm, teacher, students}
 	}
 
 	return c.JSON(class)
 }
 
 // delete a class - requires to pass a query string named class that has the class id from the database
-func deleteClass(c *fiber.Ctx, db *sql.DB) error {
+func DeleteClass(c *fiber.Ctx, db *sql.DB) error {
 	class := c.Query("class")
 	db.Exec("DELETE FROM classes WHERE id=$1", class)
 	return c.Redirect("/")

@@ -38,3 +38,9 @@ _IMPORTANT:_ we're going to need a blob store to save the files sent by each (fo
    * Add/remove students from classroom
    * Create, read lectures
      * Add note to lecture (once submitted by student)
+
+**Extra things if we are very extra:**
+ * Rate limiters pog
+ * Load balancer with channels
+ * OpenAPI spec
+ * logging lmao
