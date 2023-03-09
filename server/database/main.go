@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"github.com/gofiber/fiber/v2"
-	_ "github.com/lib/pq"
+	"time"
+
 	handlers "github.com/VisH317/db/handlers"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
+	"github.com/gofiber/fiber/v2/middleware/cache"
+	_ "github.com/lib/pq"
 )
 
 // setup db connection string
@@ -23,11 +27,26 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// middleware
+
+	app.Use(limiter.New(limiter.Config{
+		LimiterMiddleware: limiter.SlidingWindow{},
+		Max: 20,
+		Expiration: 3* time.Second,
+		LimitReached: func (c *fiber.Ctx) error {
+			return c.SendString("exceeded rate limit")
+		},
+	}))
+
+	app.Use(cache.New(cache.Config{
+		Expiration: 30 * time.Minute,
+		CacheControl: true,
+	}))
+	
 	// test route
 	app.Get("/test", func(c *fiber.Ctx) error {
 		return c.SendString("hello")
 	})
-
 	// classroom CRUD routes
 	app.Post("/api/classes", func(c *fiber.Ctx) error {
 		return handlers.CreateClass(c, db)

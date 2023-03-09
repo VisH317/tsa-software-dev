@@ -5,5 +5,5 @@ import (
 )
 
 func rateLimit(c *fiber.Ctx) error {
-	
+	return nil
 }

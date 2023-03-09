@@ -8,5 +8,18 @@ export interface Classroom {
 export interface Lecture {
     teacher: string,
     studentCount: number,
-    socketID: string
+    socketID: string,
+}
+
+export interface LecturePersist {
+    classID: number,
+    name: string,
+    description: string
+}
+
+export interface Note {
+    lectureID: number,
+    studentEmail: string,
+    title: string,
+    content: string
 }
