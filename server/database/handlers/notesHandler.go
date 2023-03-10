@@ -20,6 +20,8 @@ func CreateNote(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
+	fmt.Println("newnote: ",newNote)
+
 	_, err := db.Exec("INSERT INTO notes (lectureID, studentEmail, title, content) VALUES ($1, $2, $3, $4)", newNote.LectureID, newNote.StudentEmail, newNote.Title, newNote.Content)
 	if err!=nil {
 		fmt.Println(err)
@@ -53,6 +55,10 @@ func GetNote(c *fiber.Ctx, db *sql.DB) error {
 			n := Note{id, lectureid, studentemail, title, content}
 			notes = append(notes, n)
 		}
+
+		if len(notes)==0 {
+			return c.SendString("nothing")
+		}
 		return c.JSON(notes[0])
 	}
 
@@ -71,6 +77,10 @@ func GetNote(c *fiber.Ctx, db *sql.DB) error {
 		rows.Scan(&id, &lectureid, &studentemail, &title, &content)
 		n := Note{id, lectureid, studentemail, title, content}
 		notes = append(notes, n)
+	}
+
+	if len(notes)==0 {
+		c.SendString("nothing")
 	}
 	return c.JSON(notes)
 }

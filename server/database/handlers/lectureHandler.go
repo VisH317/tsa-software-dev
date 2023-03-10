@@ -2,18 +2,19 @@ package handlers
 
 import (
 	"database/sql"
-	"github.com/gofiber/fiber/v2"
-	_"github.com/lib/pq"
 	"fmt"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
+	_ "github.com/lib/pq"
 )
 
 type Lecture struct {
-	Id int
-	ClassID int
-	Name string
-	Description string
-	Isstopped bool
+	Id           int
+	ClassID      int
+	Name         string
+	Description  string
+	Isstopped    bool
 	creationDate time.Time
 }
 
@@ -30,12 +31,12 @@ func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
 	newLecture.Isstopped = false
 
 	_, err := db.Exec("INSERT INTO lectures (classID, name, description, isstopped) VALUES ($1, $2, $3, $4)", newLecture.ClassID, newLecture.Name, newLecture.Description, newLecture.Isstopped)
-	if err!=nil {
+	if err != nil {
 		fmt.Println(err)
 	}
 
 	rows, err := db.Query("SELECT classID FROM lectures WHERE classid=$1 ORDER BY creationdate DESC", newLecture.ClassID)
-	if err!=nil {
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -43,19 +44,24 @@ func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
 
 	rows.Next()
 	rows.Scan(&lectureID)
-	ret := CreateLectureOutput{lectureID}	
+	ret := CreateLectureOutput{lectureID}
 
 	return c.JSON(ret)
 }
 
 func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
-	id := c.Params("id", "")
-	if id=="" {
-		class := c.Query("class", "")
-		if class=="" {fmt.Println("Something went wrong")}
+	id := c.Query("id", "")
+	fmt.Println("id: ", id)
+	if id == "" {
+		class := c.Query("class", "brh")
+		fmt.Println("class: ", class)
+		if class == "" {
+			fmt.Println("Something went wrong")
+		}
 
 		rows, err := db.Query("SELECT id, classID, name, description, isstopped, creationdate FROM lectures WHERE classid=$1", class)
-		if err!=nil {
+		if err != nil {
+			fmt.Println("brh")
 			fmt.Println(err)
 		}
 
@@ -73,10 +79,14 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 			lectures = append(lectures, l)
 		}
 
+		if len(lectures)==0 {
+			return c.SendString("nothing")
+		}
 		return c.JSON(lectures)
 	} else {
 		rows, err := db.Query("SELECT id, classID, name, description, isstopped, creationdate FROM lectures WHERE id=$1", id)
-		if err!=nil {
+		if err != nil {
+			fmt.Println("classes")
 			fmt.Println(err)
 		}
 		var lectures []Lecture
@@ -93,6 +103,11 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 			lectures = append(lectures, l)
 		}
 
-		return c.JSON(lectures[0])
+		fmt.Println("Lectures: ",lectures)
+
+		if len(lectures)==0 {
+			return c.SendString("nothing")
+		}
+		return c.JSON(lectures)
 	}
 }

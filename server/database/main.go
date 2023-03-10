@@ -10,7 +10,7 @@ import (
 	handlers "github.com/VisH317/db/handlers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
-	"github.com/gofiber/fiber/v2/middleware/cache"
+	_"github.com/gofiber/fiber/v2/middleware/cache"
 	_ "github.com/lib/pq"
 )
 
@@ -38,10 +38,10 @@ func main() {
 		},
 	}))
 
-	app.Use(cache.New(cache.Config{
-		Expiration: 30 * time.Minute,
-		CacheControl: true,
-	}))
+	// app.Use(cache.New(cache.Config{
+	// 	Expiration: 30 * time.Minute,
+	// 	CacheControl: true,
+	// }))
 	
 	// test route
 	app.Get("/test", func(c *fiber.Ctx) error {
