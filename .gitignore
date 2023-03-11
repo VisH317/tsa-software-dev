@@ -5,3 +5,5 @@ server/authentication/keys
 dump.rdb
 downloads
 server/database/go.sum
+server/testMode/package-lock.json
+server/testMode/api/src/keys/keys.js

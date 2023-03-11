@@ -23,8 +23,9 @@ const getTestsForClassroom = async (classroomID: number): Promise<Test | null> =
 }
 
 
-export const getTestsById = async (id: string): Promise<Test | null> => {
+const getTestsById = async (id: string): Promise<Test | null> => {
     const test: Test | null = await Tests.findById(id)
     if(test===null) console.error("findbyid failed")
     return test
 }
+

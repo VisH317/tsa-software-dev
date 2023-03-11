@@ -2,7 +2,10 @@ import { createClient, SchemaFieldTypes } from "redis"
 import { Lecture } from "./types"
 
 export default async () => {
-    const client = createClient()
+
+    const url = 'redis://localhost:6340'
+
+    const client = createClient({ url })
 
     await client.connect()
 

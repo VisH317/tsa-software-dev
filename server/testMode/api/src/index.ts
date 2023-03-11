@@ -1,11 +1,15 @@
 import express, { Express, Request, Response } from 'express'
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
+import mongoose from 'mongoose'
+import bodyParser from 'body-parser'
+import routes from "./routes/routes"
+import keys from "./keys/keys.js"
+import { spawn } from "child_process"
+
+// create rate limiter cleanup process
 
 // mongodb
-const MONGO_URI = "placeholder"
 require("./models/testSchema")
-mongoose.connect(MONGO_URI, () => console.log("database connected"))
+mongoose.connect(keys.MongoURI)
 
 const app: Express = express()
 
@@ -13,8 +17,9 @@ const app: Express = express()
 app.use(bodyParser)
 
 // routes
+app.use("/api/tests/", routes)
 
-app.get("/api/simple_test", (req: Request, res: Response) => res.send("bruh"))
+//app.get("/api/simple_test", (req: Request, res: Response) => res.send("bruh"))
 
 const PORT: number = 5050
 
