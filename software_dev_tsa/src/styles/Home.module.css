@@ -11,7 +11,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 120px;
-  background: #27282c;
+  background: white;
 }
 
 .button {
@@ -143,4 +143,6 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
+  /* background-color: white;
+  color: white; */
 }

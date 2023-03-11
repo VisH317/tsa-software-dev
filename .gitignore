@@ -1,0 +1,13 @@
+server/authentication/node_modules
+server/authentication/package-lock.json
+node_modules
+server/authentication/keys
+dump.rdb
+downloads
+server/database/go.sum
+server/testMode/package-lock.json
+server/testMode/node_modules
+server/lectureMode/node_modules
+server/lectureMode/package-lock.json
+server/testMode/api/src/keys/keys.js
+software_dev_tsa/.next

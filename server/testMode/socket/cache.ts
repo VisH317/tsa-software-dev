@@ -3,7 +3,7 @@ import { Lecture } from "./types"
 
 export default async () => {
 
-    const url = 'redis://localhost:6341'
+    const url = 'redis://localhost:6342'
 
     const client = createClient({ url })
 
