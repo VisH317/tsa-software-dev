@@ -11,6 +11,7 @@ passport.use(
     },
     async (email, password, done) => {
         User.findOne({ email }, async (err, user) => {
+            console.log("hla como estas")
             if(!user) done(null, false)
 
             const validate = await user.isValidPassword(password)
