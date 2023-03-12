@@ -48,9 +48,9 @@ router.get("/auth/google/callback", passport.authenticate('google', { failureMes
     res.redirect("/")
 })
 
-router.get("/auth/test", passport.authorize('google'), (req, res) => res.send("hola como estas"))
+// router.get("/auth/test", passport.authorize('google'), (req, res) => res.send("hola como estas"))
 
-router.get('/', (req, res) => {
+router.get('/auth/current_user', (req, res) => {
     res.send(req.user)
 })
 
