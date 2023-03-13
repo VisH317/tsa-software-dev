@@ -7,6 +7,10 @@ const rewrites = () => {
       destination: "http://localhost:5000/auth/google"
     },
     {
+      source: "/auth/google/callback",
+      destination: "http://localhost:5000/auth/google/callback"
+    },
+    {
       source: "/auth/local",
       destination: "http://localhost:5000/auth/local"
     },

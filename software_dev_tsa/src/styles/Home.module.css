@@ -7,7 +7,7 @@
   width: 100%;
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   flex-wrap: wrap;
   gap: 120px;
@@ -21,7 +21,7 @@
   color: var(--color);
   border: 2px solid rgba(0, 0, 0, 0.5);
   border-radius: 4px;
-  text-shadow: 0 0 15px var(--color);
+  text-shadow: 0 0 15px vSar(--color);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.1rem;

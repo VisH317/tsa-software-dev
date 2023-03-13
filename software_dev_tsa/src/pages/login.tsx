@@ -35,9 +35,10 @@ export default function Login() {
       <br/>
       <label htmlFor="pw">Password:</label>
       <input type="password" id="pw" value={password} onChange={e => setPassword(e.target.value)}/>
+      <br/>
       <button type="submit">Submit</button>
     </form>
-    <button type="button" onClick={() => loginFunction()}>
+    <button type="button" onClick={() => loginFunction()} className={styles.button}>
       Login With Google
     </button>
   </div>

@@ -18,6 +18,7 @@ export default function Home() {
       <main className={styles.main}>
         <p>HELLO</p>
         <div className={styles.description}>
+          <p>DESCREIPTIOn</p>
         </div>
       </main>
     </>
