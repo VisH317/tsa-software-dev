@@ -44,8 +44,8 @@ export default function Navbar() {
     };
 
     return (
-    <AppBar position="static" sx={{backgroundColor: 'transparent', color: "#AC3B61", boxShadow: "none", width: "80%", marginLeft: "9%"}}>
-      <Container maxWidth="xl">
+    <AppBar position="static" sx={{backgroundColor: '#17252A', color: "#3aa5a9", boxShadow: "none", width: "100%"}}>
+      <Container maxWidth="xl" sx={{width: "70%", }}>
         <Toolbar disableGutters variant="dense">
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
@@ -97,7 +97,7 @@ export default function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu} sx={{color: "white"}}>
-                  <Typography textAlign="center" sx={{color: "#bab2b5"}}>{page}</Typography>
+                  <Typography textAlign="center" sx={{color: "#deb2f1"}}>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -161,7 +161,7 @@ export default function Navbar() {
                 </MenuItem>
               ))}
             </Menu> */}
-            <Button variant="contained" startIcon={<PersonIcon/>} sx={{backgroundColor: "#ac3b61"}}>
+            <Button variant="contained" startIcon={<PersonIcon/>} sx={{backgroundColor: "#2b7a78"}}>
               Sign In
             </Button>
           </Box>

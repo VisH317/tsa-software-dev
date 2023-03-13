@@ -22,18 +22,18 @@ export default function Home() {
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
       </Head>
-      <Box sx={{backgroundColor: "#eee2dc", height: "100vh"}}>
+      <Box sx={{backgroundColor: "white", height: "100vh"}}>
         <Navbar/>
         <Grid container spacing={1}>
-          <Grid item xs={6} sx={{display: "flex", width: "60%", justifyContent: "center", alignItems: "center", height: "90vh"}}>
-            <Stack sx={{width: "60%"}} spacing={3}>
-              <Typography variant="h3" sx={{fontSize: "40px", fontFamily: "'Titillium Web', sans-serif", fontWeight: "700", color: "#ac3b61"}}>WELCOME TO THIS THING</Typography>
+          <Grid item xs={6} sx={{display: "flex", width: "70%", justifyContent: "center", alignItems: "center", height: "90vh"}}>
+            <Stack sx={{width: "70%"}} spacing={3}>
+              <Typography variant="h3" sx={{fontSize: "50px", fontFamily: "'Titillium Web', sans-serif", fontWeight: "700", color: "#2b7a78"}}>WELCOME TO THIS THING</Typography>
               <Divider/>
-              <Typography variant="text" sx={{fontFamily: "'Titillium Web', sans-serif", color: "#e3b09a", fontWeight: "300"}}>lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet</Typography>
+              <Typography variant="text" sx={{fontFamily: "'Titillium Web', sans-serif", color: "#17252a", fontWeight: "300"}}>lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet</Typography>
               <Stack direction="row" spacing={2}>
                 <form onSubmit={() => console.log("empty for now")} style={{display: "flex", flexDirection: "row", flexWrap: "nowrap", width: "100%"}}>
                   <TextField id="outlined-basic" label="Email:" variant="outlined" sx={{backgroundColor: "white", borderRadius: "5px", width: "150%"}}/>
-                  <Button variant="contained" sx={{backgroundColor: "#4056a1", width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>}>
+                  <Button variant="contained" sx={{backgroundColor: "#2b7a78", width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>}>
                     Sign Up
                   </Button>
                 </form>
