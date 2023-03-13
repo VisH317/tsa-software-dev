@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu'
+import PersonIcon from '@mui/icons-material/Person';
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -43,7 +44,7 @@ export default function Navbar() {
     };
 
     return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{backgroundColor: 'transparent', color: "#AC3B61", boxShadow: "none", width: "80%", marginLeft: "9%"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters variant="dense">
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -95,8 +96,8 @@ export default function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page} onClick={handleCloseNavMenu} sx={{color: "white"}}>
+                  <Typography textAlign="center" sx={{color: "#bab2b5"}}>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -120,12 +121,12 @@ export default function Navbar() {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, color: "white" }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: '#bab2b5', display: 'block' }}
               >
                 {page}
               </Button>
@@ -133,7 +134,7 @@ export default function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {/* <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
@@ -159,7 +160,10 @@ export default function Navbar() {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
-            </Menu>
+            </Menu> */}
+            <Button variant="contained" startIcon={<PersonIcon/>} sx={{backgroundColor: "#ac3b61"}}>
+              Sign In
+            </Button>
           </Box>
         </Toolbar>
       </Container>
