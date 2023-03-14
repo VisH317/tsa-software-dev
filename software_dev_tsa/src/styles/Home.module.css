@@ -7,8 +7,9 @@
   width: 100%;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   /* justify-content: center; */
-  align-items: center;
+  /* align-items: center; */
   flex-wrap: wrap;
   gap: 120px;
   background: white;
@@ -138,11 +139,11 @@
 }
 .main {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
+  flex-direction: column; 
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* padding: 6rem; */
+  /* min-height: 100vh; */
   /* background-color: white;
   color: white; */
 }

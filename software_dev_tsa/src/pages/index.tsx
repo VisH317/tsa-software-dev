@@ -3,6 +3,10 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 
+// components
+import Navbar from '@/components/Nav/navbar'
+import { Box } from '@mui/material'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -16,10 +20,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <p>HELLO</p>
-        <div className={styles.description}>
-          <p>DESCREIPTIOn</p>
-        </div>
+        <Navbar/>
+        <Box sx={{width: "100px", backgroundColor: "blue"}}>
+          Hello
+        </Box>
       </main>
     </>
   )
