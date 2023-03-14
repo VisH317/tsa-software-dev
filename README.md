@@ -66,3 +66,21 @@ _Note:_ Our original plan was to include AI in this, and we don't have many idea
  * Group mode/Planning mode/Rewards: specific to students in each classroom
  * Analysis: need to implement with a graphing and data analysis API probably
  * Content creation: separate database that can be filtered by topic and subject
+
+
+**FRONTEND COMPONENT TODOS:**
+ * Landing:
+   * Navbar
+   * Main Image
+   * About/description
+ * Auth:
+   * Form for signup and login (form fields, submit button, text headers [placeholder])
+   * Buttons: submit, sign in/up with Google
+ * Dashboard:
+   * Cards for classrooms with specific setup (can use box or card, setup a grid)
+ * Class view:
+   * Navigation bar at top for assignments, lectures, tests
+   * For each: stack for display of assignments
+ * Assignment view:
+   * Title, description using typography
+   * Card for uploading and comments if time
