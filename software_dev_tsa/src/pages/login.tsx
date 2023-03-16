@@ -62,7 +62,11 @@ export default function Login() {
           </Button>
         </Grid>
         <Grid item xs={9} sx={{backgroundColor: colors.dark}}>
-          BRUH
+          <Stack direction="row" spacing={2}>
+            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
+            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
+            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
+          </Stack>
         </Grid>
       </Grid>
     </Box>
