@@ -15,6 +15,7 @@ import {
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person';
+import Link from 'next/link';
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -133,7 +134,7 @@ export default function Navbar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box /*sx={{ flexGrow: 0 }}*/>
             {/* <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -161,9 +162,11 @@ export default function Navbar() {
                 </MenuItem>
               ))}
             </Menu> */}
-            <Button variant="contained" startIcon={<PersonIcon/>} sx={{backgroundColor: "#2b7a78"}}>
-              Sign In
-            </Button>
+            <Link href="/login" style={{textDecoration: "none"}}>
+              <Button variant="contained" startIcon={<PersonIcon/>} sx={{backgroundColor: "#2b7a78", textDecoration: "none"}}>
+                Sign In
+              </Button>
+            </Link>
           </Box>
         </Toolbar>
       </Container>

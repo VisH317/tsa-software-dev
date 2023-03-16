@@ -3,8 +3,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from "react";
 
+
 import user, { loginLocal } from '../data/user'
 import { useAtom } from 'jotai'
+import colors from "../styles/colors"
+
+import Head from 'next/head';
+
+import { Grid, Box, TextField, Button, Typography, Divider, Avatar, Stack } from '@mui/material'
+import GoogleIcon from '@mui/icons-material/Google';
 
 
 export default function Login() {
@@ -25,22 +32,40 @@ export default function Login() {
     await loginLocal(email, password)
   }
 
+  const homeHandler = () => {
+    router.push("/")
+  }
 
   return (
-  <div className={styles.main}>
-    <h1>Login</h1>
-    <form onSubmit={localLogin}>
-      <label htmlFor="em">Email: </label>
-      <input type="email" id="em" value={email} onChange={e => setEmail(e.target.value)}></input>
-      <br/>
-      <label htmlFor="pw">Password:</label>
-      <input type="password" id="pw" value={password} onChange={e => setPassword(e.target.value)}/>
-      <br/>
-      <button type="submit">Submit</button>
-    </form>
-    <button type="button" onClick={() => loginFunction()} className={styles.button}>
-      Login With Google
-    </button>
-  </div>
+  <>
+    <Head>
+      <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
+    </Head>
+    <Box sx={{height: "101vh"}}>
+      <Grid container spacing={1} sx={{height: "100%"}}>
+        <Grid item xs={3} sx={{display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "space-around", height: '50%', marginTop: '1.25%', backgroundColor: colors.white}}>
+          <Stack direction="row" sx={{marginRight: "auto", marginLeft: "10%", alignItems: "center"}} onClick={homeHandler}>
+            <Avatar sx={{backgroundColor: colors.main}}>L</Avatar>
+            <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px"}}>Classroom</Typography>
+          </Stack>
+            <Typography variant="h2" sx={{fontFamily: "'Titillium Web', sans-serif"}}>Login</Typography>
+          <form onSubmit={localLogin} style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
+            <TextField type="email" id="em" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email:" sx={{width: "200%"}}></TextField>
+            <br/>
+            <TextField type="password" id="pw" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password:" sx={{width: "200%"}}/>
+            <br/>
+            <Button type="submit" variant="contained" sx={{width: "100%", height: "40px", backgroundColor: colors.main}}>Submit</Button>
+          </form>
+          <Divider style={{width: "90%"}}/>
+          <Button type="button" startIcon={<GoogleIcon/>} onClick={() => loginFunction()} variant="contained" sx={{backgroundColor: "#b7bdbb", color: "#111", fontSize: "20px", fontWeight: "700", fontFamily: "'Titillium Web', sans-serif", height: "10%", with: "50%", borderRadius: "12.5px", boxShadow: "1px 1px 4px #aaa"}}>
+            Login With Google
+          </Button>
+        </Grid>
+        <Grid item xs={9} sx={{backgroundColor: colors.dark}}>
+          BRUH
+        </Grid>
+      </Grid>
+    </Box>
+  </>
   );
 }
