@@ -7,23 +7,11 @@ const User = mongoose.model('users')
 
 const router = express.Router()
 
-router.post("/auth/local", async (req, res, next) => {
-    passport.authenticate("local", async (err, user, info) => {
-        try {
-            if(err || !user) {
-                const error = new Error("Error bruh")
-                return next(error)
-            }
-            // req.login(user, { session: false }, async (error) => {
-            //     res.
-            // })
-            res.redirect()
-        } catch(error) {return next(error)}
-    })
-})
+router.post("/auth/local", passport.authenticate("local"), (req, res) => res.redirect("/"))
 
 router.post("/auth/signup", async (req, res, next) => {
     const { username, password, email } = req.body
+    console.log("askdjfhwieufhskdjfhskdjfh")
     const existingUser = User.findOne({ email })
     if(existingUser) return next(null, false, { message: "already registered" })
     const user = await new User({
@@ -35,6 +23,8 @@ router.post("/auth/signup", async (req, res, next) => {
 
     res.json({ message: "signup success" })
 })
+
+router.get("/auth/signup", (req, res) => res.send("bruh"))
 
 router.get('/auth/logout', (req, res) => {
     req.session.destroy()

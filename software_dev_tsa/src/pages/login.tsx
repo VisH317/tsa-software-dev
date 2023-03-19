@@ -30,6 +30,7 @@ export default function Login() {
   const localLogin = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     await loginLocal(email, password)
+    router.push("/")
   }
 
   const homeHandler = () => {

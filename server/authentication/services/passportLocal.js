@@ -4,15 +4,15 @@ const mongoose = require('mongoose')
 
 const User = mongoose.model("users")
 
-passport.use(
-    new LocalStrategy({
+passport.use(new LocalStrategy({
         usernameField: "email",
         passwordField: "password",
     },
     async (email, password, done) => {
+        console.log("logging in pog")
         User.findOne({ email }, async (err, user) => {
             console.log("hla como estas")
-            if(!user) done(null, false)
+            if(!user) return done(null, false)
 
             const validate = await user.isValidPassword(password)
             if(!validate) return done(null, false)
