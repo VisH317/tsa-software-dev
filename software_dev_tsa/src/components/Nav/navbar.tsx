@@ -45,7 +45,7 @@ export default function Navbar() {
     };
 
     return (
-    <AppBar position="static" sx={{backgroundColor: '#17252A', color: "#3aa5a9", boxShadow: "none", width: "100%"}}>
+    <AppBar position="sticky" sx={{backgroundColor: '#17252A', color: "#3aa5a9", boxShadow: "none", width: "100%"}}>
       <Container maxWidth="xl" sx={{width: "70%", }}>
         <Toolbar disableGutters variant="dense">
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
