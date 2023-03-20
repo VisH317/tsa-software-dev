@@ -10,7 +10,20 @@ const keys =require('./keys/keys')
 
 require('./model/User')
 
-mongoose.connect(keys.MongoURI) 
+async function conn() {
+    console.log("hello")
+    await mongoose.connect(keys.MongoURI)
+    console.log("bruh")
+}
+
+mongoose.set("strictQuery", false)
+
+const options = {
+    socketTimeoutMS: 1000,
+    dbName: "TSAClassroom"
+}
+
+conn().catch(err => console.log(err))
 
 const app = express()
 
