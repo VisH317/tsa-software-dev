@@ -25,6 +25,8 @@ const options = {
 
 conn().catch(err => console.log(err))
 
+const User = mongoose.model('users')
+
 const app = express()
 
 // redis setup
@@ -59,6 +61,20 @@ app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
 app.use('/', require("./routes/routes"))
+// app.post("/auth/signup", async (req, res, next) => {
+//     const { username, password, email } = req.body
+//     console.log("askdjfhwieufhskdjfhskdjfh")
+//     const existingUser = User.findOne({ email })
+//     if(existingUser) return next(null, false, { message: "already registered" })
+//     const user = await new User({
+//         provider: "email",
+//         email,
+//         username,
+//         password
+//     }).save()
+
+//     res.json({ message: "signup success" })
+// })
 
 const PORT = 5000
 app.listen(PORT, () => console.log('server started'))

@@ -14,8 +14,7 @@ passport.use(new LocalStrategy({
             console.log("hla como estas")
             if(!user) return done(null, false)
 
-            const validate = await user.isValidPassword(password)
-            if(!validate) return done(null, false)
+            if(user.password!==password) return done(null, false)
 
             return done(null, user)
         }) 

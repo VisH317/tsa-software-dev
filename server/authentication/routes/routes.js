@@ -9,11 +9,11 @@ const router = express.Router()
 
 router.post("/auth/local", passport.authenticate("local"), (req, res) => res.redirect("/"))
 
-router.post("/auth/signup", async (req, res, next) => {
+router.post("/auth/signup", async (req, res) => {
     const { username, password, email } = req.body
     console.log("askdjfhwieufhskdjfhskdjfh")
-    const existingUser = User.findOne({ email })
-    if(existingUser) return next(null, false, { message: "already registered" })
+    const existingUser = await User.findOne({ email })
+    if(existingUser) return res.json({ message: "already registered bruh" })
     const user = await new User({
         provider: "email",
         email,
@@ -31,6 +31,8 @@ router.get('/auth/logout', (req, res) => {
     req.logout()
     res.redirect('/')
 })
+
+
 
 router.get("/auth/google", passport.authenticate('google', { scope: ['profile', 'email']}), (req, res) => res.redirect("/"))
 
