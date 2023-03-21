@@ -36,7 +36,7 @@ export default function Signup() {
                         <Avatar sx={{backgroundColor: colors.main}}>L</Avatar>
                         <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px", color: colors.dark}}>Classroom</Typography>
                     </Stack>
-                    <Typography variant="h2" sx={{fontFamily: "'Titillium Web', sans-serif", color: colors.main, height: "10%"}}>Sign Up</Typography>
+                    <Typography variant="h2" sx={{fontFamily: "'Titillium Web', sans-serif", color: colors.main, height: "10%", marginBottom: "50px"}}>Sign Up</Typography>
                     <form onSubmit={submitHandler} style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center", height: "30%"}}>
                         <TextField type="text" id="us" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username: " sx={{width: "300%"}}/>
                         <br/>
@@ -53,8 +53,8 @@ export default function Signup() {
                             <Avatar sx={{bgcolor: colors.main, height: 24, width: 24}}> </Avatar>
                         </Stack>
                     </Box>
-                    <Box sx={{width: "100%", backgroundColor: colors.light, flexGrow : "1", height: "10%", padding: "5% 5% 5% 5%"}}>
-                        <Typography variant="h3" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "5%", fontWeight: "700", marginRight: "5%"}}>Terms of Service:</Typography>
+                    <Box sx={{width: "100%", backgroundColor: colors.light, flexGrow : "1", height: "20%", padding: "5% 5% 7.5% 5%"}}>
+                        <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "5%", fontWeight: "700", marginRight: "5%"}}>Terms of Service:</Typography>
                         <br/>
                         <Typography variant="body1" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "5%", fontWeight: "300", width: "90%"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Typography>
                     </Box>

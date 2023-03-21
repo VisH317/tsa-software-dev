@@ -44,25 +44,27 @@ export default function Login() {
     </Head>
     <Box sx={{height: "101vh"}}>
       <Grid container spacing={1} sx={{height: "100%"}}>
-        <Grid item xs={3} sx={{display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "space-around", height: '50%', marginTop: '1.25%', backgroundColor: colors.white}}>
-          <Stack direction="row" sx={{marginRight: "auto", marginLeft: "10%", alignItems: "center"}} onClick={homeHandler}>
+        <Grid item xs={5} sx={{display: "flex", alignItems: "center", flexDirection: "column", justifyContent: "space-around", height: '50%', marginTop: '1.25%', backgroundColor: colors.white}}>
+          <Stack direction="row" sx={{marginRight: "auto", marginLeft: "10%", alignItems: "center", padding: "5%", marginTop: "30%"}} onClick={homeHandler}>
             <Avatar sx={{backgroundColor: colors.main}}>L</Avatar>
             <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px"}}>Classroom</Typography>
           </Stack>
-            <Typography variant="h2" sx={{fontFamily: "'Titillium Web', sans-serif"}}>Login</Typography>
+            <Typography variant="h2" sx={{fontFamily: "'Titillium Web', sans-serif", marginBottom: "30px"}}>Login</Typography>
           <form onSubmit={localLogin} style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
             <TextField type="email" id="em" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email:" sx={{width: "200%"}}></TextField>
             <br/>
             <TextField type="password" id="pw" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password:" sx={{width: "200%"}}/>
             <br/>
-            <Button type="submit" variant="contained" sx={{width: "100%", height: "40px", backgroundColor: colors.main}}>Submit</Button>
+            <Button type="submit" variant="contained" sx={{width: "100%", height: "40px", backgroundColor: colors.main, marginTop: "30px", marginBottom: "20px"}}>Submit</Button>
           </form>
+          <br/><br/>
           <Divider style={{width: "90%"}}/>
+          <br/><br/>
           <Button type="button" startIcon={<GoogleIcon/>} onClick={() => loginFunction()} variant="contained" sx={{backgroundColor: "#b7bdbb", color: "#111", fontSize: "20px", fontWeight: "700", fontFamily: "'Titillium Web', sans-serif", height: "10%", with: "50%", borderRadius: "12.5px", boxShadow: "1px 1px 4px #aaa"}}>
             Login With Google
           </Button>
         </Grid>
-        <Grid item xs={9} sx={{backgroundColor: colors.dark}}>
+        <Grid item xs={7} sx={{backgroundColor: colors.dark}}>
           <Stack direction="row" spacing={2}>
             <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
             <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>

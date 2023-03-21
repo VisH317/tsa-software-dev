@@ -13,7 +13,7 @@ interface User {
 
 const userCore = atom<User | {}>({})
 
-const user = atom((get) => get(userCore), async (get, set, action) => { 
+const user = atom((get) => get(userCore), async (get, set) => { 
     const res = await axios.get("http://localhost:3000/auth/current_user")
     set(userCore, res.data)
 })
@@ -37,7 +37,7 @@ const checkSignedIn = async(): Promise<boolean> => {
 }
 
 // hook to reroute if not signed in
-export function useUserBlock(usq: User, path: string = "/") {
+export function useUser(c: boolean, path: string = "/") {
     const [u, setu] = useAtom(user)
     const router = useRouter()
     const [loading, setLoading] = useState("false")
@@ -49,11 +49,12 @@ export function useUserBlock(usq: User, path: string = "/") {
             if(!isSignedIn) router.push(path)
             setLoading("complete")
         }
+        setu()
         console.log("called")
-        check()
+        if(c) check()
     }, [])
 
-    return loading
+    return [u, loading]
 }
 
 
