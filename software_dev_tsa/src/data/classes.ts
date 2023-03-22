@@ -19,8 +19,7 @@ const classes = atom(
 )
 
 export const createClass = async (name: string, teacher: string, students: string[]): Promise<void> => {
-    await axios.post("http://localhost:3000/api/classes", { name, teacher, students })
-    
+    await axios.post("http://localhost:3000/api/classes", { name, teacher, students }) 
 }
 
 export default classes

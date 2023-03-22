@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { atom, useAtom } from 'jotai'
+import { Atom, atom, useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 
@@ -28,8 +28,10 @@ export const signUp = async (username: string, email: string, password: string):
 }
 
 // signed in check helper function
-const checkSignedIn = async(): Promise<boolean> => {
-    if(Object.keys(user).length!==0) return true
+const checkSignedIn = async(u: User | {}): Promise<boolean> => {
+    console.log(u)
+    console.log(Object.keys(user.read))
+    if(Object.keys(user.read).length!==0) return true
     const res = await axios.get("/auth/current_user")
     console.log("User: ", res.data)
     if(Object.keys(res.data).length===0) return false
@@ -43,15 +45,16 @@ export function useUser(c: boolean, path: string = "/") {
     const [loading, setLoading] = useState("false")
 
     useEffect(() => {
-        async function check() {
+        async function check(u: User | {}) {
             setLoading("pending")
-            const isSignedIn: boolean = await checkSignedIn()
+            const isSignedIn: boolean = await checkSignedIn(u)
+            console.log(isSignedIn)
             if(!isSignedIn) router.push(path)
             setLoading("complete")
         }
         setu()
         console.log("called")
-        if(c) check()
+        if(c) check(u)
     }, [])
 
     return [u, loading]

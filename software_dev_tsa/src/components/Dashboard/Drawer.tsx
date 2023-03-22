@@ -21,6 +21,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import Head from 'next/head';
 
 import colors from '@/styles/colors';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 const drawerWidth = 240;
 
@@ -31,6 +32,8 @@ const openedMixin = (theme: Theme): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
+  backgroundColor: colors.dark,
+  color: colors.light
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -43,6 +46,8 @@ const closedMixin = (theme: Theme): CSSObject => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
+  backgroundColor: colors.dark,
+  color: colors.light
 });
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -116,37 +121,39 @@ export default function MiniDrawer() {
         <AppBar position="fixed" open={open} sx={{backgroundColor: colors.dark}}>
             <Toolbar>
             <IconButton
-                color="inherit"
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}
                 edge="start"
                 sx={{
                 marginRight: 5,
                 ...(open && { display: 'none' }),
+                color: colors.light
                 }}
             >
                 <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-                Mini variant drawer
+                {/* Mini variant drawer */}
             </Typography>
             </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} sx={{backgroundColor: colors.light}}>
             <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
+            <IconButton onClick={handleDrawerClose} sx={{color: colors.light}}>
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
             </DrawerHeader>
             <Divider />
             <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            {['Classes', 'To Do', 'Account'].map((text, index) => (
                 <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                     sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    transition: "0.25s",
+                    "&:hover": {backgroundColor: colors.main, opacity: "1", color: colors.main}
                     }}
                 >
                     <ListItemIcon
@@ -154,11 +161,13 @@ export default function MiniDrawer() {
                         minWidth: 0,
                         mr: open ? 3 : 'auto',
                         justifyContent: 'center',
+                        color: colors.white,
+
                     }}
                     >
                     {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                     </ListItemIcon>
-                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                    <ListItemText primary={<Typography variant={"body2"} sx={{fontFamily: "'Titillium Web', sans-serif", fontSize: "20px"}}>{text}</Typography>} sx={{ opacity: open ? 1 : 0, fontFamily: "'Titillium Web', sans-serif" }} />
                 </ListItemButton>
                 </ListItem>
             ))}
@@ -172,6 +181,8 @@ export default function MiniDrawer() {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    transition: "0.25s",
+                    "&:hover": {backgroundColor: colors.main, opacity: "1", color: colors.main}
                     }}
                 >
                     <ListItemIcon
@@ -179,11 +190,12 @@ export default function MiniDrawer() {
                         minWidth: 0,
                         mr: open ? 3 : 'auto',
                         justifyContent: 'center',
+                        color: colors.light
                     }}
                     >
                     {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                     </ListItemIcon>
-                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                    <ListItemText primary={<Typography variant={"body2"} sx={{fontFamily: "'Titillium Web', sans-serif", fontSize: "20px"}}>{text}</Typography>} sx={{ opacity: open ? 1 : 0, fontFamily: "'Titillium Web', sans-serif" }} />
                 </ListItemButton>
                 </ListItem>
             ))}
