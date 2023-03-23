@@ -2,6 +2,7 @@ import react from "react"
 import styles from '@/styles/Home.module.css'
 import Link from 'next/link';
 import { useUser } from "@/data/user";
+import useClasses from "@/data/classes";
 import Head from "next/head";
 import { Box, Grid, Tooltip } from "@mui/material"
 import colors from "@/styles/colors";
@@ -15,10 +16,11 @@ import { IconButton } from '@mui/material'
 
 export default function Home() {
     const [user, loading] = useUser(true)
+    const [classes, classesLoading] = useClasses(user)
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
 
-    return loading === "pending" ? <div>LOADING</div> : (
+    return loading === "pending" || classesLoading ? <div>LOADING</div> : (
         <>
             <Head>
                 <title>Create Next App

@@ -3,7 +3,7 @@ import { Atom, atom, useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 
-interface User {
+export interface User {
     provider: string
     username: string
     googleId: string
