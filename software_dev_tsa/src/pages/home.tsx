@@ -6,21 +6,23 @@ import useClasses from "@/data/classes";
 import Head from "next/head";
 import { Box, Grid, Tooltip } from "@mui/material"
 import colors from "@/styles/colors";
-import MiniDrawer from "@/components/Dashboard/Drawer";
 import { useRouter } from "next/router";
 
 // styles & icons
 import AddIcon from '@mui/icons-material/Add';
 import { IconButton } from '@mui/material'
 
+import MiniDrawer from "@/components/Dashboard/Drawer";
+import ClassesList from "@/components/Dashboard/ClassesList";
+
 
 export default function Home() {
-    const [user, loading] = useUser(true)
-    const [classes, classesLoading] = useClasses(user)
+    const [user, loadingUser] = useUser(true)
+    const { c, loading } = useClasses(user)
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
 
-    return loading === "pending" || classesLoading ? <div>LOADING</div> : (
+    return loadingUser === "pending" || loading ? <div>LOADING</div> : (
         <>
             <Head>
                 <title>Create Next App
@@ -32,15 +34,8 @@ export default function Home() {
                 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
             </Head>
             <Box sx={{height: "100vh", overflow: "auto"}}>
-                {/* <Grid container spacing={0} sx={{}}>
-                    <Grid item xs={4}>
-                        Sidebar Nav
-                    </Grid>
-                    <Grid item sx={8}>
-                        Main Content
-                    </Grid>
-                </Grid> */}
                 <MiniDrawer/>
+                <ClassesList classes={c}/>
             </Box>
             <Tooltip placement="left" title="New Class" arrow>
                 <IconButton sx={{backgroundColor: colors.main, color: colors.white, position: "fixed", bottom: "5%", right: "4%", boxShadow: "2px 2px 6px #777", "&:hover": {boxShadow: "0", backgroundColor: colors.light}}} onClick={handleNewClass}>

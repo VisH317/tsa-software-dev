@@ -4,7 +4,7 @@ import { User } from "./user"
 import { useEffect, useState } from "react"
 
 
-interface Classes {
+export interface Classes {
     id: string
     name: string
     teacher: string
@@ -22,11 +22,9 @@ export const classes = atom(
 )
 
 
-
 export const createClass = async (name: string, teacher: string, students: string[]): Promise<void> => {
     await axios.post("http://localhost:3000/api/classes", { name, teacher, students }) 
 }
-
 
 
 export default function useClasses(user: User | {}) {
@@ -41,5 +39,6 @@ export default function useClasses(user: User | {}) {
         setLoading(false)
     }, [])
 
-    return [c, loading]
+
+    return { c, loading }
 }

@@ -1,7 +1,29 @@
 import React from 'react'
+import { Classes } from '@/data/classes'
+import { Class } from '@mui/icons-material'
 
-export default function ClassesList = ({ classes }) => {
-    return classes.map(class => {
-        
-    })
+import { Box, Typography } from '@mui/material'
+
+export interface ClassesListProps {
+    classes: Classes[]
+}
+
+export default function ClassesList(props: ClassesListProps) {
+
+    const { classes } = props
+
+    const mapClasses = () => {
+        return classes.map(c => (
+            <Box sx={{width: "10%", height: '10%'}}>
+                <Typography variant='h1'>{c.name}</Typography>
+                <Typography variant='body2'><em>{c.teacher}</em></Typography>
+            </Box>
+        ))
+    }
+
+    return (
+        <Box sx={{width: "100%", height: "100%"}}>
+            {mapClasses()}
+        </Box>
+    )
 }
