@@ -1,10 +1,10 @@
-import react from "react"
+import React, { useState } from "react"
 import styles from '@/styles/Home.module.css'
 import Link from 'next/link';
 import { useUser } from "@/data/user";
 import useClasses from "@/data/classes";
 import Head from "next/head";
-import { Box, Grid, Tooltip } from "@mui/material"
+import { Box, Grid, Stack, Tooltip, Typography } from "@mui/material"
 import colors from "@/styles/colors";
 import { useRouter } from "next/router";
 
@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { IconButton } from '@mui/material'
 
 import MiniDrawer from "@/components/Dashboard/Drawer";
+import DashNav from "@/components/Dashboard/DashNav";
 import ClassesList from "@/components/Dashboard/ClassesList";
 
 
@@ -21,6 +22,11 @@ export default function Home() {
     const { c, loading } = useClasses(user)
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
+
+    const [open, setOpen] = useState(false)
+
+    const handleDrawerOpen = () => setOpen(true)
+    const handleDrawerClose = () => setOpen(false)
 
     return loadingUser === "pending" || loading ? <div>LOADING</div> : (
         <>
@@ -33,10 +39,18 @@ export default function Home() {
                 <link rel="preconnect" href="https://fonts.googleapis.com"/>
                 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
             </Head>
-            <Box sx={{height: "100vh", overflow: "auto"}}>
-                <MiniDrawer/>
+            <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
+            <Grid container sx={{height: "90vh", overflow: "auto"}}>
+                <Grid item xs={3}>
+                    <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}/>
+                </Grid>
+                <Grid item xs={9}>
+                    <Typography sx={{fontSize: "100px"}}>
+                        BRUH
+                    </Typography>
+                </Grid>
                 <ClassesList classes={c}/>
-            </Box>
+            </Grid>
             <Tooltip placement="left" title="New Class" arrow>
                 <IconButton sx={{backgroundColor: colors.main, color: colors.white, position: "fixed", bottom: "5%", right: "4%", boxShadow: "2px 2px 6px #777", "&:hover": {boxShadow: "0", backgroundColor: colors.light}}} onClick={handleNewClass}>
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>

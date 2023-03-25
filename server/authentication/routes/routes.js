@@ -34,7 +34,7 @@ router.get('/auth/logout', (req, res) => {
 
 
 
-router.get("/auth/google", passport.authenticate('google', { scope: ['profile', 'email']}), (req, res) => res.redirect("/"))
+router.get("/auth/google", passport.authenticate('google', { scope: ['profile', 'email']}), (req, res) => res.redirect("/home"))
 
 router.get("/auth/google/callback", passport.authenticate('google', { failureMessage: "/auth/google/err" }), (req, res) => {
     res.redirect("/")

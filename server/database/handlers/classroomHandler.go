@@ -44,7 +44,7 @@ func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 		return c.SendString("error fetching query")
 	}
 
-	var classes[] Classroom
+	var classes []Classroom
 
 	for rows.Next() {
 		var nm string
@@ -55,6 +55,10 @@ func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println("students:", students)
 		cl := Classroom{id, nm, teacher, students}
 		classes = append(classes, cl)
+	}
+
+	if len(classes)==0 {
+		return c.JSON(make([]Classroom, 0))
 	}
 
 	return c.JSON(classes)

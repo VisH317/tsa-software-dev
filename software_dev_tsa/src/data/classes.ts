@@ -17,6 +17,7 @@ export const classes = atom(
     get => get(classesCore),
     async (get, set, user: User | {}) => {
         const res = await axios.get("/api/classes", { params: { user } })
+        console.log("Classes: ",res)
         set(classesCore, res.data)
     }
 )
