@@ -40,17 +40,13 @@ export default function Home() {
                 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
             </Head>
             <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
-            <Grid container sx={{height: "90vh", overflow: "auto"}}>
-                <Grid item xs={3}>
-                    <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}/>
-                </Grid>
-                <Grid item xs={9}>
+                <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose} classes={c}/>
+                {/* <Grid item xs={10}>
                     <Typography sx={{fontSize: "100px"}}>
                         BRUH
                     </Typography>
-                </Grid>
+                </Grid> */}
                 <ClassesList classes={c}/>
-            </Grid>
             <Tooltip placement="left" title="New Class" arrow>
                 <IconButton sx={{backgroundColor: colors.main, color: colors.white, position: "fixed", bottom: "5%", right: "4%", boxShadow: "2px 2px 6px #777", "&:hover": {boxShadow: "0", backgroundColor: colors.light}}} onClick={handleNewClass}>
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>

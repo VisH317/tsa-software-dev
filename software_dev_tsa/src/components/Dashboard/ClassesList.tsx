@@ -23,7 +23,8 @@ export default function ClassesList(props: ClassesListProps) {
 
     return (
         <Box sx={{width: "100%", height: "100%"}}>
-            {classes!==null ? mapClasses(): "bruh"}
+            <p>BRUH</p>
+            {classes!==null ? mapClasses() : <div>BRUH</div>}
         </Box>
     )
 }

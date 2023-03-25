@@ -18,10 +18,12 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Head from 'next/head';
+import { Classes } from '@/data/classes';
 
 import colors from '@/styles/colors';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import ClassesList from './ClassesList';
+import DashNav from './DashNav';
 
 const drawerWidth = 240;
 
@@ -81,12 +83,13 @@ interface DrawerProps {
   open: boolean,
   handleDrawerOpen: () => void,
   handleDrawerClose: () => void,
+  children: React.ReactNode
 }
 
 export default function MiniDrawer(props: DrawerProps) {
   const theme = useTheme();
 
-  const { open, handleDrawerOpen, handleDrawerClose } = props
+  const { open, handleDrawerOpen, handleDrawerClose, children } = props
 
   return (
     <>
@@ -94,6 +97,8 @@ export default function MiniDrawer(props: DrawerProps) {
             <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
         </Head>
         <CssBaseline />
+        <Box sx={{display: "flex"}}>
+        <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
         <Drawer variant="permanent" open={open} sx={{backgroundColor: colors.light}}>
             <DrawerHeader>
             <IconButton onClick={handleDrawerClose} sx={{color: colors.light}}>
@@ -158,6 +163,10 @@ export default function MiniDrawer(props: DrawerProps) {
             ))}
             </List>
         </Drawer>
+        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+          {children}
+        </Box>
+        </Box>
     </>
   );
 }

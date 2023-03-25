@@ -1,0 +1,35 @@
+import React, { useState } from "react";
+import { useUser } from "@/data/user";
+import useClasses, { createClass } from "@/data/classes";
+import colors from "@/styles/colors";
+
+import { Box, TextField, Typography, Button } from "@mui/material";
+import DashNav from "@/components/Dashboard/DashNav";
+import MiniDrawer from "@/components/Dashboard/Drawer";
+
+
+export default function NewClass() {
+    const [user, loadingUser] = useUser(true)
+    const { c, loading } = useClasses(user)
+    const [open, setOpen] = useState(false)
+    const handleDrawerOpen = () => setOpen(true)
+    const handleDrawerClose = () => setOpen(false)
+
+    const newClassHandler = () => console.log('bruh')
+
+    const [name, setName] = useState("")
+
+    if(loadingUser==="pending" || loading) return <div>LOADING</div>
+
+    return (
+        <MiniDrawer open={open} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}>
+            <Box sx={{width: "50%", padding: "30px", backgroundColor: colors.white}}>
+                <form onSubmit={newClassHandler}>
+                    <Typography variant="h1"></Typography>
+                    <TextField type="text" placeholder="Name:" value={name} onChange={e => setName(e.target.value)}></TextField>
+                    <Button type="submit" variant="contained" sx={{backgroundColor: colors.main}}>Create Class</Button>
+                </form>
+            </Box>
+        </MiniDrawer>
+    )
+}
