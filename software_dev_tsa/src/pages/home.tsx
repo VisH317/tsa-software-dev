@@ -1,12 +1,9 @@
-import React, { useState } from "react"
-import styles from '@/styles/Home.module.css'
-import Link from 'next/link';
-import { useUser } from "@/data/user";
-import useClasses from "@/data/classes";
+import React, { useEffect, useState } from "react"
 import Head from "next/head";
 import { Box, Grid, Stack, Tooltip, Typography } from "@mui/material"
 import colors from "@/styles/colors";
 import { useRouter } from "next/router";
+import useUserAndClasses from "@/data/hooks";
 
 // styles & icons
 import AddIcon from '@mui/icons-material/Add';
@@ -15,20 +12,21 @@ import { IconButton } from '@mui/material'
 import MiniDrawer from "@/components/Dashboard/Drawer";
 import DashNav from "@/components/Dashboard/DashNav";
 import ClassesList from "@/components/Dashboard/ClassesList";
+import { useAtom } from "jotai";
 
 
 export default function Home() {
-    const [user, loadingUser] = useUser(true)
-    const { c, loading } = useClasses(user)
+    const [us, usStatus, cls, clsStatus] = useUserAndClasses()
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
+    
 
     const [open, setOpen] = useState(false)
 
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
-
-    return loadingUser === "pending" || loading ? <div>LOADING</div> : (
+    
+    return usStatus[0]==="success" && clsStatus[0]==="success" ? (
         <>
             <Head>
                 <title>Create Next App
@@ -40,18 +38,23 @@ export default function Home() {
                 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
             </Head>
             <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
-                <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose} classes={c}/>
-                {/* <Grid item xs={10}>
-                    <Typography sx={{fontSize: "100px"}}>
-                        BRUH
-                    </Typography>
-                </Grid> */}
-                <ClassesList classes={c}/>
+                <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
+                    <Grid item xs={10}>
+                        <Typography sx={{fontSize: "100px"}}>
+                            BRUH
+                        </Typography>
+                    </Grid>
+                </MiniDrawer>
+                <ClassesList classes={cls}/>
             <Tooltip placement="left" title="New Class" arrow>
                 <IconButton sx={{backgroundColor: colors.main, color: colors.white, position: "fixed", bottom: "5%", right: "4%", boxShadow: "2px 2px 6px #777", "&:hover": {boxShadow: "0", backgroundColor: colors.light}}} onClick={handleNewClass}>
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>
                 </IconButton>
             </Tooltip>
         </>
-    )
+    ) : <div>BRUH LOADING</div>
 }
+
+// export const getServerSideProps: GetServerSideProps = async context => {
+
+// }

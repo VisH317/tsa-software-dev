@@ -1,25 +1,29 @@
-import React, { useState } from "react";
-import { useUser } from "@/data/user";
+import React, { useEffect, useState } from "react";
+import user from "@/data/user";
 import useClasses, { createClass } from "@/data/classes";
 import colors from "@/styles/colors";
 
 import { Box, TextField, Typography, Button } from "@mui/material";
 import DashNav from "@/components/Dashboard/DashNav";
 import MiniDrawer from "@/components/Dashboard/Drawer";
+import { useAtom } from "jotai";
+import { useRouter } from "next/router";
+import useUserAndClasses from "@/data/hooks";
 
 
 export default function NewClass() {
-    const [user, loadingUser] = useUser(true)
-    const { c, loading } = useClasses(user)
+    const [us, usStatus, cls, clsStatus] = useUserAndClasses()
+    const router = useRouter()
     const [open, setOpen] = useState(false)
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
+    
 
     const newClassHandler = () => console.log('bruh')
 
     const [name, setName] = useState("")
 
-    if(loadingUser==="pending" || loading) return <div>LOADING</div>
+    if(usStatus[0]!=="loading" || clsStatus[0]!=="loading") return <div>LOADING</div>
 
     return (
         <MiniDrawer open={open} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}>
