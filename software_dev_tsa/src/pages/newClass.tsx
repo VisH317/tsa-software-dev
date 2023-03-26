@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import user from "@/data/user";
-import useClasses, { createClass } from "@/data/classes";
 import colors from "@/styles/colors";
 
 import { Box, TextField, Typography, Button } from "@mui/material";
-import DashNav from "@/components/Dashboard/DashNav";
 import MiniDrawer from "@/components/Dashboard/Drawer";
-import { useAtom } from "jotai";
-import { useRouter } from "next/router";
 import useUserAndClasses from "@/data/hooks";
+import { createClass } from "@/data/classes";
+import { useRouter } from "next/router";
 
 
 export default function NewClass() {
@@ -19,7 +16,11 @@ export default function NewClass() {
     const handleDrawerClose = () => setOpen(false)
     
 
-    const newClassHandler = () => console.log('bruh')
+    const newClassHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        await createClass(name, us[0].email)
+        router.push("/home")
+    }
 
     const [name, setName] = useState("")
 

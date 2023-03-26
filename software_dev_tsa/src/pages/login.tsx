@@ -16,7 +16,6 @@ import GoogleIcon from '@mui/icons-material/Google';
 
 export default function Login() {
 
-  const [u, setu] = useAtom(user)
   const router = useRouter();
 
   // form states
