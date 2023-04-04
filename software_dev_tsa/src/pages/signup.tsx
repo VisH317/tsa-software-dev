@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import colors from '@/styles/colors'
 import { Box, Grid, Avatar, Typography, Stack, TextField, Button } from '@mui/material'
 import Head from 'next/head'
-import { signUp } from '@/data/user'
+import { signUp } from '@/lib/user'
 
 export default function Signup() {
 

@@ -64,6 +64,28 @@ func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 	return c.JSON(classes)
 }
 
+func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
+	email := c.Query("email")
+	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE $1 = ANY (students)", email)
+	if err!=nil {
+		fmt.Println(err)
+	}
+
+	var classes[] Classroom
+
+	for rows.Next() {
+		var id int
+		var nm string
+		var teacher string
+		var students []string
+		rows.Scan(&id, &nm, &teacher, &students)
+		c := Classroom{id, nm, teacher, students}
+		classes = append(classes, c)
+	}
+
+	return c.JSON(classes)
+}
+
 func GetClassByID(c *fiber.Ctx, db *sql.DB) error {
 	id := c.Query("id")
 	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE id=$1", id)

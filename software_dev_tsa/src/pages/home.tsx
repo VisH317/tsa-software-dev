@@ -3,7 +3,8 @@ import Head from "next/head";
 import { Box, Grid, Stack, Tooltip, Typography } from "@mui/material"
 import colors from "@/styles/colors";
 import { useRouter } from "next/router";
-import useUserAndClasses from "@/data/hooks";
+import { useUser } from "@/lib/user";
+import { useClasses } from "@/lib/classes";
 
 // styles & icons
 import AddIcon from '@mui/icons-material/Add';
@@ -16,7 +17,8 @@ import { useAtom } from "jotai";
 
 
 export default function Home() {
-    const [us, usStatus, cls, clsStatus] = useUserAndClasses()
+    const us = useUser()
+    const cls = useClasses()
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
     
@@ -26,7 +28,7 @@ export default function Home() {
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
     
-    return usStatus[0]==="success" && clsStatus[0]==="success" ? (
+    return us.state!=="loading" && cls.state!=="loading" ? (
         <>
             <Head>
                 <title>Create Next App

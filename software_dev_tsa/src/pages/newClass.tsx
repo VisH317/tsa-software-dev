@@ -3,8 +3,8 @@ import colors from "@/styles/colors";
 
 import { Box, TextField, Typography, Button } from "@mui/material";
 import MiniDrawer from "@/components/Dashboard/Drawer";
-import useUserAndClasses from "@/data/hooks";
-import { createClass } from "@/data/classes";
+import useUserAndClasses from "@/lib/hooks";
+import { createClass } from "@/lib/classes";
 import { useRouter } from "next/router";
 
 

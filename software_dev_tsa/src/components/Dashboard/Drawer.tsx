@@ -18,7 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Head from 'next/head';
-import { Classes } from '@/data/classes';
+import { Classes } from '@/lib/classes';
 
 import colors from '@/styles/colors';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';

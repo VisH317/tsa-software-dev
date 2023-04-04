@@ -1,11 +1,11 @@
 import React from 'react'
-import { Classes } from '@/data/classes'
+import { Classes } from '@/lib/classes'
 import { Class } from '@mui/icons-material'
 
 import { Box, Typography } from '@mui/material'
 
 export interface ClassesListProps {
-    classes: Classes[]
+    classes: any
 }
 
 export default function ClassesList(props: ClassesListProps) {
@@ -13,7 +13,7 @@ export default function ClassesList(props: ClassesListProps) {
     const { classes } = props
 
     const mapClasses = () => {
-        return classes.map(c => (
+        return classes.map((c: any) => (
             <Box sx={{width: "10%", height: '10%'}}>
                 <Typography variant='h1'>{c.name}</Typography>
                 <Typography variant='body2'><em>{c.teacher}</em></Typography>

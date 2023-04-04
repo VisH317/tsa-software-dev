@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from "react";
 
 
-import user, { loginLocal } from '../data/user'
+import user, { loginLocal } from '../lib/user'
 import { useAtom } from 'jotai'
 import colors from "../styles/colors"
 

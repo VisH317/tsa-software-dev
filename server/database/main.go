@@ -64,6 +64,10 @@ func main() {
 		return handlers.GetClassByID(c, db)
 	})
 
+	app.Get("api/classes/bystud", func(c *fiber.Ctx) error {
+		return handlers.GetClassesForStudent(c, db)
+	})
+
 	// student update routes
 	app.Post("/api/classes/students", func(c *fiber.Ctx) error {
 		return handlers.AddStudent(c, db)

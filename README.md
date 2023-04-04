@@ -84,3 +84,7 @@ _Note:_ Our original plan was to include AI in this, and we don't have many idea
  * Assignment view:
    * Title, description using typography
    * Card for uploading and comments if time
+
+
+FRONTEND TODOS:
+ * Add server side rendering and atom hydration (later thing when talking about optimization it is important)
