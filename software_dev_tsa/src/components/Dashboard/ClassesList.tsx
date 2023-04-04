@@ -5,12 +5,14 @@ import { Class } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
 
 export interface ClassesListProps {
-    classes: any
+    classes: Classes[]
 }
 
 export default function ClassesList(props: ClassesListProps) {
 
     const { classes } = props
+
+    console.log("classes: ", classes)
 
     const mapClasses = () => {
         return classes.map((c: any) => (

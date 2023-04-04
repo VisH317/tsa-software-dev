@@ -21,12 +21,9 @@ export interface User {
 //     },
 // }))
 
-const user: Atom<User> = atom<User>((get): User => {
-    let data = { provider: "", username: "", googleId: "", password: "", email: "" }
-    axios.get("http://localhost:3000/auth/current_user").then(res => {
-        data = res.data
-    })
-    return data
+const user: Atom<Promise<User>> = atom<Promise<User>>(async (get): Promise<User> => {
+    const res = await axios.get("http://localhost:3000/auth/current_user")
+    return res.data
 })
 
 // login/signup post api functions
@@ -57,11 +54,13 @@ export function useUser(path: string = "/") {
     const [u] = useAtom(loadableUser)
     const router = useRouter()
 
-    useEffect(() => {
-        const isSignedIn: boolean = checkSignedIn(u)
-        if(!isSignedIn) router.push(path)
-        console.log("called")
-    }, [])
+    console.log(u)
+
+    // useEffect(() => {
+    //     const isSignedIn: boolean = checkSignedIn(u)
+    //     if(!isSignedIn) router.push(path)
+    //     console.log("called")
+    // }, [u.state])
 
     return u
 }

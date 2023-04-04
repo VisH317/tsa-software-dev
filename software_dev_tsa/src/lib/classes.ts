@@ -1,5 +1,5 @@
 import axios from "axios"
-import { atom, useAtom } from "jotai"
+import { atom, useAtom, Atom } from "jotai"
 import user, { User } from "./user"
 import { useEffect, useState } from "react"
 import { atomsWithQuery } from "jotai-tanstack-query"
@@ -14,9 +14,10 @@ export interface Classes {
 }
 
 
-export const classes = atom(
-    async get => {
-        const res = await axios.get("/api/classes", { params: { user: get(user).email } });
+export const classes: Atom<Promise<User>> = atom<Promise<User>>(
+    async (get): Promise<User> => {
+        const u = await get(user)
+        const res = await axios.get("/api/classes", { params: { user: u.email } });
         return res.data
     }
 )
@@ -33,7 +34,8 @@ export const classes = atom(
 
 export const studentClasses = atom(
     async get => {
-        const res = await axios.get("/api/classes/bystud", { params: { user: get(user).email } })
+        const u = await get(user)
+        const res = await axios.get("/api/classes/bystud", { params: { user: u.email } })
         return res.data
     },
 )
@@ -43,11 +45,13 @@ export const createClass = async (name: string, teacher: string, students: strin
 }
 
 const loadableClasses = loadable(classes)
+const loadableStudentClasses = loadable(studentClasses)
 
 export function useClasses() {
     const [c] = useAtom(loadableClasses)
+    const [sc] = useAtom(loadableStudentClasses)
 
-    return c
+    return [c, sc]
 }
 
 export default classes
