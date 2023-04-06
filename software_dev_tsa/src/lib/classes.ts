@@ -44,6 +44,17 @@ export const createClass = async (name: string, teacher: string, students: strin
     await axios.post("/api/classes", { name, teacher, students }) 
 }
 
+// export const joinClass = async (name: string, class: number): Promise<void> => {
+//     await axios.post("/api/classes", { name, teacher }) 
+// }
+
+export const joinClass = async (cls: number, student: string | null): Promise<void> => {
+    await axios.post("/api/classes/students", {
+        stud: student,
+        class: cls
+    })
+}
+
 const loadableClasses = loadable(classes)
 const loadableStudentClasses = loadable(studentClasses)
 

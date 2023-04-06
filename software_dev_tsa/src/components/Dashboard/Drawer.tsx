@@ -163,7 +163,7 @@ export default function MiniDrawer(props: DrawerProps) {
             ))}
             </List>
         </Drawer>
-        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+        <Box component="main" sx={{flexGrow: 1, p: 3, marginTop: "100px"}}>
           {children}
         </Box>
         </Box>

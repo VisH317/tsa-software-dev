@@ -18,12 +18,14 @@ import { useAtom } from "jotai";
 
 export default function Home() {
     const us = useUser()
-    const cls = useClasses()
+    const [cls, scls] = useClasses()
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
     
 
     const [open, setOpen] = useState(false)
+
+    console.log(cls)
 
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
@@ -47,7 +49,7 @@ export default function Home() {
                         </Typography>
                     </Grid>
                 </MiniDrawer>
-                <ClassesList classes={cls}/>
+                <ClassesList classes={cls.data}/>
             <Tooltip placement="left" title="New Class" arrow>
                 <IconButton sx={{backgroundColor: colors.main, color: colors.white, position: "fixed", bottom: "5%", right: "4%", boxShadow: "2px 2px 6px #777", "&:hover": {boxShadow: "0", backgroundColor: colors.light}}} onClick={handleNewClass}>
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>
