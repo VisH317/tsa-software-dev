@@ -44,21 +44,21 @@ create table notes (
     foreign key (lectureid) references lectures(id)
 );
 
-create table assignments {
+create table assignments (
     id serial primary key,
     classroomid int,
     title text,
-    desc text,
+    descr text,
     foreign key (classroomid) references classes(id)
-};
+);
 
-create table assignmentresponse {
-    id serial primary key,
-    assignmentid int,
-    user text,
-    content text,
-    foreign key (assignmentid) references assignments(id)
-};
+-- create table assignmentresponse (
+--     id serial primary key,
+--     assignmentid int,
+--     user text,
+--     content text,
+--     foreign key (assignmentid) references assignments(id)
+-- );
 
 -- create table TESTS if not exists (
     

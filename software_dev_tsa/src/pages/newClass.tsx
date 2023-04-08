@@ -51,20 +51,19 @@ export default function NewClass() {
             <Box sx={{width: "50%", padding: "30px", backgroundColor: colors.white}}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={tab} onChange={handleTab} aria-label="basic tabs example">
-                        <Tab label="Item One" {...a11yProps(0)} />
-                        <Tab label="Item Two" {...a11yProps(1)} />
-                        <Tab label="Item Three" {...a11yProps(2)} />
+                        <Tab label="Join Class" {...a11yProps(0)} />
+                        <Tab label="Create Class" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={tab} index={0}>
-                    <form onSubmit={newClassHandler}>
+                    <form onSubmit={newClassHandler} style={{display: "flex", flexDirection: "column", gap: "30px 30px"}}>
                         <Typography variant="h3">Create Class</Typography>
                         <TextField type="text" placeholder="Name:" value={name} onChange={e => setName(e.target.value)}/>
                         <Button type="submit" variant="contained" sx={{backgroundColor: colors.main}}>Create Class</Button>
                     </form>
                 </TabPanel>
                 <TabPanel value={tab} index={1}>
-                    <form onSubmit={joinClassHandler}>
+                    <form onSubmit={joinClassHandler} style={{display: "flex", flexDirection: "column", gap: "30px 30px"}}>
                     <Typography variant="h3">Join Class</Typography>
                     <TextField type="text" placeholder="Class ID:" value={id} onChange={e => setId(e.target.value)}/>
                     <Button type="submit" variant="contained" sx={{backgroundColor: colors.main}}>Join Class</Button>

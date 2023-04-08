@@ -9,7 +9,7 @@ import (
 type Assignment struct {
 	Classroomid int
 	Title string
-	Desc string
+	Descr string
 }
 
 type AssignmentResponse struct {
@@ -23,7 +23,7 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 	if err := c.BodyParser(&newAssignment); err!=nil {
 		fmt.Println(err)
 	}
-	_, err := db.Exec("INSERT INTO assignments (classsroomid, title, desc) VALUES ($1, $2, $3)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Desc)
+	_, err := db.Exec("INSERT INTO assignments (classsroomid, title, descr) VALUES ($1, $2, $3)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Descr)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -32,7 +32,7 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 
 func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	class := c.Query("class")
-	rows, err := db.Query("SELECT (classroomid, title, desc) FROM assignments WHERE classroomid=$1", class)
+	rows, err := db.Query("SELECT (classroomid, title, descr) FROM assignments WHERE classroomid=$1", class)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -41,9 +41,9 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 
 	for rows.Next() {
 		var cid int
-		var title, desc string
-		rows.Scan(&cid, &title, &desc)
-		as := Assignment{cid, title, desc}
+		var title, descr string
+		rows.Scan(&cid, &title, &descr)
+		as := Assignment{cid, title, descr}
 		assignments = append(assignments, as)
 	}
 

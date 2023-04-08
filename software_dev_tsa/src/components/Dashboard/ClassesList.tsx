@@ -16,17 +16,16 @@ export default function ClassesList(props: ClassesListProps) {
 
     const mapClasses = () => {
         return classes.map((c: any) => (
-            <Box sx={{width: "10%", height: '10%'}}>
-                <Typography variant='h1'>{c.name}</Typography>
-                <Typography variant='body2'><em>{c.teacher}</em></Typography>
+            <Box sx={{width: "100%", position: "relative", border: "1px solid black"}}>
+                <Typography variant='h1'>{c.Nm}</Typography>
+                <Typography variant='body2'><em>{c.Teacher}</em></Typography>
             </Box>
         ))
     }
 
     return (
-        <Box sx={{width: "100%", height: "100%"}}>
-            <p>BRUH</p>
-            {classes!==null ? mapClasses() : <div>BRUH</div>}
+        <Box sx={{width: "95%", height: "100%", position: "relative", left: "5%", marginLeft: "25px", display: "flex", flexDirection: "column"}}>
+            {mapClasses()}
         </Box>
     )
 }

@@ -30,7 +30,7 @@ export default function Home() {
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
     
-    return us.state!=="loading" && cls.state!=="loading" ? (
+    return us.state==="hasData" && cls.state==="hasData" ? (
         <>
             <Head>
                 <title>Create Next App
@@ -44,8 +44,8 @@ export default function Home() {
             <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
                 <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
                     <Grid item xs={10}>
-                        <Typography sx={{fontSize: "100px"}}>
-                            BRUH
+                        <Typography sx={{fontSize: "50px"}}>
+                            Hello
                         </Typography>
                     </Grid>
                 </MiniDrawer>

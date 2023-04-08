@@ -17,6 +17,7 @@ export interface Classes {
 export const classes: Atom<Promise<User>> = atom<Promise<User>>(
     async (get): Promise<User> => {
         const u = await get(user)
+        console.log(u)
         const res = await axios.get("/api/classes", { params: { user: u.email } });
         return res.data
     }
@@ -41,7 +42,7 @@ export const studentClasses = atom(
 )
 
 export const createClass = async (name: string, teacher: string, students: string[] = []): Promise<void> => {
-    await axios.post("/api/classes", { name, teacher, students }) 
+    await axios.post("/api/classes", { nm: name, teacher, students }) 
 }
 
 // export const joinClass = async (name: string, class: number): Promise<void> => {
