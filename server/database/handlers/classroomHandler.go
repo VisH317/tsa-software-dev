@@ -39,10 +39,10 @@ func CreateClass(c *fiber.Ctx, db *sql.DB) error {
 func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 	user := c.Query("user")
 	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE teacher=$1", user)
-	defer rows.Close()
 	if err!=nil {
 		return c.SendString("error fetching query")
 	}
+	defer rows.Close()
 
 	var classes []Classroom
 
@@ -66,8 +66,9 @@ func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 
 func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
 	email := c.Query("email")
-	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE $1 = ANY (students)", email)
+	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE $1 = ANY(students)", email)
 	if err!=nil {
+		fmt.Println("error")
 		fmt.Println(err)
 	}
 
@@ -81,6 +82,10 @@ func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
 		rows.Scan(&id, &nm, &teacher, &students)
 		c := Classroom{id, nm, teacher, students}
 		classes = append(classes, c)
+	}
+
+	if len(classes)==0 {
+		return c.JSON(make([]Classroom, 0))
 	}
 
 	return c.JSON(classes)

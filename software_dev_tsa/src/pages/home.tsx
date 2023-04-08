@@ -25,12 +25,12 @@ export default function Home() {
 
     const [open, setOpen] = useState(false)
 
-    console.log(cls)
+    console.log(scls)
 
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
     
-    return us.state==="hasData" && cls.state==="hasData" ? (
+    return us.state==="hasData" && cls.state==="hasData" && scls.state==="hasData" ? (
         <>
             <Head>
                 <title>Create Next App
@@ -47,9 +47,12 @@ export default function Home() {
                         <Typography sx={{fontSize: "50px"}}>
                             Hello
                         </Typography>
+                        TEACHER
+                        <ClassesList classes={cls.data}/>
+                        STUDENT
+                        <ClassesList classes={scls.data}/>
                     </Grid>
                 </MiniDrawer>
-                <ClassesList classes={cls.data}/>
             <Tooltip placement="left" title="New Class" arrow>
                 <IconButton sx={{backgroundColor: colors.main, color: colors.white, position: "fixed", bottom: "5%", right: "4%", boxShadow: "2px 2px 6px #777", "&:hover": {boxShadow: "0", backgroundColor: colors.light}}} onClick={handleNewClass}>
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>

@@ -14,6 +14,13 @@ create table classes (
     students text[]
 );
 
+-- create table students (
+--     id serial primary key,
+--     email text,
+--     teacher text[],
+--     student
+-- );
+
 -- MATERIALS FOR EACH CLASS
 
 -- create table MATERIALS if not exists (

@@ -36,7 +36,7 @@ export const classes: Atom<Promise<User>> = atom<Promise<User>>(
 export const studentClasses = atom(
     async get => {
         const u = await get(user)
-        const res = await axios.get("/api/classes/bystud", { params: { user: u.email } })
+        const res = await axios.get("/api/classes/bystud", { params: { email: u.email } })
         return res.data
     },
 )
