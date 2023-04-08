@@ -1,9 +1,15 @@
 import React from 'react'
 import { Box } from '@mui/material'
 import axios from 'axios'
+import {useRouter} from 'next/router';
 
 export default function Cls({ cls }: any) {
     console.log(cls)
+    const router = useRouter();
+
+    if (router.isFallback) {
+    return <div>loading...</div>
+    }
     return (
         <div>
             {cls}
@@ -21,10 +27,10 @@ export async function getStaticPaths() {
     }))
 
     console.log(paths)
-    const npaths = [{params: {id: "1"}}, {params: {id: "2"}}, {params: {id: "3"}}]
-    return { npaths, fallback: true }
+    // const npaths = [{params: {id: "1"}}, {params: {id: "2"}}, {params: {id: "3"}}]
+    return { paths: paths, fallback: true }
 }
 
 export async function getStaticProps({ params }: any) {
-    return { props: { cls: params.id }}
+    return { props: { cls: params.id     }}
 }
