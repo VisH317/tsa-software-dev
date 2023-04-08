@@ -7,10 +7,10 @@ import { loadable } from "jotai/utils"
 
 
 export interface Classes {
-    id: string
-    name: string
-    teacher: string
-    students: string[]
+    Id: number
+    Nm: string
+    Teacher: string
+    Students: string[]
 }
 
 

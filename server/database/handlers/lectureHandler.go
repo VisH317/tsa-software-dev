@@ -15,7 +15,7 @@ type Lecture struct {
 	Name         string
 	Description  string
 	Isstopped    bool
-	creationDate time.Time
+	CreationDate time.Time
 }
 
 type CreateLectureOutput struct {
@@ -35,7 +35,7 @@ func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
-	rows, err := db.Query("SELECT classID FROM lectures WHERE classid=$1 ORDER BY creationdate DESC", newLecture.ClassID)
+	rows, err := db.Query("SELECT classID FROM lectures WHERE classid=$1 ORDER BY c	reationdate DESC", newLecture.ClassID)
 	if err != nil {
 		fmt.Println(err)
 	}
