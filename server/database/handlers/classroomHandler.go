@@ -26,9 +26,6 @@ func CreateClass(c *fiber.Ctx, db *sql.DB) error {
 	if err:=c.BodyParser(&newClass); err!=nil {
 		return c.SendString(err.Error())
 	}
-	fmt.Println("name: ",newClass.Nm)
-	fmt.Println("teachers: ",newClass.Teacher)
-	fmt.Println(newClass.Students)
 	// later: check for empty students and insert empty array automatically
 	_, err := db.Exec("INSERT into classes (nm, teacher, students) VALUES($1, $2, $3)", newClass.Nm, newClass.Teacher, pq.Array(newClass.Students))
 	if err!=nil {c.SendString(err.Error())}
@@ -52,7 +49,6 @@ func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 		var teacher string
 		var students []string
 		rows.Scan(&id, &nm, &teacher, (*pq.StringArray)(&students))
-		fmt.Println("students:", students)
 		cl := Classroom{id, nm, teacher, students}
 		classes = append(classes, cl)
 	}
@@ -68,7 +64,6 @@ func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
 	email := c.Query("email")
 	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE $1 = ANY(students)", email)
 	if err!=nil {
-		fmt.Println("error")
 		fmt.Println(err)
 	}
 

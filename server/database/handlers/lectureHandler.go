@@ -29,7 +29,6 @@ func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
 	}
 
 	newLecture.Isstopped = true
-	fmt.Println("ClassID: ", newLecture.ClassID)
 
 	_, err := db.Exec("INSERT INTO lectures (classID, name, description, isstopped) VALUES ($1, $2, $3, $4)", newLecture.ClassID, newLecture.Name, newLecture.Description, newLecture.Isstopped)
 	if err != nil {
@@ -52,12 +51,27 @@ func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
 
 // create toggle lecture stopping to be called through the websocket server
 
+func ToggleLectureStarted(c *fiber.Ctx, db *sql.DB) error {
+	lecture := c.Query("lecture")
+	set := c.Query("start")
+	fmt.Println("set: ", set)
+
+	db.Exec("UPDATE lectures SET isstopped = $1 WHERE id = $2", set, lecture)
+
+	return c.SendString("success i think")
+}
+
+func DeleteLecture(c *fiber.Ctx, db *sql.DB) error {
+	id := c.Query("lecture")
+	db.Exec("DELETE FROM lectures WHERE id=$1", id)
+	return c.SendString("success")
+}
+
 func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 	// id := c.Query("id")
 	// fmt.Println("id: ", id)
 	// if id == "" {
 		class := c.Query("class")
-		fmt.Println("class: ", class)
 		if class == "" {
 			fmt.Println("Something went wrong")
 		}

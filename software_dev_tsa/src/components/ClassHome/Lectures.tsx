@@ -23,9 +23,10 @@ export default function LecturesHome(props: LecturesProps) {
         if(lectures.length===0) return <Box>You currently have no previous or ongoing lectures</Box>
         return lectures.map(l => {
             return (
-                <Box key={l.Id}>
+                <Box key={l.Id} sx={{backgroundColor: l.Isstopped ? "transparent" : "green"}}>
                     <Typography variant="h1">{l.Name}</Typography>
-                    <Typography>{l.Isstopped}</Typography>
+                    <Typography>{l.Description}</Typography>
+                    
                 </Box>
             )
         })

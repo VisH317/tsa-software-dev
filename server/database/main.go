@@ -86,6 +86,14 @@ func main() {
 		return handlers.GetLectureByID(c, db)
 	})
 
+	app.Delete("/api/lectures", func(c *fiber.Ctx) error {
+		return handlers.DeleteLecture(c, db)
+	})
+
+	app.Post("/api/lectures/start", func(c *fiber.Ctx) error {
+		return handlers.ToggleLectureStarted(c, db)
+	})
+
 	// notes routes
 	app.Post("/api/notes", func(c *fiber.Ctx) error {
 		return handlers.CreateNote(c, db)
