@@ -12,6 +12,11 @@ export interface Lecture {
     CreationDate: Date
 }
 
+export interface StartLectureData {
+    lecture: number,
+    start: boolean
+}
+
 export interface CreateLectureData {
     name: string,
     description: string,

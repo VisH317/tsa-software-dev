@@ -51,12 +51,20 @@ func CreateLecture(c *fiber.Ctx, db *sql.DB) error {
 
 // create toggle lecture stopping to be called through the websocket server
 
-func ToggleLectureStarted(c *fiber.Ctx, db *sql.DB) error {
-	lecture := c.Query("lecture")
-	set := c.Query("start")
-	fmt.Println("set: ", set)
+type LectureStartedRequest struct {
+	Lecture int
+	Start bool
+}
 
-	db.Exec("UPDATE lectures SET isstopped = $1 WHERE id = $2", set, lecture)
+func ToggleLectureStarted(c *fiber.Ctx, db *sql.DB) error {
+	lsr := LectureStartedRequest{}
+	if err := c.BodyParser(&lsr); err!=nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("set: ", lsr.Start)
+
+	db.Exec("UPDATE lectures SET isstopped = $1 WHERE id = $2", lsr.Start, lsr.Lecture)
 
 	return c.SendString("success i think")
 }
