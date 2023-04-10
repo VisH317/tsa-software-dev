@@ -112,9 +112,15 @@ func GetClassByID(c *fiber.Ctx, db *sql.DB) error {
 	return c.JSON(class)
 }
 
+type DeleteRes struct {
+	IsSuccess bool
+}
+
 // delete a class - requires to pass a query string named class that has the class id from the database
 func DeleteClass(c *fiber.Ctx, db *sql.DB) error {
 	class := c.Query("class")
+	fmt.Println("Deleting: ", class)
 	db.Exec("DELETE FROM classes WHERE id=$1", class)
-	return c.Redirect("/")
+	res := DeleteRes{true}
+	return c.JSON(res)
 }

@@ -12,6 +12,12 @@ export interface Lecture {
     CreationDate: Date
 }
 
+export interface CreateLectureData {
+    name: string,
+    description: string,
+    classID: number
+}
+
 export interface ClassData {
     lectures: Lecture[]
 }

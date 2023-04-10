@@ -8,18 +8,25 @@ import TabPanel, { a11yProps } from '@/components/Tabs';
 import DashNav from '@/components/Dashboard/DashNav';
 import MiniDrawer from '@/components/Dashboard/Drawer';
 import LecturesHome from '@/components/ClassHome/Lectures';
+import { isConstructorDeclaration } from 'typescript';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
     const router = useRouter();
     const [cls, scls] = useClasses()
     const { id } = router.query
-    const [curClass, setCur] = useState<Classes>(null)
-
+    const [curClass, setCur] = useState<Classes | null>(null)
+    console.log(id)
     const [tab, setTab] = useState(0)
 
     const handleTab = (e: React.SyntheticEvent, newVal: number) => {
         setTab(newVal)
+    }
+
+    const handleDelete = async () => {
+        if(curClass===null) return
+        const res = await axios.delete("/api/classes", {params: {class: curClass.Id}})
+        router.push("/home")
     }
 
     useEffect(() => {
@@ -39,12 +46,16 @@ export default function TeacherClassHome() {
     }, [cls.state])
 
     const { status, data, error, isFetching } = useQuery({
-        queryKey: ['teacherClasses', id],
-        queryFn: async () => {
-            const res = await axios.get("/api/lectures", { params: { id } })
+        queryKey: ['teacherClasses', router.query.id],
+        queryFn: async ({ queryKey }) => {
+            const [_, cid] = queryKey
+            console.log(cid)
+            if(cid===undefined) return
+            const res = await axios.get("/api/lectures", { params: { class: cid } })
             return res.data
         }
     })
+    console.log("Lectures: ", curClass)
 
     // stuff for the drawer
     const [open, setOpen] = useState(false)
@@ -53,7 +64,7 @@ export default function TeacherClassHome() {
 
     if(status!=="success") return <div>loading...</div>
 
-    return (
+    if (curClass!==null) return (
         <>
             <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
             <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
@@ -65,12 +76,12 @@ export default function TeacherClassHome() {
                         <Tab label="Tests" {...a11yProps(3)}/>
                     </Tabs>
                     <TabPanel value={tab} index={0}>
-                        Welcome to {curClass.Nm}
+                        Welcome to {curClass.Nm} {"\n"}
                         teacher: {curClass.Teacher}
-                        <Button variant="contained">Delete Class</Button>
+                        <Button variant="contained" onClick={handleDelete}>Delete Class</Button>
                     </TabPanel>
                     <TabPanel value={tab} index={1}>
-                        <LecturesHome lectures={data}/>
+                        <LecturesHome lectures={data} classID={curClass.Id}/>
                     </TabPanel>
                 </div>
             </MiniDrawer>
