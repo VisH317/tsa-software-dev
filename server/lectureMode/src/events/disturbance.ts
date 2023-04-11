@@ -1,5 +1,5 @@
 import type { Socket, Server } from "socket.io"
-import type { Lecture } from "../types"
+import type { Lecture } from "../types.js"
 
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../serverconfig"
 import { checkStudent, checkTeacher } from "../middleware"

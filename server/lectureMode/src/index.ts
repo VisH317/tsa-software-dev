@@ -1,10 +1,10 @@
 import { Server } from "socket.io"
-import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData } from "./serverconfig"
-import initRedis from "./redis"
+import { ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData } from "./serverconfig.js"
+import initRedis from "./redis.js"
 
 // event handler imports
-import rooms from "./events/rooms"
-import questions from "./events/questions"
+import rooms from "./events/rooms.js"
+import questions from "./events/questions.js"
 
 // socket server interfaces
 

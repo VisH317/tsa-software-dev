@@ -18,7 +18,7 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
     // room management
-    createRoom: (userEmail: string, lectureID: number, classroomID: number, name: string, description: string) => void
+    createRoom: (userEmail: string, lectureID: number, classroomID: number) => void
     deleteRoom: (userEmail: string, lectureID: number) => void
     joinRoom: (userEmail: string, lectureID: number) => void
     leaveRoom: (userEmail: string, lectureID: number, title: string, content: string) => void

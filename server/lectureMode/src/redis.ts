@@ -1,5 +1,5 @@
 import { createClient, SchemaFieldTypes } from "redis"
-import { Lecture } from "./types"
+import { Lecture } from "./types.js"
 
 export default async () => {
 

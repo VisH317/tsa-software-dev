@@ -50,6 +50,8 @@ const checkSignedIn = (u: User | {}): boolean => {
 
 const loadableUser = loadable(user)
 
+export type Email = `${string}@${string}.${string}`
+
 export function useUser(path: string = "/") {
     const [u] = useAtom(loadableUser)
     const router = useRouter()

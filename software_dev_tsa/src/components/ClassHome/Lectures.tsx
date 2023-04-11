@@ -6,6 +6,7 @@ import colors from '@/styles/colors';
 import Modal from '../Modal/Modal';
 import axios from 'axios';
 import { setTokenSourceMapRange } from 'typescript';
+import { useRouter } from 'next/router';
 
 interface LecturesProps {
     lectures: Lecture[],
@@ -20,7 +21,7 @@ export default function LecturesHome(props: LecturesProps) {
     const [name, setName] = useState<string>("")
     const [desc, setDesc] = useState<string>("")
 
-
+    const router = useRouter()
 
     const mapLectures = (): React.ReactNode => {
         if(lectures.length===0) return <Box>You currently have no previous or ongoing lectures</Box>
@@ -54,6 +55,7 @@ export default function LecturesHome(props: LecturesProps) {
         const req: StartLectureData = { lecture: lid, start }
         const res = await axios.post("/api/lectures/start", req)
         setOpen(false)
+        router.push(`/teacher/lecture/${lid}`)
     }
 
     return (

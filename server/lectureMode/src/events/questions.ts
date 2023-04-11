@@ -3,9 +3,9 @@ import type { Server, Socket } from "socket.io"
 import type { Lecture } from "../types"
 
 // imports
-import { checkStudent, checkTeacher } from "../middleware"
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../serverconfig"
-import { convertToLectureType } from "../redis"
+import { checkStudent, checkTeacher } from "../middleware.js"
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../serverconfig.js"
+import { convertToLectureType } from "../redis.js"
 
 
 export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {

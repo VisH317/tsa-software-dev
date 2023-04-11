@@ -1,13 +1,13 @@
 import type { Socket } from "socket.io"
-import type { Note, Lecture, LecturePersist } from "../types"
+import type { Note, Lecture, LecturePersist } from "../types.js"
 
-import { checkTeacher, checkStudent } from "../middleware"
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../serverconfig"
+import { checkTeacher, checkStudent } from "../middleware.js"
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../serverconfig.js"
 import axios from "axios"
 
 
 export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
-    socket.on("createRoom", async (userEmail: string, lectureID: number, classroomID: number, name: string, description: string) => {
+    socket.on("createRoom", async (userEmail: string, lectureID: number, classroomID: number) => {
         if(!await checkTeacher(socket, userEmail, classroomID)) return
 
         await client.hSet(`classroom:lectures:${lectureID}`, { teacher: userEmail, studentCount: 0, socketID: socket.id, classroomID  })
