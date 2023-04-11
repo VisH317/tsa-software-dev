@@ -14,7 +14,7 @@ export default async () => {
             teacher: SchemaFieldTypes.TEXT,
             studentCount: SchemaFieldTypes.NUMERIC,
             socketID: SchemaFieldTypes.TEXT,
-            lectureID: SchemaFieldTypes.NUMERIC
+            classroomID: SchemaFieldTypes.NUMERIC
         }, {
             ON: "HASH",
             PREFIX: "classroom:lectures"

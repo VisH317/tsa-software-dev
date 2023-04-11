@@ -18,21 +18,21 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
     // room management
-    createRoom: (userEmail: string, classroomID: string, name: string, description: string) => void
-    deleteRoom: (userEmail: string, classroomID: string) => void
-    joinRoom: (userEmail: string, classroomID: string) => void
-    leaveRoom: (userEmail: string, classroomID: string, title: string, content: string) => void
+    createRoom: (userEmail: string, lectureID: number, classroomID: number, name: string, description: string) => void
+    deleteRoom: (userEmail: string, lectureID: number) => void
+    joinRoom: (userEmail: string, lectureID: number) => void
+    leaveRoom: (userEmail: string, lectureID: number, title: string, content: string) => void
 
     // teacher questions
-    createTeacherQuestion: (userEmail: string, classroomID: string, questionPrompt: string) => void
-    answerTeacherQuestion: (userEmail: string, classroomID, string, questionAnswer: string) => void
+    createTeacherQuestion: (userEmail: string, lectureID: number, questionPrompt: string) => void
+    answerTeacherQuestion: (userEmail: string, lectureID: number, questionAnswer: string) => void
 
     // student questions
-    createStudentQuestion: (userEmail: string, classroomID: string, questionPrompt: string) => void
-    answerStudentQuestion: (userEmail: string, classroomID: string, questionAnswer: string, socketID: string) => void
+    createStudentQuestion: (userEmail: string, lectureID: number, questionPrompt: string) => void
+    answerStudentQuestion: (userEmail: string, lectureID: number, questionAnswer: string, socketID: string) => void
 
     // disturbance detection
-    checkDisturbance: (userEmail: string, classroomID: string) => void
+    checkDisturbance: (userEmail: string, lectureID: number) => void
 }
 
 export interface InterServerEvents {}

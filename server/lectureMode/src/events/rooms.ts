@@ -7,45 +7,39 @@ import axios from "axios"
 
 
 export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
-    socket.on("createRoom", async (userEmail: string, classroomID: string, name: string, description: string) => {
+    socket.on("createRoom", async (userEmail: string, lectureID: number, classroomID: number, name: string, description: string) => {
         if(!await checkTeacher(socket, userEmail, classroomID)) return
 
-        const res = await axios.post("http://localhost:3000/api/lectures", {
-            classID: classroomID,
-            name,
-            description
-        })
-        const lectureID: number = res.data.lectureID
-
-        await client.hSet(`classroom:lectures:${classroomID}`, { teacher: userEmail, studentCount: 0, socketID: socket.id, lectureID  })
-        socket.join(classroomID)
+        await client.hSet(`classroom:lectures:${lectureID}`, { teacher: userEmail, studentCount: 0, socketID: socket.id, classroomID  })
+        socket.join(String(lectureID))
     })
 
 
-    socket.on("deleteRoom", async (userEmail: string, classroomID: string) => {
+    socket.on("deleteRoom", async (userEmail: string, lectureID: number) => {
+        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
         if(!await checkTeacher(socket, userEmail, classroomID)) return
 
-        await client.hDel(`classroom:lectures`, classroomID)
-        socket.to(classroomID).emit("roomClosed")
-        socket.leave(classroomID)
+        await client.hDel(`classroom:lectures`, lectureID)
+        socket.to(String(lectureID)).emit("roomClosed")
+        socket.leave(String(lectureID))
     })
 
 
-    socket.on("joinRoom", async(userEmail: string, classroomID: string) => {
+    socket.on("joinRoom", async(userEmail: string, lectureID: number) => {
+        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
-        await client.hIncrBy(`classroom:lectures:${classroomID}`, 'studentCount', 1)
-        socket.join(classroomID)
+        await client.hIncrBy(`classroom:lectures:${lectureID}`, 'studentCount', 1)
+        socket.join(String(lectureID))
     })
 
 
-    socket.on("leaveRoom", async (userEmail: string, classroomID: string, title: string, content: string) => {
+    socket.on("leaveRoom", async (userEmail: string,lectureID: number, title: string, content: string) => {
+        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
-        await client.hIncrBy(`classroom:lectures:${classroomID}`, 'studentCount', -1)
-        socket.leave(classroomID)
-
-        const lectureID: number = client.hGet(`classroom:lectures:${classroomID}`, 'lectureID')
+        await client.hIncrBy(`classroom:lectures:${lectureID}`, 'studentCount', -1)
+        socket.leave(String(lectureID))
 
         const note: Note = {
             lectureID,
