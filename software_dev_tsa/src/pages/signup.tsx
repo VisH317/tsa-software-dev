@@ -37,7 +37,7 @@ export default function Signup() {
                         <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px", color: colors.dark}}>Classroom</Typography>
                     </Stack>
                     <Typography variant="h2" sx={{fontFamily: "'Titillium Web', sans-serif", color: colors.main, height: "10%", marginBottom: "50px"}}>Sign Up</Typography>
-                    <form onSubmit={submitHandler} style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center", height: "30%"}}>
+                    <form onSubmit={(e)=>{submitHandler(e)}} style={{display: "flex", flexDirection: "column", justifyContent: "space-around", alignItems: "center", height: "30%"}}>
                         <TextField type="text" id="us" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username: " sx={{width: "300%"}}/>
                         <br/>
                         <TextField type="email" id="em" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email:" sx={{width: "300%"}}/>

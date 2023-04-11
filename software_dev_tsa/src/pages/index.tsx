@@ -42,7 +42,7 @@ export default function Home() {
               <Stack direction="row" spacing={2}>
                 <form onSubmit={() => console.log("empty for now")} style={{display: "flex", flexDirection: "row", flexWrap: "nowrap", width: "100%"}}>
                   <TextField id="outlined-basic" label="Email:" variant="outlined" sx={{backgroundColor: "white", borderRadius: "5px", width: "150%"}}/>
-                  <Button variant="contained" sx={{backgroundColor: "#2b7a78", width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>} onClick={signUpRoute}>
+                  <Button variant="contained" sx={{backgroundColor: "#2b7a78", width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>} onClick={()=> {signUpRoute()}}>
                     Sign Up
                   </Button>
                 </form>
