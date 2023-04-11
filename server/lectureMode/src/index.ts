@@ -15,7 +15,6 @@ const client = await initRedis()
 // create redis index (basically schema for storing the lecture sessions)
 
 io.on('connection', function (socket) {
-    console.log("socket connection made")
 
     rooms(socket, client)
 

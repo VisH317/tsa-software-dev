@@ -56,8 +56,6 @@ export function useUser(path: string = "/") {
     const [u] = useAtom(loadableUser)
     const router = useRouter()
 
-    console.log(u)
-
     // useEffect(() => {
     //     const isSignedIn: boolean = checkSignedIn(u)
     //     if(!isSignedIn) router.push(path)

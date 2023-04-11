@@ -92,6 +92,7 @@ func GetClassByID(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	fmt.Println("newid: ", id)
 
 	var class Classroom
 

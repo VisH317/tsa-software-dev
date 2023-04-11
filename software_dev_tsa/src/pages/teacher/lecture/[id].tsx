@@ -12,7 +12,7 @@ export default function TeacherLecture() {
     const router = useRouter()
     const user = useUser()
     const { id } = router.query
-    const [lec, setLec] = useState<Lecture>()
+    const [lec, setLec] = useState()
     const [students, setStudents] = useState<Email[]>()
 
     // fetch list of lectures with react-query
@@ -22,27 +22,39 @@ export default function TeacherLecture() {
             const [_, cid] = queryKey
             console.log(cid)
             if(cid===undefined) return
-            const res = await axios.get("/api/lectures", { params: { class: cid } })
+            const res = await axios.get("/api/lectures", { params: { id: cid } })
+            console.log(res)
+            setLec(res.data)
             return res.data
         }
     })
 
-    const socket = io("ws://localhost:8080")
+    const socket = io("ws://localhost:8080", {
+        transports: ["websocket"]
+    })
+    socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err.message}`);
+    });
 
     const closeRoom = () => {
         if(user.state!=="hasData") return
+        console.log("lectureID: ", lec?.Id)
+        console.log("classid: ", lec?.ClassID)
         socket.emit("deleteRoom", user.data.email, lec?.Id)
     }
 
     // select the desired lecture based on the ID fetched from the route
     useEffect(() => {
-        if(status==='success') {
-            data.map((l:Lecture) => {
-                if(l.Id===parseInt(id as string)) setLec(l)
-                socket.emit("createRoom", lec?.Id, lec?.ClassID)
-            })
+        console.log("RUNNING THIS SHIT PLS")
+        if(status==='success'&&user.state==="hasData") {
+            console.log("GETTING IN PLS")
+            console.log(data)
+            console.log("lec: ", lec)
+            console.log("lectureID: ", data.Id)
+            console.log("classid: ", data.ClassID)
+            socket.emit("createRoom", user.data.email, data.Id, data.ClassID)
         }
-    }, [status])
+    }, [status, user.state])
 
 
     if(status==="loading") return <div>LOADING</div>

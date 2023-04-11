@@ -76,9 +76,9 @@ func DeleteLecture(c *fiber.Ctx, db *sql.DB) error {
 }
 
 func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
-	// id := c.Query("id")
-	// fmt.Println("id: ", id)
-	// if id == "" {
+	id := c.Query("id")
+	fmt.Println("id: ", id)
+	if id == "" {
 		class := c.Query("class")
 		if class == "" {
 			fmt.Println("Something went wrong")
@@ -108,31 +108,25 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 			return c.JSON(make([]Lecture, 0))
 		}
 		return c.JSON(lectures)
-	// } else {
-	// 	rows, err := db.Query("SELECT id, classID, name, description, isstopped, creationdate FROM lectures WHERE id=$1", id)
-	// 	if err != nil {
-	// 		fmt.Println("classes")
-	// 		fmt.Println(err)
-	// 	}
-	// 	var lectures []Lecture
+	} else {
+		rows, err := db.Query("SELECT id, classID, name, description, isstopped, creationdate FROM lectures WHERE id=$1", id)
+		if err != nil {
+			fmt.Println("classes")
+			fmt.Println(err)
+		}
+		var lecture Lecture
 
-	// 	for rows.Next() {
-	// 		var id int
-	// 		var classID int
-	// 		var name string
-	// 		var description string
-	// 		var isStopped bool
-	// 		var creationDate time.Time
-	// 		rows.Scan(&id, &classID, &name, &description, &isStopped, &creationDate)
-	// 		l := Lecture{id, classID, name, description, isStopped, creationDate}
-	// 		lectures = append(lectures, l)
-	// 	}
+		for rows.Next() {
+			var id int
+			var classID int
+			var name string
+			var description string
+			var isStopped bool
+			var creationDate time.Time
+			rows.Scan(&id, &classID, &name, &description, &isStopped, &creationDate)
+			lecture = Lecture{id, classID, name, description, isStopped, creationDate}
+		}
 
-	// 	fmt.Println("Lectures: ",lectures)
-
-	// 	if len(lectures)==0 {
-	// 		return c.SendString("nothing")
-	// 	}
-	// 	return c.JSON(lectures)
-	// }
+		return c.JSON(lecture)
+	}
 }
