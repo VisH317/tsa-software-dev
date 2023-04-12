@@ -25,25 +25,21 @@ export default function StudentLecturesHome(props: LecturesProps) {
 
     const mapLectures = (): React.ReactNode => {
         if(lectures.length===0) return <Box>You currently have no previous or ongoing lectures</Box>
-        return lectures.map(l => {
+        return lectures.map((l: Lecture) => {
             return (
                 <Box key={l.Id} sx={{backgroundColor: l.Isstopped ? "transparent" : "green"}}>
                     <Typography variant="h1">{l.Name}</Typography>
                     <Typography>{l.Description}</Typography>
                     <Typography>{l.Isstopped ? "stopped" : "started"}</Typography>
-                    <Button variant="contained" onClick={() => joinLectureHandler(l.Id, false)}>{l.Isstopped ? "Start lecture" : "Open Lecture"}</Button>
+                    {!l.Isstopped && <Button variant="contained" onClick={() => joinLectureHandler(l.Id)}>Join Lecture</Button>}
                 </Box>
             )
         })
     }
 
-    // const startLectureHandler = async (lid: number, start: boolean): Promise<void> => {
-    //     console.log(start)
-    //     const req: StartLectureData = { lecture: lid, start }
-    //     const res = await axios.post("/api/lectures/start", req)
-    //     setOpen(false)
-    //     router.push(`/student/lecture/${lid}`)
-    // }
+    const joinLectureHandler = async (lid: number): Promise<void> => {
+        router.push(`/student/lecture/${lid}`)
+    }
 
     return (
         <Box sx={{width: "100%", height: "100%"}}>

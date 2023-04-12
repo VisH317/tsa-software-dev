@@ -25,6 +25,7 @@ export default function TeacherClassHome() {
 
     useEffect(() => {
         if(scls.state==="hasData") {
+            console.log("scls: ", scls)
             let t: boolean = false
             scls.data.map((c: Classes) => {
                 console.log(c.Id)
