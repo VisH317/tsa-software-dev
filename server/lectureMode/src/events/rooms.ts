@@ -44,28 +44,31 @@ export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, Inter
         await client.hIncrBy(`lectures:${lectureID}`, 'studentCount', 1)
         const num = await client.hGet(`lectures:${lectureID}`, "studentCount") // later: show the student's emails by managing the list of people on the teacher's end and making a socket request there and back to reroute back to the person when joining or store on database and get as request
         socket.join(String(lectureID))
+        console.log("sending feedback event...")
         socket.to(String(lectureID)).emit("studentJoins", num)
     })
 
 
     socket.on("leaveRoom", async (userEmail: string,lectureID: number, title: string, content: string) => {
+        console.log("leavingroom!!")
         const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
         await client.hIncrBy(`lectures:${lectureID}`, 'studentCount', -1)
         const num = await client.hGet(`lectures:${lectureID}`, 'studentCount')
+        console.log("num!!: ", num)
         socket.to(String(lectureID)).emit("studentLeaves", num)
 
         socket.leave(String(lectureID))
 
-        const note: Note = {
-            lectureID,
-            studentEmail: userEmail,
-            title,
-            content
-        }
+        // const note: Note = {
+        //     lectureID,
+        //     studentEmail: userEmail,
+        //     title,
+        //     content
+        // }
 
-        // save the notes to the database
-        await axios.post("http://localhost:3000/api/notes", note)
+        // // save the notes to the database
+        // await axios.post("http://localhost:3000/api/notes", note)
     })
 }

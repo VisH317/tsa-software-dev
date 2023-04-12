@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
@@ -42,7 +42,9 @@ export default function TeacherLecture() {
         router.push(`/student/${lec?.ClassID}`)
     }
 
-    socket.on("studentJoins", num => setStudents(num))
+    useWindowUnloadEffect(leave)
+
+    socket.on("studentJoins", num => {console.log("joined! ", num);setStudents(num)})
     socket.on("studentLeaves", num => setStudents(num))
     socket.on("roomClosed", leave)
 
@@ -80,3 +82,22 @@ export default function TeacherLecture() {
     // render a list of people in the meeting and change when receiving a leave or join room
 
 }
+
+const useWindowUnloadEffect = (handler: () => unknown, callOnCleanup: boolean = false) => {
+    const cb = useRef()
+    
+    // cb.current = handler
+    
+    useEffect(() => {
+    //   const handler = () => cb.current()
+    
+      window.addEventListener('beforeunload', handler)
+      
+      return () => {
+        // if(callOnCleanup) handler()
+      
+        window.removeEventListener('beforeunload', handler)
+      }
+    }, [callOnCleanup])
+  }
+  
