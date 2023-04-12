@@ -2,6 +2,10 @@ export interface ServerToClientEvents {
     // room management & error events
     roomClosed: () => void
     unauthorized: () => void
+
+    // notifications for people joining and leaving rooms
+    studentJoins: (students: number) => void
+    studentLeaves: (students: number) => void
     
     // sends question to student client
     receiveTeacherQuestion: (questionPrompt: string) => void

@@ -37,14 +37,20 @@ export default function TeacherLecture() {
         console.log(`connect_error due to ${err.message}`);
     });
 
+    const leave = () => {
+        socket.close()
+        router.push(`/student/${lec?.ClassID}`)
+    }
+
     socket.on("studentJoins", num => setStudents(num))
     socket.on("studentLeaves", num => setStudents(num))
+    socket.on("roomClosed", leave)
 
     const closeRoom = () => {
         if(user.state!=="hasData") return
         console.log("lectureID: ", lec?.Id)
         console.log("classid: ", lec?.ClassID)
-        socket.emit("deleteRoom", user.data.email, lec?.Id)
+        socket.emit("leaveRoom", user.data.email, lec?.Id)
     }
 
     // select the desired lecture based on the ID fetched from the route
@@ -56,7 +62,7 @@ export default function TeacherLecture() {
             console.log("lec: ", lec)
             console.log("lectureID: ", data.Id)
             console.log("classid: ", data.ClassID)
-            socket.emit("createRoom", user.data.email, data.Id, data.ClassID)
+            socket.emit("joinRoom", user.data.email, data.Id, data.ClassID)
         }
     }, [status, user.state])
 

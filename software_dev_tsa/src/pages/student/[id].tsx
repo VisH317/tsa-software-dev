@@ -7,14 +7,15 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TabPanel, { a11yProps } from '@/components/Tabs';
 import DashNav from '@/components/Dashboard/DashNav';
 import MiniDrawer from '@/components/Dashboard/Drawer';
-import LecturesHome from '@/components/ClassHome/Lectures';
+import StudentLecturesHome from '@/components/ClassHome/StudentLectures';
+import { Lecture } from '@/lib/classData';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
     const router = useRouter();
     const [cls, scls] = useClasses()
     const { id } = router.query
-    const [curClass, setCur] = useState<Classes>(null)
+    const [curClass, setCur] = useState<Classes>()
 
     const [tab, setTab] = useState(0)
 
@@ -42,7 +43,8 @@ export default function TeacherClassHome() {
         queryKey: ['teacherClasses', id],
         queryFn: async () => {
             const res = await axios.get("/api/lectures", { params: { id } })
-            return res.data
+            const data: Lecture[] = res.data
+            return data
         }
     })
 
@@ -65,12 +67,12 @@ export default function TeacherClassHome() {
                         <Tab label="Tests" {...a11yProps(3)}/>
                     </Tabs>
                     <TabPanel value={tab} index={0}>
-                        Welcome to {curClass.Nm}
-                        teacher: {curClass.Teacher}
+                        Welcome to {curClass?.Nm}
+                        teacher: {curClass?.Teacher}
                         <Button variant="contained">Leave Class</Button>
                     </TabPanel>
                     <TabPanel value={tab} index={1}>
-                        <LecturesHome lectures={data}/>
+                        <StudentLecturesHome lectures={data} classID={curClass?.Id!}/>
                     </TabPanel>
                 </div>
             </MiniDrawer>
