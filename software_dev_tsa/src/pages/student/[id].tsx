@@ -40,11 +40,13 @@ export default function TeacherClassHome() {
     }, [scls.state])
 
     const { status, data, error, isFetching } = useQuery({
-        queryKey: ['teacherClasses', id],
-        queryFn: async () => {
-            const res = await axios.get("/api/lectures", { params: { id } })
-            const data: Lecture[] = res.data
-            return data
+        queryKey: ['teacherClasses', router.query.id],
+        queryFn: async ({ queryKey }) => {
+            const [_, cid] = queryKey
+            console.log(cid)
+            if(cid===undefined) return
+            const res = await axios.get("/api/lectures", { params: { class: cid } })
+            return res.data
         }
     })
 

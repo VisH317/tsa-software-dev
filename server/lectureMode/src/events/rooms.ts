@@ -27,8 +27,8 @@ export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, Inter
         if(!await checkTeacher(socket, userEmail, classroomID)) return
 
         console.log("deleting room!!")
-        await client.hDel(`lectures`, lectureID)
-        const test = await client.hGetAll(`lectures:${lectureID}`)
+        await client.hDel(`lectures`, String(lectureID))
+        const test = await client.hGetAll(`lectures`, String(lectureID))
 
         console.log("mytest: ", test)
         socket.to(String(lectureID)).emit("roomClosed")

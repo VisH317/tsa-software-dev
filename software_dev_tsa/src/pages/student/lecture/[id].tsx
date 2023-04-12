@@ -71,7 +71,10 @@ export default function TeacherLecture() {
     if(status==='error') return <div>error</div>
     
     return (
-        <button onClick={closeRoom}>Close Room</button>
+        <>
+            <p>{students}</p>
+            <button onClick={closeRoom}>Close Room</button>
+        </>
     )
     // NOTES: events to emit - createRoom, deleteRoom, for student: joinRoom leaveRoom (with notes UI)
     // render a list of people in the meeting and change when receiving a leave or join room

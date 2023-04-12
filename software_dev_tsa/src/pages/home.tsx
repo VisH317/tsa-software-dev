@@ -48,9 +48,9 @@ export default function Home() {
                             Hello
                         </Typography>
                         TEACHER
-                        <ClassesList classes={cls.data}/>
+                        <ClassesList classes={cls.data} isTeacher/>
                         STUDENT
-                        <ClassesList classes={scls.data}/>
+                        <ClassesList classes={scls.data} isTeacher={false}/>
                     </Grid>
                 </MiniDrawer>
             <Tooltip placement="left" title="New Class" arrow>

@@ -7,12 +7,13 @@ import { Box, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 
 export interface ClassesListProps {
-    classes: Classes[]
+    classes: Classes[],
+    isTeacher: boolean
 }
 
 export default function ClassesList(props: ClassesListProps) {
 
-    const { classes } = props
+    const { classes, isTeacher } = props
 
     console.log("classes: ", classes)
     const router = useRouter()
@@ -22,7 +23,7 @@ export default function ClassesList(props: ClassesListProps) {
 
     const mapClasses = () => {
         return classes.map((c: any) => (
-            <Link href={"/teacher/"+String(c.Id)}>
+            <Link href={`${isTeacher ? "/teacher/" : "/student/"}`+String(c.Id)}>
             <Box sx={{width: "100%", position: "relative", border: "1px solid black"}}>
                 <Typography variant='h1'>{c.Nm}</Typography>
                 <Typography variant='body2'><em>{c.Teacher}</em></Typography>
