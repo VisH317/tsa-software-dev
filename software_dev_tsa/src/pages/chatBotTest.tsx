@@ -11,6 +11,11 @@ import { Grid, Box, TextField, Button, Typography, Divider, Avatar, Stack } from
 import GoogleIcon from '@mui/icons-material/Google';
 
 
+interface Message {
+    role: string;
+    message: string;
+};
+
 export default function test() {
 
   const router = useRouter();
@@ -18,6 +23,8 @@ export default function test() {
   // form states
   const [prompt, setPrompt] = useState("")
   const [result, setResult] = useState("")
+  const [messages, setMessages] = useState<Message[]>([
+  ])
 
   const loginFunction = () => {
     router.push('/auth/google')
@@ -26,16 +33,23 @@ export default function test() {
   const homeHandler = () => {
     router.push("/")
   }
+
+ 
   
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const newPrompt: Message = { role: "Human", message: prompt }; 
+    messages.push(newPrompt)
+    const finalPrompt = messages.map((message:Message) => message.role + ": " + message.message).join("\n")
+    console.log("final",finalPrompt)
+    
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt:prompt }),
+        body: JSON.stringify({ prompt: "You are a helper \n" + finalPrompt + "\n AI:"  }),
       });
 
       const data = await response.json();
@@ -44,6 +58,12 @@ export default function test() {
       }
 
       setResult(data.result);
+   
+
+     
+      const newResult: Message = { role: "AI", message: data.result};
+      setMessages(prevMessage => [...prevMessage, newResult]);
+      console.log(messages)
       setPrompt("");
     } catch(error) {
       // Consider implementing your own error handling logic here
@@ -51,6 +71,7 @@ export default function test() {
     //   alert(error.message);
     }
   }
+
 
   return (
   <>
@@ -77,10 +98,11 @@ export default function test() {
 
         </Grid>
         <Grid item xs={7} sx={{backgroundColor: colors.dark}}>
-          <Stack direction="row" spacing={2}>
-            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
-            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
-            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
+          <Stack direction="column" spacing={2}>
+            {messages.map(message=>
+              <Typography key={message.message} variant="h5" sx={{color: "white", fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px"}}>{message.message}</Typography>
+              )}
+          {/* <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px"}}>{messages}</Typography> */}
           </Stack>
         </Grid>
       </Grid>
