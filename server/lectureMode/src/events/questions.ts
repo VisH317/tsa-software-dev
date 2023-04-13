@@ -36,14 +36,14 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
         const res = await client.hGetAll(`classroom:lectures${lectureID}`)
         const lecture: Lecture = convertToLectureType(res.data)
 
-        io.sockets[lecture.socketID].emit("receiveStudentQuestion", questionPrompt, socket.id)
+        io.sockets[lecture.socketID].emit("receiveStudentQuestion", userEmail, questionPrompt, socket.id)
     })
 
 
-    socket.on("answerStudentQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, socketID: string) => {
+    socket.on("answerStudentQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, socketID: string, question: string) => {
         const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
         if(!await checkTeacher(socket, userEmail, classroomID)) return
 
-        io.sockets[socketID].emit("sendStudentQuestionResponse", questionAnswer)
+        io.sockets[socketID].emit("sendStudentQuestionResponse", questionAnswer, question)
     })
 }

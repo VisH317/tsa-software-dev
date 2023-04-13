@@ -13,9 +13,9 @@ export interface ServerToClientEvents {
     sendTeacherQuestionResponse: (questionAnwer: string) => void
 
     // sends question asked by student to teacher socket ID
-    receiveStudentQuestion: (questionPrompt: string, socketID: string) => void
+    receiveStudentQuestion: (email: string, questionPrompt: string, socketID: string) => void
     // sends student question response from teacher back to student
-    sendStudentQuestionResponse: (questionAnswer: string) => void
+    sendStudentQuestionResponse: (questionAnswer: string, question: string) => void
 
     sendDisturbance: () => void
 }
@@ -33,7 +33,7 @@ export interface ClientToServerEvents {
 
     // student questions
     createStudentQuestion: (userEmail: string, lectureID: number, questionPrompt: string) => void
-    answerStudentQuestion: (userEmail: string, lectureID: number, questionAnswer: string, socketID: string) => void
+    answerStudentQuestion: (userEmail: string, lectureID: number, questionAnswer: string, socketID: string, question: string) => void
 
     // disturbance detection
     checkDisturbance: (userEmail: string, lectureID: number) => void

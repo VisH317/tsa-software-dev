@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import { Lecture } from '@/lib/classData'
 import { useUser, Email } from '@/lib/user'
+import { TextField } from '@mui/material'
 
 // IMPORTANT FOR LATER: add check for lecture being accessed is in the right class
 
@@ -57,17 +58,21 @@ export default function TeacherLecture() {
 
     // select the desired lecture based on the ID fetched from the route
     useEffect(() => {
-        console.log("RUNNING THIS SHIT PLS")
-        if(status==='success'&&user.state==="hasData") {
-            console.log("GETTING IN PLS")
-            console.log(data)
-            console.log("lec: ", lec)
-            console.log("lectureID: ", data.Id)
-            console.log("classid: ", data.ClassID)
-            socket.emit("joinRoom", user.data.email, data.Id, data.ClassID)
-        }
+        if(status==='success'&&user.state==="hasData") socket.emit("joinRoom", user.data.email, data.Id, data.ClassID)
     }, [status, user.state])
 
+    // question asking stuff
+
+    const [question, setQuestion] = useState<string>("")
+    const [answer, setAnswer] = useState<string>("")
+
+    const submitQuestion = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        if(user.state!=="hasData") return 
+        e.preventDefault()
+        socket.emit("createStudentQuestion", user.data.email, lec?.Id, question)
+    }
+
+    socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(response))
 
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
@@ -76,6 +81,13 @@ export default function TeacherLecture() {
         <>
             <p>{students}</p>
             <button onClick={closeRoom}>Close Room</button>
+            <br/><br/><br/>
+            <form onSubmit={submitQuestion}>
+                <p>HAVE A QUESTION?</p>
+                <textarea value={question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setQuestion(e.target.value)}/>
+                <button type="submit">Ask Question</button>
+            </form>
+            <p>Answer to your last question: {answer}</p>
         </>
     )
     // NOTES: events to emit - createRoom, deleteRoom, for student: joinRoom leaveRoom (with notes UI)
