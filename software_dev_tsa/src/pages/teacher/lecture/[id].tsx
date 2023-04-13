@@ -59,7 +59,7 @@ export default function TeacherLecture() {
     // select the desired lecture based on the ID fetched from the route
     useEffect(() => {
         if(status==='success'&&user.state==="hasData") {
-            socket.emit("createRoom", user.data.email, data.Id, data.ClassID)
+            socket.emit("createRoom", user.data.email, lec?.Id, lec?.ClassID)
         }
     }, [status, user.state])
 
@@ -77,7 +77,7 @@ export default function TeacherLecture() {
 
     const submitQuestionResponse = () => {
         socket.emit("answerStudentQuestion", currentModal?.email, lec?.Id, answer, currentModal?.id, currentModal?.question)
-        alert("submitted answer!!")
+        // alert("submitted answer!!")
     }
 
     const mapQuestions = () => {
@@ -97,7 +97,7 @@ export default function TeacherLecture() {
         <>
             <p>{students}</p>
             <button onClick={closeRoom}>Close Room</button>
-            <div>
+            <div>hello
                 {mapQuestions()}
             </div>
             <Modal open={modal} close={() => setModal(false)}>

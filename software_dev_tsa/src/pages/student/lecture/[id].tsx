@@ -58,7 +58,10 @@ export default function TeacherLecture() {
 
     // select the desired lecture based on the ID fetched from the route
     useEffect(() => {
-        if(status==='success'&&user.state==="hasData") socket.emit("joinRoom", user.data.email, data.Id, data.ClassID)
+        if(status==='success'&&user.state==="hasData") {
+            if(lec?.Isstopped) router.push(`/student/${lec?.ClassID}`) 
+            socket.emit("joinRoom", user.data.email, data.Id, data.ClassID)
+        }
     }, [status, user.state])
 
     // question asking stuff
