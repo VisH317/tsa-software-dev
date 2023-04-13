@@ -51,7 +51,7 @@ export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, Inter
 
     socket.on("leaveRoom", async (userEmail: string,lectureID: number, title: string, content: string) => {
         console.log("leavingroom!!")
-        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
+        const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
         await client.hIncrBy(`lectures:${lectureID}`, 'studentCount', -1)

@@ -54,6 +54,7 @@ export default function TeacherLecture() {
         console.log("lectureID: ", lec?.Id)
         console.log("classid: ", lec?.ClassID)
         socket.emit("leaveRoom", user.data.email, lec?.Id)
+        router.push(`/student/${lec?.ClassID}`)
     }
 
     // select the desired lecture based on the ID fetched from the route
