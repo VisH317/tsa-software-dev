@@ -2,7 +2,7 @@ import { Configuration, OpenAIApi } from "openai";
 
 
 const configuration = new Configuration({
-    apiKey: "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"
+    apiKey: "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"
     //Guys, I can't make a Api KEY and push to github. So go to this link https://platform.openai.com/docs/quickstart/build-your-application, and scroll down and make your own API KEY.
 });
 

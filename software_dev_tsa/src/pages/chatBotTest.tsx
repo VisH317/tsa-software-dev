@@ -23,8 +23,9 @@ export default function test() {
   // form states
   const [prompt, setPrompt] = useState("")
   const [result, setResult] = useState("")
-  const [messages, setMessages] = useState<Message[]>([
-  ])
+  const [disable, setDisable] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [context, setContext] = useState("The assignment is writing a five paragraph essay on the second president of the United States of America")
 
   const loginFunction = () => {
     router.push('/auth/google')
@@ -37,6 +38,7 @@ export default function test() {
  
   
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    setDisable(true)
     event.preventDefault();
     const newPrompt: Message = { role: "Human", message: prompt }; 
     messages.push(newPrompt)
@@ -49,7 +51,7 @@ export default function test() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: "You are a helper \n" + finalPrompt + "\n AI:"  }),
+        body: JSON.stringify({ prompt: "You are a tutor that always responds in the Socratic style. You *never* give the student the answer, but always try to nudge them learn to think for themselves. You should always tune your suggestion to the interest & knowledge of the student. Currently, you are helping a student with an assignment." + context + "\n" + finalPrompt + "\n AI:"  }),
       });
 
       const data = await response.json();
@@ -65,6 +67,7 @@ export default function test() {
       setMessages(prevMessage => [...prevMessage, newResult]);
       console.log(messages)
       setPrompt("");
+      setDisable(false)
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -90,7 +93,7 @@ export default function test() {
             <TextField type="text" id="em" value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Prompt:" sx={{width: "200%"}}></TextField>
             <br/>
         
-            <Button type="submit" variant="contained" sx={{width: "100%", height: "40px", backgroundColor: colors.main, marginTop: "30px", marginBottom: "20px"}}>Submit</Button>
+            <Button disabled={disable} type="submit" variant="contained" sx={{width: "100%", height: "40px", backgroundColor: colors.main, marginTop: "30px", marginBottom: "20px"}}>Submit</Button>
           </form>
           <br/><br/>
           <Divider style={{width: "90%"}}/>
