@@ -101,7 +101,7 @@ export default function TeacherLecture() {
         e.preventDefault()
         if(user.state!=="hasData") return
         console.log("teacherquestion: ", teacherQuestion)
-        setAllTeacherQuestions([...allTeacherQuestions, teacherQuestion])
+        setAllTeacherQuestions(allTeacherQuestions => [...allTeacherQuestions, teacherQuestion])
         console.log("allTeacherQuestions: ", allTeacherQuestions)
         socket.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion.question)
         setTeacherQuestion({ question: "", answer: [] })
@@ -110,13 +110,17 @@ export default function TeacherLecture() {
     socket.on("sendTeacherQuestionResponse", (email, answer, question) => {
         const ans: Answer = { email, answer }
         console.log("allteacherquestions when getting response: ", allTeacherQuestions)
-        const atq: TeacherQuestion[] = [...allTeacherQuestions]
-        console.log("atq: ", atq)
+        let atq: TeacherQuestion[]
+        setAllTeacherQuestions(allTeacherQuestions => {
+            atq = [...allTeacherQuestions]
+            return [...allTeacherQuestions]
+        })
+        console.log("atq: ", atq!)
         console.log("Question: ", question)
-        const idx: number = atq.map(q => q.question).indexOf(question)
+        const idx: number = atq!.map(q => q.question).indexOf(question)
         console.log("idx: ", idx)
-        atq[idx] = { question, answer: [...atq[idx].answer, ans] }
-        setAllTeacherQuestions(atq)
+        atq![idx] = { question, answer: [...atq![idx].answer, ans] }
+        setAllTeacherQuestions(atq!)
     })
 
     const [openAnswers, setOpenAnswers] = useState<boolean>(false)
