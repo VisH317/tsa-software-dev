@@ -100,17 +100,21 @@ export default function TeacherLecture() {
     const createTeacherQuestion = (e: any) => {
         e.preventDefault()
         if(user.state!=="hasData") return
-        socket.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion.question)
+        console.log("teacherquestion: ", teacherQuestion)
         setAllTeacherQuestions([...allTeacherQuestions, teacherQuestion])
         console.log("allTeacherQuestions: ", allTeacherQuestions)
+        socket.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion.question)
         setTeacherQuestion({ question: "", answer: [] })
     }
 
     socket.on("sendTeacherQuestionResponse", (email, answer, question) => {
         const ans: Answer = { email, answer }
+        console.log("allteacherquestions when getting response: ", allTeacherQuestions)
         const atq: TeacherQuestion[] = [...allTeacherQuestions]
         console.log("atq: ", atq)
+        console.log("Question: ", question)
         const idx: number = atq.map(q => q.question).indexOf(question)
+        console.log("idx: ", idx)
         atq[idx] = { question, answer: [...atq[idx].answer, ans] }
         setAllTeacherQuestions(atq)
     })
@@ -123,6 +127,7 @@ export default function TeacherLecture() {
     }
 
     const mapTeacherQuestions = () => {
+        console.log("mapTeacherQuestions: ", allTeacherQuestions)
         return allTeacherQuestions.map(q => (
             <div>
                 <p>Question: {q.question}</p>

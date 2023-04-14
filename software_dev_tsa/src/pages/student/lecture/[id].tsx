@@ -64,7 +64,7 @@ export default function TeacherLecture() {
             if(lec?.Isstopped) router.push(`/student/${lec?.ClassID}`) 
             socket.emit("joinRoom", user.data.email, data.Id, data.ClassID)
         }
-    }, [status, user.state])
+    }, [status, user, data])
 
     // question asking stuff
 
@@ -87,7 +87,8 @@ export default function TeacherLecture() {
     const [studentAnswer, setStudentAnswer] = useState<string>("")
 
     socket.on("receiveTeacherQuestion", prompt => {
-        setTeacherQuestions([...teacherQuestions, { prompt }])
+        console.log("oldTeacherQuestions: ", teacherQuestions)
+        setTeacherQuestions(teacherQuestions => [...teacherQuestions, { prompt }])
     })
 
     const openModal = (q: TeacherQuestion) => {
