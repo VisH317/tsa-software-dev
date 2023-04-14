@@ -10,7 +10,7 @@ export interface ServerToClientEvents {
     // sends question to student client
     receiveTeacherQuestion: (questionPrompt: string) => void
     // sends question responses from students to teacher client
-    sendTeacherQuestionResponse: (questionAnwer: string) => void
+    sendTeacherQuestionResponse: (email: string, questionAnwer: string, question: string) => void
 
     // sends question asked by student to teacher socket ID
     receiveStudentQuestion: (email: string, questionPrompt: string, socketID: string) => void
@@ -29,7 +29,7 @@ export interface ClientToServerEvents {
 
     // teacher questions
     createTeacherQuestion: (userEmail: string, lectureID: number, questionPrompt: string) => void
-    answerTeacherQuestion: (userEmail: string, lectureID: number, questionAnswer: string) => void
+    answerTeacherQuestion: (userEmail: string, lectureID: number, questionAnswer: string, question: string) => void
 
     // student questions
     createStudentQuestion: (userEmail: string, lectureID: number, questionPrompt: string) => void

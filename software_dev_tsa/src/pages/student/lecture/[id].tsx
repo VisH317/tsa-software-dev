@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Lecture } from '@/lib/classData'
 import { useUser, Email } from '@/lib/user'
 import { TextField } from '@mui/material'
+import Modal from '@/components/Modal/Modal'
 
 // IMPORTANT FOR LATER: add check for lecture being accessed is in the right class
 
@@ -78,6 +79,36 @@ export default function TeacherLecture() {
 
     socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(response))
 
+    // question creating stuff
+
+    const [teacherQuestions, setTeacherQuestions] = useState<TeacherQuestion[]>([])
+    const [currentTeacherQuestion, setCurrentTeacherQuestion] = useState<TeacherQuestion>()
+    const [open, setOpen] = useState<boolean>(false)
+    const [answer, setAnswer] = useState<string>("")
+
+    socket.on("receiveTeacherQuestion", prompt => {
+        setTeacherQuestions([...teacherQuestions, { prompt }])
+    })
+
+    const openModal = (q: TeacherQuestion) => {
+        setCurrentTeacherQuestion(q)
+        setOpen(true)
+    }
+
+    const submitAnswer = () => {
+        if(user.state!=="hasData") return
+        socket.emit("answerTeacherQuestion", user.data.email, lec?.Id, answer, currentTeacherQuestion?.prompt)
+    }
+
+    const mapTeacherQuestions = () => {
+        return teacherQuestions.map((q: TeacherQuestion) => (
+            <div>
+                <p>Question: {q.prompt}</p>
+                <button onClick={() => openModal(q)}>Answer Question</button>
+            </div>
+        ))
+    }
+
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
     
@@ -91,7 +122,18 @@ export default function TeacherLecture() {
                 <textarea value={question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setQuestion(e.target.value)}/>
                 <button type="submit">Ask Question</button>
             </form>
+            <br/>
+            <div>
+                Questions from the teacher:
+                {mapTeacherQuestions()}
+            </div>
             <p>Answer to your last question: {answer}</p>
+            <Modal open={open} close={() => setOpen(false)}>
+                <h1>Submit answer to question</h1>
+                <p>Question: {currentTeacherQuestion?.prompt}</p>
+                <textarea rows={5} cols={30} value={answer} onChange={e => setAnswer(e.target.value)}/>
+                <button onClick={submitAnswer}>Submit Answer</button>
+            </Modal>
         </>
     )
     // NOTES: events to emit - createRoom, deleteRoom, for student: joinRoom leaveRoom (with notes UI)
@@ -117,3 +159,6 @@ const useWindowUnloadEffect = (handler: () => unknown, callOnCleanup: boolean = 
     }, [callOnCleanup])
   }
   
+interface TeacherQuestion {
+    prompt: string
+}

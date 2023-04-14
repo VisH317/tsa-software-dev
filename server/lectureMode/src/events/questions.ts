@@ -18,13 +18,13 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     })
 
     
-    socket.on("answerTeacherQuestion", async (userEmail: string, lectureID: number, questionAnswer: string) => {
+    socket.on("answerTeacherQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, question: string) => {
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
         const socketID = await client.hGet(`lectures:${lectureID}`, "socketID")
         
-        io.to(socketID).emit("sendTeacherQuestionResponse", questionAnswer)
+        io.to(socketID).emit("sendTeacherQuestionResponse", userEmail, questionAnswer, question)
     })
 
 
