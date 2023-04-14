@@ -97,18 +97,21 @@ export default function TeacherLecture() {
     const [allTeacherQuestions, setAllTeacherQuestions] = useState<TeacherQuestion[]>([]) // need a map, adding 
     const [currentTeacherQuestion, setCurrentTeacherQuestion] = useState<TeacherQuestion>()
 
-    const createTeacherQuestion = () => {
+    const createTeacherQuestion = (e: any) => {
+        e.preventDefault()
         if(user.state!=="hasData") return
-        socket.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion)
+        socket.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion.question)
         setAllTeacherQuestions([...allTeacherQuestions, teacherQuestion])
+        console.log("allTeacherQuestions: ", allTeacherQuestions)
         setTeacherQuestion({ question: "", answer: [] })
     }
 
     socket.on("sendTeacherQuestionResponse", (email, answer, question) => {
         const ans: Answer = { email, answer }
         const atq: TeacherQuestion[] = [...allTeacherQuestions]
+        console.log("atq: ", atq)
         const idx: number = atq.map(q => q.question).indexOf(question)
-        atq[idx] = { question, answer: [...atq[idx].answer, answer] }
+        atq[idx] = { question, answer: [...atq[idx].answer, ans] }
         setAllTeacherQuestions(atq)
     })
 
@@ -117,6 +120,15 @@ export default function TeacherLecture() {
     const openAnswersModal = (q: TeacherQuestion) => {
         setCurrentTeacherQuestion(q)
         setOpenAnswers(true)
+    }
+
+    const mapTeacherQuestions = () => {
+        return allTeacherQuestions.map(q => (
+            <div>
+                <p>Question: {q.question}</p>
+                <button onClick={() => openAnswersModal(q)}>See Answers</button>
+            </div>
+        ))
     }
 
     const mapAnswers = () => {
@@ -144,6 +156,11 @@ export default function TeacherLecture() {
                     <textarea value={teacherQuestion.question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setTeacherQuestion({ question: e.target.value, answer: [] })}/>
                     <button type="submit">Ask Question</button>
                 </form>
+            </div>
+
+            <div>
+                see answers to previous questions:  
+                {mapTeacherQuestions()}
             </div>
 
             <Modal open={modal} close={() => setModal(false)}>

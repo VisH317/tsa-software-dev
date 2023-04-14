@@ -10,6 +10,7 @@ import { convertToLectureType } from "../redis.js"
 
 export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
     socket.on("createTeacherQuestion", async (userEmail: string, lectureID: number, questionPrompt: string) => {
+        console.log("creating teacher question!!")
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkTeacher(socket, userEmail, classroomID)) return
         
@@ -19,6 +20,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
 
     
     socket.on("answerTeacherQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, question: string) => {
+        console.log("answering teacher question!")
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 

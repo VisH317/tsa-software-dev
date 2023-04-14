@@ -79,12 +79,12 @@ export default function TeacherLecture() {
 
     socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(response))
 
-    // question creating stuff
+    // question answering stuff
 
     const [teacherQuestions, setTeacherQuestions] = useState<TeacherQuestion[]>([])
     const [currentTeacherQuestion, setCurrentTeacherQuestion] = useState<TeacherQuestion>()
     const [open, setOpen] = useState<boolean>(false)
-    const [answer, setAnswer] = useState<string>("")
+    const [studentAnswer, setStudentAnswer] = useState<string>("")
 
     socket.on("receiveTeacherQuestion", prompt => {
         setTeacherQuestions([...teacherQuestions, { prompt }])
@@ -97,10 +97,13 @@ export default function TeacherLecture() {
 
     const submitAnswer = () => {
         if(user.state!=="hasData") return
-        socket.emit("answerTeacherQuestion", user.data.email, lec?.Id, answer, currentTeacherQuestion?.prompt)
+        socket.emit("answerTeacherQuestion", user.data.email, lec?.Id, studentAnswer, currentTeacherQuestion?.prompt)
+        console.log("answered teacher question!!")
+        setOpen(false)
     }
 
     const mapTeacherQuestions = () => {
+        console.log("teacher questions: ", teacherQuestions)
         return teacherQuestions.map((q: TeacherQuestion) => (
             <div>
                 <p>Question: {q.prompt}</p>
@@ -131,7 +134,7 @@ export default function TeacherLecture() {
             <Modal open={open} close={() => setOpen(false)}>
                 <h1>Submit answer to question</h1>
                 <p>Question: {currentTeacherQuestion?.prompt}</p>
-                <textarea rows={5} cols={30} value={answer} onChange={e => setAnswer(e.target.value)}/>
+                <textarea rows={5} cols={30} value={studentAnswer} onChange={e => setStudentAnswer(e.target.value)}/>
                 <button onClick={submitAnswer}>Submit Answer</button>
             </Modal>
         </>
