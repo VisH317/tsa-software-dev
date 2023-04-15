@@ -17,7 +17,8 @@ export interface ServerToClientEvents {
     // sends student question response from teacher back to student
     sendStudentQuestionResponse: (questionAnswer: string, question: string) => void
 
-    sendDisturbance: () => void
+    sendDisturbance: (email: string) => void
+    sendJoin: (email: string) => void
 }
 
 export interface ClientToServerEvents {

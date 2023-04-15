@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
@@ -7,6 +7,7 @@ import { Lecture, StartLectureData } from '@/lib/classData'
 import { useUser, Email } from '@/lib/user'
 import Modal from '@/components/Modal/Modal'
 import { createSocket } from 'dgram'
+import type { Socket } from 'socket.io-client'
 
 // IMPORTANT FOR LATER: add check for lecture being accessed is in the right class
 
@@ -19,6 +20,8 @@ export default function TeacherLecture() {
     const [questions, setQuestions] = useState<Question[]>([])
     const [currentModal, setCurrentModal] = useState<Question>()
     const [modal, setModal] = useState<boolean>(false)
+    const [message, setMessage] = useState<string>("")
+    const ws = useRef<Socket>()
 
     // fetch list of lectures with react-query
     const { status, data, error, isFetching } = useQuery({
@@ -34,24 +37,61 @@ export default function TeacherLecture() {
         }
     })
 
+    useEffect(() => {
+        const socket = io("ws://localhost:8080", {
+            transports: ["websocket"]
+        })
+
+        socket.on("connect_error", (err) => {
+            console.log(`connect_error due to ${err.message}`);
+        });
+
+        socket.on("studentJoins", num => setStudents(num))
+        socket.on("studentLeaves", num => setStudents(num))
+
+        socket.on("receiveStudentQuestion", (email: Email, question: string, id: string): void => {
+            const q: Question = { email, question, id }
+            setQuestions([...questions, q])
+        })
+
+        socket.on("sendTeacherQuestionResponse", (email: Email, answer: string, question: string) => { // can refactor into a useEffect callback if this doesnt work
+            const ans: Answer = { email, answer }
+            setAllTeacherQuestions(allTeacherQuestions => {
+                const atq = [...allTeacherQuestions]
+                console.log("atq: ", atq!)
+                console.log("Question: ", question)
+                const idx: number = atq!.map(q => q.question).indexOf(question)
+                console.log("idx: ", idx)
+                atq![idx] = { question, answer: [...atq![idx].answer, ans] }
+                return atq
+            })
+        })
+
+        socket.on("sendDisturbance", (email: string) => {
+            setMessage(`${email} has left the session`)
+        })
+        
+        socket.on("sendJoin", (email: string) => {
+            setMessage(`${email} has joined the session`)
+        })
+
+        ws.current = socket
+
+        return () => {
+            socket.disconnect()
+        }
+
+    }, [])
+
     // connect websocket and joining/leaving functionality
-    const socket = io("ws://localhost:8080", {
-        transports: ["websocket"]
-    })
-
-    socket.on("connect_error", (err) => {
-        console.log(`connect_error due to ${err.message}`);
-    });
-
-    socket.on("studentJoins", num => setStudents(num))
-    socket.on("studentLeaves", num => setStudents(num))
+    
 
     // close 
     const closeRoom = async () => {
         if(user.state!=="hasData") return
         console.log("lectureID: ", lec?.Id)
         console.log("classid: ", lec?.ClassID)
-        socket.emit("deleteRoom", user.data.email, lec?.Id)
+        ws.current?.emit("deleteRoom", user.data.email, lec?.Id)
         const req: StartLectureData = { lecture: lec?.Id!, start: true }
         const res = await axios.post("/api/lectures/start", req)
         router.push(`/teacher/${lec?.Id!}`)
@@ -60,14 +100,11 @@ export default function TeacherLecture() {
     // select the desired lecture based on the ID fetched from the route
     useEffect(() => {
         if(status==='success'&&user.state==="hasData") {
-            socket.emit("createRoom", user.data.email, lec?.Id, lec?.ClassID)
+            ws.current?.emit("createRoom", user.data.email, lec?.Id, lec?.ClassID)
         }
     }, [status, user.state])
 
-    socket.on("receiveStudentQuestion", (email: Email, question: string, id: string): void => {
-        const q: Question = { email, question, id }
-        setQuestions([...questions, q])
-    })
+    
 
     const [answer, setAnswer] = useState<string>("")
 
@@ -78,7 +115,7 @@ export default function TeacherLecture() {
 
     // teacher responses to student questions
     const submitQuestionResponse = () => {
-        socket.emit("answerStudentQuestion", currentModal?.email, lec?.Id, answer, currentModal?.id, currentModal?.question)
+        ws.current?.emit("answerStudentQuestion", currentModal?.email, lec?.Id, answer, currentModal?.id, currentModal?.question)
         // alert("submitted answer!!")
     }
 
@@ -103,25 +140,9 @@ export default function TeacherLecture() {
         console.log("teacherquestion: ", teacherQuestion)
         setAllTeacherQuestions(allTeacherQuestions => [...allTeacherQuestions, teacherQuestion])
         console.log("allTeacherQuestions: ", allTeacherQuestions)
-        socket.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion.question)
+        ws.current?.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion.question)
         setTeacherQuestion({ question: "", answer: [] })
     }
-
-    socket.on("sendTeacherQuestionResponse", (email, answer, question) => {
-        const ans: Answer = { email, answer }
-        console.log("allteacherquestions when getting response: ", allTeacherQuestions)
-        let atq: TeacherQuestion[]
-        setAllTeacherQuestions(allTeacherQuestions => {
-            atq = [...allTeacherQuestions]
-            return [...allTeacherQuestions]
-        })
-        console.log("atq: ", atq!)
-        console.log("Question: ", question)
-        const idx: number = atq!.map(q => q.question).indexOf(question)
-        console.log("idx: ", idx)
-        atq![idx] = { question, answer: [...atq![idx].answer, ans] }
-        setAllTeacherQuestions(atq!)
-    })
 
     const [openAnswers, setOpenAnswers] = useState<boolean>(false)
 
@@ -170,6 +191,10 @@ export default function TeacherLecture() {
             <div>
                 see answers to previous questions:  
                 {mapTeacherQuestions()}
+            </div>
+
+            <div>
+                Activity: {message}
             </div>
 
             <Modal open={modal} close={() => setModal(false)}>

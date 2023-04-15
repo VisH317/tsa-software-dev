@@ -1,4 +1,4 @@
-import type { Socket } from "socket.io"
+import type { Socket, Server } from "socket.io"
 import type { Note, Lecture, LecturePersist } from "../types.js"
 // import redis from 'redis'
 
@@ -7,7 +7,7 @@ import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDa
 import axios from "axios"
 
 
-export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
+export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
     socket.on("createRoom", async (userEmail: string, lectureID: number, classroomID: number) => {
         console.log("Stuff: ", userEmail, ", ", lectureID, ", ", classroomID)
         if(!await checkTeacher(socket, userEmail, classroomID)) return
@@ -46,6 +46,9 @@ export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, Inter
         socket.join(String(lectureID))
         console.log("sending feedback event...")
         socket.to(String(lectureID)).emit("studentJoins", num)
+
+        const socketID: string = await client.hGet(`lectures:${lectureID}`, 'socketID')
+        io.to(socketID).emit("sendJoin", userEmail)
     })
 
 
@@ -59,16 +62,19 @@ export default (socket: Socket<ClientToServerEvents, ServerToClientEvents, Inter
         console.log("num!!: ", num)
         socket.to(String(lectureID)).emit("studentLeaves", num)
 
+        const socketID: string = await client.hGet(`lectures:${lectureID}`, 'socketID')
+        io.to(socketID).emit("sendDisturbance", userEmail)
+
         socket.leave(String(lectureID))
+        console.log("note: ", content)
+        const note: Note = {
+            lectureID,
+            studentEmail: userEmail,
+            title,
+            content
+        }
 
-        // const note: Note = {
-        //     lectureID,
-        //     studentEmail: userEmail,
-        //     title,
-        //     content
-        // }
-
-        // // save the notes to the database
-        // await axios.post("http://localhost:3000/api/notes", note)
+        // save the notes to the database
+        await axios.post("http://localhost:5001/api/notes", note)
     })
 }

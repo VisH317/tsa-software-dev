@@ -16,7 +16,7 @@ const client = await initRedis()
 
 io.on('connection', function (socket) {
 
-    rooms(socket, client)
+    rooms(io, socket, client)
 
     // question creation
 

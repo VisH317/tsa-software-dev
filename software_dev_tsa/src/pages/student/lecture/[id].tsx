@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useState, useEffect, useRef } from 'react'
-import { io } from 'socket.io-client'
+import { Socket, io } from 'socket.io-client'
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import { Lecture } from '@/lib/classData'
@@ -10,12 +10,13 @@ import Modal from '@/components/Modal/Modal'
 
 // IMPORTANT FOR LATER: add check for lecture being accessed is in the right class
 
-export default function TeacherLecture() {
+export default function StudentLecture() {
     const router = useRouter()
     const user = useUser()
     const { id } = router.query
     const [lec, setLec] = useState<Lecture>()
     const [students, setStudents] = useState<number>(0)
+    const ws = useRef<Socket>()
 
     // fetch list of lectures with react-query
     const { status, data, error, isFetching } = useQuery({
@@ -31,38 +32,57 @@ export default function TeacherLecture() {
         }
     })
 
-    const socket = io("ws://localhost:8080", {
-        transports: ["websocket"]
-    })
+    // socket handler setup
+    useEffect(() => {
+        const socket = io("ws://localhost:8080", {
+            transports: ["websocket"]
+        })
+        socket.connect()
 
-    socket.on("connect_error", (err) => {
-        console.log(`connect_error due to ${err.message}`);
-    });
+        socket.on("connect_error", (err) => {
+            console.log(`connect_error due to ${err.message}`);
+        });
+
+        socket.on("studentJoins", num => {console.log("joined! ", num);setStudents(num)})
+        socket.on("studentLeaves", num => setStudents(num))
+        socket.on("roomClosed", leave)
+        socket.on("roomClosed", closeRoom)
+        socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(response))
+
+        socket.on("receiveTeacherQuestion", prompt => {
+            console.log("oldTeacherQuestions: ", teacherQuestions)
+            setTeacherQuestions(teacherQuestions => [...teacherQuestions, { prompt }])
+        })
+
+        ws.current = socket
+
+        return () => {
+            socket.disconnect()
+        }
+    }, [])
+
 
     const leave = () => {
-        socket.close()
+        // socket.close()
         router.push(`/student/${lec?.ClassID}`)
     }
 
     useWindowUnloadEffect(leave)
 
-    socket.on("studentJoins", num => {console.log("joined! ", num);setStudents(num)})
-    socket.on("studentLeaves", num => setStudents(num))
-    socket.on("roomClosed", leave)
-
     const closeRoom = () => {
         if(user.state!=="hasData") return
         console.log("lectureID: ", lec?.Id)
         console.log("classid: ", lec?.ClassID)
-        socket.emit("leaveRoom", user.data.email, lec?.Id)
-        router.push(`/student/${lec?.ClassID}`)
+        console.log("note: ", note)
+        ws.current?.emit("leaveRoom", user.data.email, lec?.Id, lec?.Name, note)
+        leave()
     }
 
     // select the desired lecture based on the ID fetched from the route
     useEffect(() => {
         if(status==='success'&&user.state==="hasData") {
             if(lec?.Isstopped) router.push(`/student/${lec?.ClassID}`) 
-            socket.emit("joinRoom", user.data.email, data.Id, data.ClassID)
+            ws.current?.emit("joinRoom", user.data.email, data.Id, data.ClassID)
         }
     }, [status, user, data])
 
@@ -74,10 +94,8 @@ export default function TeacherLecture() {
     const submitQuestion = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         if(user.state!=="hasData") return 
         e.preventDefault()
-        socket.emit("createStudentQuestion", user.data.email, lec?.Id, question)
+        ws.current?.emit("createStudentQuestion", user.data.email, lec?.Id, question)
     }
-
-    socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(response))
 
     // question answering stuff
 
@@ -86,11 +104,6 @@ export default function TeacherLecture() {
     const [open, setOpen] = useState<boolean>(false)
     const [studentAnswer, setStudentAnswer] = useState<string>("")
 
-    socket.on("receiveTeacherQuestion", prompt => {
-        console.log("oldTeacherQuestions: ", teacherQuestions)
-        setTeacherQuestions(teacherQuestions => [...teacherQuestions, { prompt }])
-    })
-
     const openModal = (q: TeacherQuestion) => {
         setCurrentTeacherQuestion(q)
         setOpen(true)
@@ -98,7 +111,7 @@ export default function TeacherLecture() {
 
     const submitAnswer = () => {
         if(user.state!=="hasData") return
-        socket.emit("answerTeacherQuestion", user.data.email, lec?.Id, studentAnswer, currentTeacherQuestion?.prompt)
+        ws.current?.emit("answerTeacherQuestion", user.data.email, lec?.Id, studentAnswer, currentTeacherQuestion?.prompt)
         console.log("answered teacher question!!")
         setOpen(false)
     }
@@ -112,6 +125,10 @@ export default function TeacherLecture() {
             </div>
         ))
     }
+
+    // note taking stuff
+
+    const [note, setNote] = useState<string>("")
 
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
@@ -130,6 +147,11 @@ export default function TeacherLecture() {
             <div>
                 Questions from the teacher:
                 {mapTeacherQuestions()}
+            </div>
+            <br/><br/>
+            <div>
+                Notes to take:
+                <textarea value={note} onChange={e => setNote(e.target.value)} rows={20} cols={50}/>
             </div>
             <p>Answer to your last question: {answer}</p>
             <Modal open={open} close={() => setOpen(false)}>
