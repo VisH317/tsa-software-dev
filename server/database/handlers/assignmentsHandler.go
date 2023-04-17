@@ -65,6 +65,33 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	return c.JSON(assignments)
 }
 
+func GetAssignmentByID(c *fiber.Ctx, db *sql.DB) error {
+	id := c.Query("id")
+	rows, err := db.Query("SELECT classroomid, title, descr, duedate FROM assignments WHERE id=$1", id)
+	if err!=nil {
+		fmt.Println(err)
+	}
+
+	var assignment Assignment
+
+	for rows.Next() {
+		var classroomid int
+		var title, descr string
+		var duedate time.Time
+		rows.Scan(&classroomid, &title, &descr, &duedate)
+		fmt.Println("title: ", title)
+		fmt.Println("duedate: ", duedate)
+		assignment = Assignment{classroomid, title, descr, duedate.Format(time.RFC3339)}
+	}
+
+	return c.JSON(assignment)
+}
+
+func DeleteAssignment(c *fiber.Ctx, db *sql.DB) error {
+	id := c.Query("id")
+	db.Exec("DELETE FROM assignments WHERE id=$1", id)
+	return c.SendString("success")
+}
 
 func CreateAssignmentResponse(c *fiber.Ctx, db *sql.DB) error {
 	newRes := AssignmentResponse{}
