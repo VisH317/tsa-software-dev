@@ -56,6 +56,7 @@ create table assignments (
     classroomid int,
     title text,
     descr text,
+    duedate timestamp,
     foreign key (classroomid) references classes(id)
 );
 

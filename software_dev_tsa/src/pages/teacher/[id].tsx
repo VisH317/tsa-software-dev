@@ -73,7 +73,7 @@ export default function TeacherClassHome() {
                         <Tab label="About" {...a11yProps(0)}/>
                         <Tab label="Lectures" {...a11yProps(1)}/>
                         <Tab label="Assignments" {...a11yProps(2)}/>
-                        <Tab label="Tests" {...a11yProps(3)}/>
+                        <Tab label="Chat" {...a11yProps(3)}/>
                     </Tabs>
                     <TabPanel value={tab} index={0}>
                         Welcome to {curClass.Nm} {"\n"}
@@ -82,6 +82,9 @@ export default function TeacherClassHome() {
                     </TabPanel>
                     <TabPanel value={tab} index={1}>
                         <LecturesHome lectures={data} classID={curClass.Id}/>
+                    </TabPanel>
+                    <TabPanel value={tab} index={2}>
+                        
                     </TabPanel>
                 </div>
             </MiniDrawer>

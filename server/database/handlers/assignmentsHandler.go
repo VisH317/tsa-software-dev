@@ -4,12 +4,14 @@ import (
 	"database/sql"
 	"github.com/gofiber/fiber/v2"
 	"fmt"
+	"time"
 )
 
 type Assignment struct {
 	Classroomid int
 	Title string
 	Descr string
+	Duedate string
 }
 
 type AssignmentResponse struct {
@@ -23,7 +25,8 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 	if err := c.BodyParser(&newAssignment); err!=nil {
 		fmt.Println(err)
 	}
-	_, err := db.Exec("INSERT INTO assignments (classsroomid, title, descr) VALUES ($1, $2, $3)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Descr)
+
+	_, err := db.Exec("INSERT INTO assignments (classsroomid, title, descr, duedate) VALUES ($1, $2, $3)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Descr, time.Now())
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -42,8 +45,9 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	for rows.Next() {
 		var cid int
 		var title, descr string
-		rows.Scan(&cid, &title, &descr)
-		as := Assignment{cid, title, descr}
+		var duedate time.Time
+		rows.Scan(&cid, &title, &descr, &duedate)
+		as := Assignment{cid, title, descr, duedate.Format(time.RFC3339)}
 		assignments = append(assignments, as)
 	}
 
