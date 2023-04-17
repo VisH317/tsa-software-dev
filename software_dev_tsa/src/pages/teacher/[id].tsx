@@ -9,6 +9,7 @@ import DashNav from '@/components/Dashboard/DashNav';
 import MiniDrawer from '@/components/Dashboard/Drawer';
 import LecturesHome from '@/components/ClassHome/Lectures';
 import { isConstructorDeclaration } from 'typescript';
+import Assignments from '@/components/ClassHome/Assignments';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
@@ -84,7 +85,7 @@ export default function TeacherClassHome() {
                         <LecturesHome lectures={data} classID={curClass.Id}/>
                     </TabPanel>
                     <TabPanel value={tab} index={2}>
-                        
+                        <Assignments classID={curClass.Id}/>
                     </TabPanel>
                 </div>
             </MiniDrawer>
