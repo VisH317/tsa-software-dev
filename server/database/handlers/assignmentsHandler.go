@@ -26,9 +26,12 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
+	fmt.Println("creating assignment!")
 	date, _ := time.Parse("2006-01-02T15:04:05.000Z", newAssignment.Duedate)
 
-	_, err := db.Exec("INSERT INTO assignments (classsroomid, title, descr, duedate) VALUES ($1, $2, $3)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Descr, date)
+	fmt.Println("date: ", date)
+
+	_, err := db.Exec("INSERT INTO assignments (classroomid, title, descr, duedate) VALUES ($1, $2, $3, $4)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Descr, date)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -37,7 +40,7 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 
 func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	class := c.Query("class")
-	rows, err := db.Query("SELECT (classroomid, title, descr) FROM assignments WHERE classroomid=$1", class)
+	rows, err := db.Query("SELECT classroomid, title, descr, duedate FROM assignments WHERE classroomid=$1", class)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -45,11 +48,13 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	var assignments []Assignment
 
 	for rows.Next() {
-		var cid int
+		var classroomid int
 		var title, descr string
 		var duedate time.Time
-		rows.Scan(&cid, &title, &descr, &duedate)
-		as := Assignment{cid, title, descr, duedate.Format(time.RFC3339)}
+		rows.Scan(&classroomid, &title, &descr, &duedate)
+		fmt.Println("title: ", title)
+		fmt.Println("duedate: ", duedate)
+		as := Assignment{classroomid, title, descr, duedate.Format(time.RFC3339)}
 		assignments = append(assignments, as)
 	}
 

@@ -34,11 +34,13 @@ export default function Assignments({ classID }: AssignmentsProps) {
 
     const mapAssignments = () => {
         return assignments.map(a => {
-            const isOverdue = Date.parse(a.Duedate) < Date.now() ? true : false
+            console.log("Not now: ", new Date(Date.parse(a.Duedate)).getTime())
+            console.log("now: ",Date.now())
+            const isOverdue = new Date(Date.parse(a.Duedate)).getTime() < Date.now() ? true : false
             return (
                 <div>
-                    <h1>{a.Title}</h1>
-                    <p>{a.Desc}</p>
+                    <h1>Title: {a.Title}</h1>
+                    <p>Desc: {a.Descr}</p>
                     <h6>Due: {a.Duedate}{isOverdue ? ", OVERDUE" : ""}</h6>
                 </div>
             )
@@ -60,7 +62,7 @@ export default function Assignments({ classID }: AssignmentsProps) {
         const body: Assignment = {
             Classroomid: classID,
             Title: title,
-            Desc: desc,
+            Descr: desc,
             Duedate: date,
         }
         await classMut.mutateAsync(body)
@@ -68,16 +70,17 @@ export default function Assignments({ classID }: AssignmentsProps) {
     }
 
     return (
-        <div className="relative">
+        <div className="h-full">
             <h1>ASSIGNMENTS:</h1>
             {mapAssignments()}
-            <button className={`absolute bottom-20 right-20 w-24 h-24 rounded-[50%] bg-main text-3xl`} onClick={() => setOpen(true)}>+</button>
+            <button className={`absolute bottom-20 right-20 w-24 h-24 rounded-[50%] bg-main text-5xl text-white`} onClick={() => setOpen(true)}>+</button>
             <Modal open={open} close={close}>
                 <h2>Create a New Assignment</h2>
                 <form onSubmit={createAssignment}>
                     <input type='text' placeholder="Title:" value={title} onChange={e => setTitle(e.target.value)}/>
                     <input type="text" placeholder="Description:" value={desc} onChange={e => setDesc(e.target.value)}/>
                     <input type="datetime-local" placeholder="Due Date:" value={dueDate} onChange={e => setDueDate(e.target.value)}/>
+                    <button type="submit">Create Assignment</button>
                 </form>
             </Modal>
         </div>
@@ -87,6 +90,6 @@ export default function Assignments({ classID }: AssignmentsProps) {
 type Assignment = {
     Classroomid: number,
     Title: string,
-    Desc: string,
+    Descr: string,
     Duedate: string
 }
