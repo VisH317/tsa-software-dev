@@ -26,7 +26,9 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
-	_, err := db.Exec("INSERT INTO assignments (classsroomid, title, descr, duedate) VALUES ($1, $2, $3)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Descr, time.Now())
+	date, _ := time.Parse("2006-01-02T15:04:05.000Z", newAssignment.Duedate)
+
+	_, err := db.Exec("INSERT INTO assignments (classsroomid, title, descr, duedate) VALUES ($1, $2, $3)", newAssignment.Classroomid, newAssignment.Title, newAssignment.Descr, date)
 	if err!=nil {
 		fmt.Println(err)
 	}
