@@ -9,13 +9,14 @@ import DashNav from '@/components/Dashboard/DashNav';
 import MiniDrawer from '@/components/Dashboard/Drawer';
 import StudentLecturesHome from '@/components/ClassHome/StudentLectures';
 import { Lecture } from '@/lib/classData';
+import AssignmentsStudent from '@/components/ClassHome/AssignmentsStudent';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
     const router = useRouter();
     const [cls, scls] = useClasses()
     const { id } = router.query
-    const [curClass, setCur] = useState<Classes>()
+    const [curClass, setCur] = useState<Classes | null>(null)
 
     const [tab, setTab] = useState(0)
 
@@ -58,7 +59,7 @@ export default function TeacherClassHome() {
 
     if(status!=="success") return <div>loading...</div>
 
-    return (
+    return curClass!==null ? (
         <>
             <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
             <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
@@ -77,10 +78,13 @@ export default function TeacherClassHome() {
                     <TabPanel value={tab} index={1}>
                         <StudentLecturesHome lectures={data} classID={curClass?.Id!}/>
                     </TabPanel>
+                    <TabPanel value={tab} index={2}>
+                        <AssignmentsStudent classID={curClass?.Id}/>
+                    </TabPanel>
                 </div>
             </MiniDrawer>
         </>
-    )
+    ) : <div>LOADING</div>
 }
 
 // export async function getStaticPaths() {

@@ -160,3 +160,7 @@ func GetAssignmentResponses(c *fiber.Ctx, db *sql.DB) error {
 
 	return c.JSON(resp)
 }
+
+// func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
+
+// }
