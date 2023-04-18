@@ -100,7 +100,7 @@ export default function Assignments({ classID }: AssignmentsProps) {
     )
 }
 
-type Assignment = {
+export type Assignment = {
     Classroomid: number,
     Title: string,
     Descr: string,

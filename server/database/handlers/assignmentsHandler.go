@@ -60,6 +60,11 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 		assignments = append(assignments, as)
 	}
 
+	// separate due and overdue
+	var due, overdue []Assignment
+
+	
+
 	if len(assignments)==0 {
 		return c.JSON(make([]Assignment, 0))
 	}
