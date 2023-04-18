@@ -57,6 +57,7 @@ create table assignments (
     title text,
     descr text,
     duedate timestamp,
+    maxgroup int,
     foreign key (classroomid) references classes(id)
 );
 
