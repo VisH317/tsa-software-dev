@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"fmt"
 	"time"
+	"sort"
 )
 
 type Assignment struct {
@@ -22,6 +23,8 @@ type AssignmentResponse struct {
 	Content string
 }
 
+const RFC3339 = "2006-01-02T15:04:05.000Z"
+
 func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 	newAssignment := Assignment{}
 	if err := c.BodyParser(&newAssignment); err!=nil {
@@ -29,7 +32,7 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 	}
 
 	fmt.Println("creating assignment!")
-	date, _ := time.Parse("2006-01-02T15:04:05.000Z", newAssignment.Duedate)
+	date, _ := time.Parse(RFC3339, newAssignment.Duedate)
 
 	fmt.Println("cid: ", newAssignment.Classroomid)
 
@@ -62,14 +65,42 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 
 	// separate due and overdue
 	var due, overdue []Assignment
+	now := time.Now()
 
-	
+	for _, element := range assignments {
+		t, err := time.Parse(RFC3339, element.Duedate)
+		if err!=nil { fmt.Println(err) }
+
+		if now.Before(t) {
+			overdue = append(overdue, element)
+		} else {
+			due = append(due, element)
+		}
+	}
 
 	if len(assignments)==0 {
 		return c.JSON(make([]Assignment, 0))
 	}
 
-	return c.JSON(assignments)
+	sort.Slice(due, func(i, j int) bool {
+		first, err := time.Parse(RFC3339, due[i].Duedate)
+		if err!=nil { fmt.Println(err) }
+		second, err := time.Parse(RFC3339, due[j].Duedate)
+		if err!=nil { fmt.Println(err) }
+		return first.Before(second)
+	})
+
+	sort.Slice(overdue, func(i, j int) bool {
+		first, err := time.Parse(RFC3339, overdue[i].Duedate)
+		if err!=nil { fmt.Println(err) }
+		second, err := time.Parse(RFC3339, overdue[j].Duedate)
+		if err!=nil { fmt.Println(err) }
+		return first.Before(second)
+	})
+
+	sortedAssignments := append(due, overdue[:]...)
+
+	return c.JSON(sortedAssignments)
 }
 
 func GetAssignmentByID(c *fiber.Ctx, db *sql.DB) error {
