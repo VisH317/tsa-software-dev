@@ -44,30 +44,30 @@ create table lectures (
 
 create table notes (
     id serial primary key,
-    lectureid int,
-    studentemail text,
-    title text,
-    content text,
+    lectureid int NOT NULL,
+    studentemail text NOT NULL,
+    title text NOT NULL,
+    content text NOT NULL,
     foreign key (lectureid) references lectures(id)
 );
 
 create table assignments (
     id serial primary key,
-    classroomid int,
-    title text,
-    descr text,
-    duedate timestamp,
-    maxgroup int,
+    classroomid int NOT NULL,
+    title text NOT NULL,
+    descr text NOT NULL,
+    duedate timestamp NOT NULL,
+    maxgroup int NOT NULL,
     foreign key (classroomid) references classes(id)
 );
 
--- create table assignmentresponse (
---     id serial primary key,
---     assignmentid int,
---     user text,
---     content text,
---     foreign key (assignmentid) references assignments(id)
--- );
+create table assignmentresponse (
+    id serial primary key,
+    assignmentid int NOT NULL,
+    users text[] NOT NULL,
+    content text NOT NULL,
+    foreign key (assignmentid) references assignments(id)
+);
 
 -- create table TESTS if not exists (
     

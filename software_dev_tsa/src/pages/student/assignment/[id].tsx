@@ -20,7 +20,7 @@ export default function AssignmentView() {
             const res = await axios.get("/api/assignments/id", { params: { id: cid } })
 
             setAssignment(res.data)
-            const isOverdue = new Date(Date.parse(a.Duedate)).getTime() < Date.now()
+            const isOverdue = new Date(Date.parse(assignment?.Duedate as string)).getTime() < Date.now()
             setOverdue(isOverdue)
 
             return res.data

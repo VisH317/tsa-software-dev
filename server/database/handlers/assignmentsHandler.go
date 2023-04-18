@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 	"sort"
+	"github.com/lib/pq"
 )
 
 type Assignment struct {
@@ -19,7 +20,7 @@ type Assignment struct {
 
 type AssignmentResponse struct {
 	Assignmentid int
-	User string
+	Users []string
 	Content string
 }
 
@@ -138,29 +139,52 @@ func CreateAssignmentResponse(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
-	_, err := db.Exec("INSERT INTO assignmentresponse (assignmentid, user, content) VALUES ($1, $2, $3)", newRes.Assignmentid, newRes.User, newRes.Content)
+	_, err := db.Exec("INSERT INTO assignmentresponse (assignmentid, user, content) VALUES ($1, $2, $3)", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content)
 	if err!=nil {fmt.Println(err)}
 	return c.JSON(newRes)
 }
 
 func GetAssignmentResponses(c *fiber.Ctx, db *sql.DB) error {
 	assignment := c.Query("assignment")
-	rows, err := db.Query("SELECT (assignmentid, user, content) FROM assignmentresponse WHERE assignmentid=$1", assignment)
+	rows, err := db.Query("SELECT assignmentid, users, content FROM assignmentresponse WHERE assignmentid=$1", assignment)
 	if err!=nil {
 		fmt.Println(err)
 	}
 	var resp []AssignmentResponse
 	for rows.Next() {
 		var asid int
-		var user, content string
-		rows.Scan(&asid, &user, &content)
-		r := AssignmentResponse{asid, user, content}
+		var content string
+		var users []string
+		rows.Scan(&asid, (*pq.StringArray)(&users), &content)
+		r := AssignmentResponse{asid, users, content}
 		resp = append(resp, r)
 	}
 
 	return c.JSON(resp)
 }
 
-// func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
+func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
+	assignment := c.Query("assignment")
+	user := c.Query("user")
 
-// }
+	rows, err := db.Query("SELECT assignmentid, users, content FROM assignmentresponse WHERE assignmentid=$1 AND user=$2", assignment, user)
+	if err!=nil {
+		fmt.Println(err)
+	}
+
+	var resp *AssignmentResponse
+
+	for rows.Next() {
+		var asid int
+		var content string
+		var users []string
+		rows.Scan(&asid, (*pq.StringArray)(&users), &content)
+		*resp = AssignmentResponse{asid, users, content}
+	}
+
+	if resp==nil {
+		c.SendString("nonexistent")
+	}
+
+	return c.JSON(*resp)
+}
