@@ -8,6 +8,7 @@ import (
 )
 
 type Assignment struct {
+	Id int
 	Classroomid int
 	Title string
 	Descr string
@@ -40,7 +41,7 @@ func CreateAssignment(c *fiber.Ctx, db *sql.DB) error {
 
 func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	class := c.Query("class")
-	rows, err := db.Query("SELECT classroomid, title, descr, duedate FROM assignments WHERE classroomid=$1", class)
+	rows, err := db.Query("SELECT id, classroomid, title, descr, duedate FROM assignments WHERE classroomid=$1", class)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -48,13 +49,13 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	var assignments []Assignment
 
 	for rows.Next() {
-		var classroomid int
+		var classroomid, id int
 		var title, descr string
 		var duedate time.Time
-		rows.Scan(&classroomid, &title, &descr, &duedate)
+		rows.Scan(&id, &classroomid, &title, &descr, &duedate)
 		fmt.Println("title: ", title)
 		fmt.Println("duedate: ", duedate)
-		as := Assignment{classroomid, title, descr, duedate.Format(time.RFC3339)}
+		as := Assignment{id, classroomid, title, descr, duedate.Format(time.RFC3339)}
 		assignments = append(assignments, as)
 	}
 
@@ -67,7 +68,7 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 
 func GetAssignmentByID(c *fiber.Ctx, db *sql.DB) error {
 	id := c.Query("id")
-	rows, err := db.Query("SELECT classroomid, title, descr, duedate FROM assignments WHERE id=$1", id)
+	rows, err := db.Query("SELECT id, classroomid, title, descr, duedate FROM assignments WHERE id=$1", id)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -75,13 +76,13 @@ func GetAssignmentByID(c *fiber.Ctx, db *sql.DB) error {
 	var assignment Assignment
 
 	for rows.Next() {
-		var classroomid int
+		var classroomid, id int
 		var title, descr string
 		var duedate time.Time
-		rows.Scan(&classroomid, &title, &descr, &duedate)
+		rows.Scan(&id, &classroomid, &title, &descr, &duedate)
 		fmt.Println("title: ", title)
 		fmt.Println("duedate: ", duedate)
-		assignment = Assignment{classroomid, title, descr, duedate.Format(time.RFC3339)}
+		assignment = Assignment{id, classroomid, title, descr, duedate.Format(time.RFC3339)}
 	}
 
 	return c.JSON(assignment)
@@ -89,6 +90,7 @@ func GetAssignmentByID(c *fiber.Ctx, db *sql.DB) error {
 
 func DeleteAssignment(c *fiber.Ctx, db *sql.DB) error {
 	id := c.Query("id")
+	fmt.Println("deleting assignments: ", id)
 	db.Exec("DELETE FROM assignments WHERE id=$1", id)
 	return c.SendString("success")
 }

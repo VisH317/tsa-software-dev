@@ -23,25 +23,31 @@ export default function Assignments({ classID }: AssignmentsProps) {
             return res.data
         }
     })
+
     const classMut = useMutation({
-        mutationFn: async (a: Assignment) => { await axios.post("/api/assignments", a) },
+        mutationKey: ["assignments", classID],
+        mutationFn: async (a: CreateAssignment) => { await axios.post("/api/assignments", a) },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["assignments", classID] })
         }
     })
 
-
+    const classDeleteMut = useMutation({
+        mutationFn: async (id: number) => { await axios.delete("/api/assignments", { params: { id } }) }
+    })
 
     const mapAssignments = () => {
         return assignments.map(a => {
             console.log("Not now: ", new Date(Date.parse(a.Duedate)).getTime())
             console.log("now: ",Date.now())
             const isOverdue = new Date(Date.parse(a.Duedate)).getTime() < Date.now() ? true : false
+            console.log("id: ", a.Id)
             return (
                 <div>
                     <h1>Title: {a.Title}</h1>
                     <p>Desc: {a.Descr}</p>
                     <h6>Due: {a.Duedate}{isOverdue ? ", OVERDUE" : ""}</h6>
+                    <button onClick={() => void classDeleteMut.mutateAsync(a.Id)}>Delete Class</button>
                 </div>
             )
         })
@@ -59,7 +65,7 @@ export default function Assignments({ classID }: AssignmentsProps) {
     const createAssignment = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const date = new Date(dueDate).toISOString()
-        const body: Assignment = {
+        const body: CreateAssignment = {
             Classroomid: classID,
             Title: title,
             Descr: desc,
@@ -91,5 +97,13 @@ type Assignment = {
     Classroomid: number,
     Title: string,
     Descr: string,
-    Duedate: string
+    Duedate: string,
+    Id: number
+}
+
+type CreateAssignment = {
+    Classroomid: number,
+    Title: string,
+    Descr: string,
+    Duedate: string,
 }
