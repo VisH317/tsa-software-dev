@@ -128,6 +128,10 @@ func main() {
 		return handlers.GetAssignmentResponses(c, db)
 	})
 
+	app.Get("/api/responses/student", func (c *fiber.Ctx) error {
+		return handlers.GetAssignmentResponsesStudent(c, db)
+	})
+
 	port :=  os.Getenv("PORT")
 	if port=="" {
 		port="5001"

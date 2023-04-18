@@ -163,6 +163,10 @@ func GetAssignmentResponses(c *fiber.Ctx, db *sql.DB) error {
 	return c.JSON(resp)
 }
 
+type InvalidAssignmentFetch struct {
+	msg string
+}
+
 func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 	assignment := c.Query("assignment")
 	user := c.Query("user")
@@ -183,7 +187,7 @@ func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 	}
 
 	if resp==nil {
-		c.SendString("nonexistent")
+		c.JSON(InvalidAssignmentFetch{"iaf"})
 	}
 
 	return c.JSON(*resp)

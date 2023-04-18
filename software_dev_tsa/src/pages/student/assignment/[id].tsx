@@ -27,6 +27,26 @@ export default function AssignmentView() {
         }
     })
 
+    const responseQuery = useQuery({
+        queryKey: ["assignmentresponse", id, user.state==="hasData" ? user.data.email : ""],
+        queryFn: async ({ queryKey }) => {
+            const [_, asid, uid] = queryKey
+            const res = await axios.get('/api/responses/student', { params: { assignment: asid, user: uid } })
+            const data: AssignmentResponse | NoResponse = res.data
+            return data   
+        },
+        initialData: { msg: "initial" }
+    })
+
+    const renderResponse = () => {
+        if(Object.keys(responseQuery.data).includes("msg")) return <div>no response submitted yet</div>
+        return (
+            <div>
+                {(responseQuery.data as AssignmentResponse).Content}
+            </div>
+        )
+    }
+
     // states and handlers for drawer
     const [open, setOpen] = useState(false)
     const handleDrawerOpen = () => setOpen(true)
@@ -42,3 +62,11 @@ export default function AssignmentView() {
         </MiniDrawer>
     )
 }
+
+export type AssignmentResponse = {
+    Assignmentid: number
+    Users: string[]
+    Content: string
+}
+
+type NoResponse = { msg: string }
