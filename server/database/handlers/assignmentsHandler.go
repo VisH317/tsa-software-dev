@@ -174,6 +174,9 @@ type InvalidAssignmentFetch struct {
 func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 	assignment := c.Query("assignment")
 	user := c.Query("user")
+	if len(user)==0 || len(assignment)==0 {
+		return c.JSON(InvalidAssignmentFetch{"loading"})
+	}
 	
 	fmt.Println("getting assignment responses")
 	fmt.Println("as: ", assignment)
@@ -185,9 +188,10 @@ func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 	}
 	defer rows.Close()
 
+
 	var resp *AssignmentResponse
 	fmt.Println("resp")
-	fmt.Println("resp: ", rows)
+	exists := false
 
 	for rows.Next() {
 		fmt.Println("DONT GO HERE")
@@ -196,12 +200,13 @@ func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 		var users []string
 		rows.Scan(&asid, (*pq.StringArray)(&users), &content)
 		*resp = AssignmentResponse{asid, users, content}
+		exists = true
 	}
 
-	fmt.Println("resp: ", *resp)
+	fmt.Println("respafter: ")
 
-	if resp==nil {
-		c.JSON(InvalidAssignmentFetch{"iaf"})
+	if !exists {
+		return c.JSON(InvalidAssignmentFetch{"iaf"})
 	}
 
 	return c.JSON(*resp)

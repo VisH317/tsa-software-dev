@@ -17,6 +17,7 @@ export default function AssignmentView() {
         queryKey: ["assignmentbyid", id],
         queryFn: async ({ queryKey }) => {
             const [_, cid] = queryKey
+            if(cid===undefined || cid.length===0) return
             const res = await axios.get("/api/assignments/id", { params: { id: cid } })
 
             setAssignment(res.data)
