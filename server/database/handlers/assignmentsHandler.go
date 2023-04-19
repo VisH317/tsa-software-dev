@@ -50,6 +50,7 @@ func GetAssignmentsForClass(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 	
 	var assignments []Assignment
 
@@ -110,6 +111,7 @@ func GetAssignmentByID(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 
 	var assignment Assignment
 
@@ -150,6 +152,8 @@ func GetAssignmentResponses(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
+
 	var resp []AssignmentResponse
 	for rows.Next() {
 		var asid int
@@ -170,21 +174,31 @@ type InvalidAssignmentFetch struct {
 func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 	assignment := c.Query("assignment")
 	user := c.Query("user")
+	
+	fmt.Println("getting assignment responses")
+	fmt.Println("as: ", assignment)
+	fmt.Println("user: ", user)
 
 	rows, err := db.Query("SELECT assignmentid, users, content FROM assignmentresponse WHERE assignmentid=$1 AND user=$2", assignment, user)
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 
 	var resp *AssignmentResponse
+	fmt.Println("resp")
+	fmt.Println("resp: ", rows)
 
 	for rows.Next() {
+		fmt.Println("DONT GO HERE")
 		var asid int
 		var content string
 		var users []string
 		rows.Scan(&asid, (*pq.StringArray)(&users), &content)
 		*resp = AssignmentResponse{asid, users, content}
 	}
+
+	fmt.Println("resp: ", *resp)
 
 	if resp==nil {
 		c.JSON(InvalidAssignmentFetch{"iaf"})

@@ -43,6 +43,7 @@ func GetNote(c *fiber.Ctx, db *sql.DB) error {
 		if err!=nil {
 			fmt.Println(err)
 		}
+		defer rows.Close()
 
 		var notes []Note
 		for rows.Next() {

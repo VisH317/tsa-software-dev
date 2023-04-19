@@ -66,6 +66,7 @@ func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 
 	var classes[] Classroom
 
@@ -93,6 +94,7 @@ func GetClassByID(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 	fmt.Println("newid: ", id)
 
 	var class Classroom

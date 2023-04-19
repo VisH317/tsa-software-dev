@@ -30,8 +30,9 @@ export default function AssignmentView() {
     const responseQuery = useQuery({
         queryKey: ["assignmentresponse", id, user.state==="hasData" ? user.data.email : ""],
         queryFn: async ({ queryKey }) => {
+            if(user.state!=="hasData") return { msg: "loading" }
             const [_, asid, uid] = queryKey
-            const res = await axios.get('/api/responses/student', { params: { assignment: asid, user: uid } })
+            const res = await axios.get('/api/responses/student', { params: { assignment: id, user: user.data.email } })
             const data: AssignmentResponse | NoResponse = res.data
             return data   
         },
@@ -58,6 +59,7 @@ export default function AssignmentView() {
                 <p className="text-5xl">Assignment: {assignment?.Title}</p>
                 <p className="text-xl text-slate-600">Due Date: {assignment?.Duedate}, {overdue ? "OVERDUE" : ""}</p>
                 <p>{assignment?.Descr}</p>
+                {renderResponse()}
             </div>
         </MiniDrawer>
     )
