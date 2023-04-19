@@ -13,6 +13,8 @@ export default function AssignmentView() {
     const [assignment, setAssignment] = useState<Assignment>()
     const [overdue, setOverdue] = useState<boolean>(false)
 
+    const queryClient = useQueryClient()
+
     const queryRes = useQuery({
         queryKey: ["assignmentbyid", id],
         queryFn: async ({ queryKey }) => {
@@ -31,20 +33,61 @@ export default function AssignmentView() {
     const responseQuery = useQuery({
         queryKey: ["assignmentresponse", id, user.state==="hasData" ? user.data.email : ""],
         queryFn: async ({ queryKey }) => {
-            if(user.state!=="hasData") return { msg: "loading" }
-            const [_, asid, uid] = queryKey
+            if(user.state!=="hasData") return {}
             const res = await axios.get('/api/responses/student', { params: { assignment: id, user: user.data.email } })
-            const data: AssignmentResponse | NoResponse = res.data
+            const data: AssignmentResponse | {} = res.data
             return data   
         },
         initialData: { msg: "initial" }
     })
 
+    const createResponse = useMutation({
+        mutationFn: async () => {
+            if(user.state!=="hasData") return
+            console.log("mutating!!!")
+            const body: AssignmentResponse = {
+                Assignmentid: parseInt(id as string),
+                Content: resp,
+                Users: [user.data.email]
+            }
+
+            await axios.post("/api/responses", body)
+        },
+        onSuccess: () => {
+            if(user.state!=="hasData") return
+            queryClient.invalidateQueries(["assignmentresponse", id, user.data.email])
+        }
+    })
+
+    const updateResponse = useMutation({
+        mutationFn: async () => {
+            if(user.state!=="hasData") return
+            console.log("updating!!!")
+            const body: AssignmentResponse = {
+                Assignmentid: parseInt(id as string),
+                Content: resp,
+                Users: [user.data.email]
+            }
+
+            await axios.patch("/api/responses", body)
+        }
+    })
+
+    const [resp, setResp] = useState<string>("")
+
     const renderResponse = () => {
-        if(Object.keys(responseQuery.data).includes("msg")) return <div>no response submitted yet</div>
+        if(Object.keys(responseQuery.data).length===0) return (
+            <div>
+                no response submitted yet
+                <textarea rows={10} cols={40} placeholder={"Submit a response..."} value={resp} onChange={e => setResp(e.target.value)}/>
+                <button onClick={() => void createResponse.mutateAsync()}>Submit Response</button>
+            </div>
+        )
         return (
             <div>
                 {(responseQuery.data as AssignmentResponse).Content}
+                <textarea rows={10} cols={40} placeholder={"Submit a response..."} value={resp} onChange={e => setResp(e.target.value)}/>
+                <button onClick={() => void updateResponse.mutateAsync()}>Update Response</button>
             </div>
         )
     }

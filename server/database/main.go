@@ -128,6 +128,10 @@ func main() {
 		return handlers.GetAssignmentResponses(c, db)
 	})
 
+	app.Patch("/api/responses", func (c *fiber.Ctx) error {
+		return handlers.UpdateAssignmentResponse(c, db)
+	})
+
 	app.Get("/api/responses/student", func (c *fiber.Ctx) error {
 		return handlers.GetAssignmentResponsesStudent(c, db)
 	})

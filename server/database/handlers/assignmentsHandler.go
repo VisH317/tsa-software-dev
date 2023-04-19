@@ -140,8 +140,10 @@ func CreateAssignmentResponse(c *fiber.Ctx, db *sql.DB) error {
 	if err := c.BodyParser(&newRes); err!=nil {
 		fmt.Println(err)
 	}
+	fmt.Println("creating assignment...")
+	fmt.Println(newRes.Assignmentid)
 
-	_, err := db.Exec("INSERT INTO assignmentresponse (assignmentid, user, content) VALUES ($1, $2, $3)", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content)
+	_, err := db.Exec("INSERT INTO assignmentresponse (assignmentid, users, content) VALUES ($1, $2, $3)", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content)
 	if err!=nil {fmt.Println(err)}
 	return c.JSON(newRes)
 }
@@ -178,36 +180,47 @@ func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 		return c.JSON(InvalidAssignmentFetch{"loading"})
 	}
 	
-	fmt.Println("getting assignment responses")
 	fmt.Println("as: ", assignment)
 	fmt.Println("user: ", user)
 
-	rows, err := db.Query("SELECT assignmentid, users, content FROM assignmentresponse WHERE assignmentid=$1 AND user=$2", assignment, user)
+	rows, err := db.Query("SELECT assignmentid, users, content FROM assignmentresponse WHERE assignmentid=$1 AND $2=ANY(users)", assignment, user)
 	if err!=nil {
 		fmt.Println(err)
 	}
 	defer rows.Close()
 
-
-	var resp *AssignmentResponse
-	fmt.Println("resp")
+	var resp AssignmentResponse
+	fmt.Println("rows: ", rows)
 	exists := false
 
 	for rows.Next() {
-		fmt.Println("DONT GO HERE")
 		var asid int
 		var content string
 		var users []string
 		rows.Scan(&asid, (*pq.StringArray)(&users), &content)
-		*resp = AssignmentResponse{asid, users, content}
+		resp = AssignmentResponse{asid, users, content}
 		exists = true
 	}
-
-	fmt.Println("respafter: ")
+	fmt.Println("exists: ", exists)
 
 	if !exists {
-		return c.JSON(InvalidAssignmentFetch{"iaf"})
+		fmt.Println("nonexistent")
+		iaf := InvalidAssignmentFetch{"iaf"}
+		return c.JSON(iaf)
 	}
 
-	return c.JSON(*resp)
+	return c.JSON(resp)
+}
+
+func UpdateAssignmentResponse(c *fiber.Ctx, db *sql.DB) error {
+	newRes := AssignmentResponse{}
+	if err := c.BodyParser(&newRes); err!=nil {
+		fmt.Println(err)
+	}
+	fmt.Println("creating assignment...")
+	fmt.Println(newRes.Assignmentid)
+
+	_, err := db.Exec("UPDATE assignmentresponse SET content=$3 WHERE assignmentid=$1 AND users=$2", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content)
+	if err!=nil {fmt.Println(err)}
+	return c.JSON(newRes)
 }

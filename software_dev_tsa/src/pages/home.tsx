@@ -18,6 +18,7 @@ import { useAtom } from "jotai";
 
 export default function Home() {
     const us = useUser()
+    console.log("user: ", us)
     const [cls, scls] = useClasses()
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
