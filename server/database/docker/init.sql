@@ -66,6 +66,7 @@ create table assignmentresponse (
     assignmentid int NOT NULL,
     users text[] NOT NULL,
     content text NOT NULL,
+    duedate timestamp NOT NULL,
     foreign key (assignmentid) references assignments(id)
 );
 

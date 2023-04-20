@@ -22,6 +22,7 @@ type AssignmentResponse struct {
 	Assignmentid int
 	Users []string
 	Content string
+	Duedate string
 }
 
 const RFC3339 = "2006-01-02T15:04:05.000Z"
@@ -143,7 +144,9 @@ func CreateAssignmentResponse(c *fiber.Ctx, db *sql.DB) error {
 	fmt.Println("creating assignment...")
 	fmt.Println(newRes.Assignmentid)
 
-	_, err := db.Exec("INSERT INTO assignmentresponse (assignmentid, users, content) VALUES ($1, $2, $3)", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content)
+	date := time.Now()
+
+	_, err := db.Exec("INSERT INTO assignmentresponse (assignmentid, users, content, duedate) VALUES ($1, $2, $3, $4)", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content, date)
 	if err!=nil {fmt.Println(err)}
 	return c.JSON(newRes)
 }
@@ -161,8 +164,9 @@ func GetAssignmentResponses(c *fiber.Ctx, db *sql.DB) error {
 		var asid int
 		var content string
 		var users []string
-		rows.Scan(&asid, (*pq.StringArray)(&users), &content)
-		r := AssignmentResponse{asid, users, content}
+		var date time.Time
+		rows.Scan(&asid, (*pq.StringArray)(&users), &content, &date)
+		r := AssignmentResponse{asid, users, content, date.Format(time.RFC3339)}
 		resp = append(resp, r)
 	}
 
@@ -183,7 +187,7 @@ func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 	fmt.Println("as: ", assignment)
 	fmt.Println("user: ", user)
 
-	rows, err := db.Query("SELECT assignmentid, users, content FROM assignmentresponse WHERE assignmentid=$1 AND $2=ANY(users)", assignment, user)
+	rows, err := db.Query("SELECT assignmentid, users, content, duedate FROM assignmentresponse WHERE assignmentid=$1 AND $2=ANY(users)", assignment, user)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -197,8 +201,13 @@ func GetAssignmentResponsesStudent(c *fiber.Ctx, db *sql.DB) error {
 		var asid int
 		var content string
 		var users []string
-		rows.Scan(&asid, (*pq.StringArray)(&users), &content)
-		resp = AssignmentResponse{asid, users, content}
+		var date time.Time
+		rows.Scan(&asid, (*pq.StringArray)(&users), &content, &date)
+		fmt.Println("scanned user: ", users)
+		fmt.Println("scanned content: ", content)
+		fmt.Println("date: ", date)
+		fmt.Println("asid: ", asid)
+		resp = AssignmentResponse{asid, users, content, date.Format(time.RFC3339)}
 		exists = true
 	}
 	fmt.Println("exists: ", exists)
@@ -220,7 +229,9 @@ func UpdateAssignmentResponse(c *fiber.Ctx, db *sql.DB) error {
 	fmt.Println("creating assignment...")
 	fmt.Println(newRes.Assignmentid)
 
-	_, err := db.Exec("UPDATE assignmentresponse SET content=$3 WHERE assignmentid=$1 AND users=$2", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content)
+	date := time.Now()
+
+	_, err := db.Exec("UPDATE assignmentresponse SET content=$3, duedate=$4 WHERE assignmentid=$1 AND users=$2", newRes.Assignmentid, pq.Array(newRes.Users), newRes.Content, date)
 	if err!=nil {fmt.Println(err)}
 	return c.JSON(newRes)
 }

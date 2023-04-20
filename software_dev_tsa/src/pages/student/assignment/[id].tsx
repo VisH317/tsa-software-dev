@@ -48,7 +48,7 @@ export default function AssignmentView() {
             const body: AssignmentResponse = {
                 Assignmentid: parseInt(id as string),
                 Content: resp,
-                Users: [user.data.email]
+                Users: [user.data.email, ...team.split(", ")]
             }
 
             await axios.post("/api/responses", body)
@@ -63,23 +63,32 @@ export default function AssignmentView() {
         mutationFn: async () => {
             if(user.state!=="hasData") return
             console.log("updating!!!")
+            console.log("responseQuery: ", responseQuery.data)
+            const users = (responseQuery.data as AssignmentResponse).Users
+            console.log("users: ", users)
             const body: AssignmentResponse = {
                 Assignmentid: parseInt(id as string),
                 Content: resp,
-                Users: [user.data.email]
+                Users: users
             }
 
             await axios.patch("/api/responses", body)
+        },
+        onSuccess: () => {
+            if(user.state!=="hasData") return
+            queryClient.invalidateQueries(['assignmentresponse', id, user.data.email])
         }
     })
 
     const [resp, setResp] = useState<string>("")
+    const [team, setTeam] = useState<string>("")
 
     const renderResponse = () => {
         if(Object.keys(responseQuery.data).length===0) return (
             <div>
                 no response submitted yet
                 <textarea rows={10} cols={40} placeholder={"Submit a response..."} value={resp} onChange={e => setResp(e.target.value)}/>
+                <input type="text" placeholder="Emails of other classmates you worked with" value={team} onChange={e => setTeam(e.target.value)}/>
                 <button onClick={() => void createResponse.mutateAsync()}>Submit Response</button>
             </div>
         )
