@@ -11,7 +11,10 @@ module.exports = {
         light: "#d2d9d9",
         dark: "#17252A",
         gray: "#5f6666"
-      }
+      },
+      fontFamily: {
+        "sans": ['var(--font-montserrat)']
+      },
     },
   },
   plugins: [],

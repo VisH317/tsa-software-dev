@@ -98,11 +98,10 @@ export default function MiniDrawer(props: DrawerProps) {
         </Head>
         <CssBaseline />
         <Box sx={{display: "flex"}}>
-        <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
         <Drawer variant="permanent" open={open} sx={{backgroundColor: colors.light}}>
             <DrawerHeader>
-            <IconButton onClick={handleDrawerClose} sx={{color: colors.light}}>
-                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen} sx={{color: colors.light, textAlign: "center"}}>
+                {!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
             </DrawerHeader>
             <Divider />
@@ -163,7 +162,7 @@ export default function MiniDrawer(props: DrawerProps) {
             ))}
             </List>
         </Drawer>
-        <Box component="main" sx={{flexGrow: 1, p: 3, marginTop: "100px"}}>
+        <Box component="main" sx={{flexGrow: 1}}>
           {children}
         </Box>
         </Box>
