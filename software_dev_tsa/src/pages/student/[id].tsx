@@ -7,14 +7,16 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import TabPanel, { a11yProps } from '@/components/Tabs';
 import DashNav from '@/components/Dashboard/DashNav';
 import MiniDrawer from '@/components/Dashboard/Drawer';
-import LecturesHome from '@/components/ClassHome/Lectures';
+import StudentLecturesHome from '@/components/ClassHome/StudentLectures';
+import { Lecture } from '@/lib/classData';
+import AssignmentsStudent from '@/components/ClassHome/AssignmentsStudent';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
     const router = useRouter();
     const [cls, scls] = useClasses()
     const { id } = router.query
-    const [curClass, setCur] = useState<Classes>(null)
+    const [curClass, setCur] = useState<Classes | null>(null)
 
     const [tab, setTab] = useState(0)
 
@@ -24,6 +26,7 @@ export default function TeacherClassHome() {
 
     useEffect(() => {
         if(scls.state==="hasData") {
+            console.log("scls: ", scls)
             let t: boolean = false
             scls.data.map((c: Classes) => {
                 console.log(c.Id)
@@ -39,9 +42,12 @@ export default function TeacherClassHome() {
     }, [scls.state])
 
     const { status, data, error, isFetching } = useQuery({
-        queryKey: ['teacherClasses', id],
-        queryFn: async () => {
-            const res = await axios.get("/api/lectures", { params: { id } })
+        queryKey: ['teacherClasses', router.query.id],
+        queryFn: async ({ queryKey }) => {
+            const [_, cid] = queryKey
+            console.log(cid)
+            if(cid===undefined) return
+            const res = await axios.get("/api/lectures", { params: { class: cid } })
             return res.data
         }
     })
@@ -53,7 +59,7 @@ export default function TeacherClassHome() {
 
     if(status!=="success") return <div>loading...</div>
 
-    return (
+    return curClass!==null ? (
         <>
             <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
             <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
@@ -65,17 +71,20 @@ export default function TeacherClassHome() {
                         <Tab label="Tests" {...a11yProps(3)}/>
                     </Tabs>
                     <TabPanel value={tab} index={0}>
-                        Welcome to {curClass.Nm}
-                        teacher: {curClass.Teacher}
+                        Welcome to {curClass?.Nm}
+                        teacher: {curClass?.Teacher}
                         <Button variant="contained">Leave Class</Button>
                     </TabPanel>
                     <TabPanel value={tab} index={1}>
-                        <LecturesHome lectures={data}/>
+                        <StudentLecturesHome lectures={data} classID={curClass?.Id!}/>
+                    </TabPanel>
+                    <TabPanel value={tab} index={2}>
+                        <AssignmentsStudent classID={curClass?.Id}/>
                     </TabPanel>
                 </div>
             </MiniDrawer>
         </>
-    )
+    ) : <div>LOADING</div>
 }
 
 // export async function getStaticPaths() {

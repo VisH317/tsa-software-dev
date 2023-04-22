@@ -14,10 +14,13 @@ import MiniDrawer from "@/components/Dashboard/Drawer";
 import DashNav from "@/components/Dashboard/DashNav";
 import ClassesList from "@/components/Dashboard/ClassesList";
 import { useAtom } from "jotai";
+import { montserrat } from "@/styles/fonts";
+import Image from "next/image";
 
 
 export default function Home() {
     const us = useUser()
+    console.log("user: ", us)
     const [cls, scls] = useClasses()
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
@@ -41,18 +44,24 @@ export default function Home() {
                 <link rel="preconnect" href="https://fonts.googleapis.com"/>
                 <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
             </Head>
-            <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
-                <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
-                    <Grid item xs={10}>
-                        <Typography sx={{fontSize: "50px"}}>
-                            Hello
-                        </Typography>
-                        TEACHER
-                        <ClassesList classes={cls.data}/>
-                        STUDENT
-                        <ClassesList classes={scls.data}/>
-                    </Grid>
-                </MiniDrawer>
+            {/* <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/> */}
+            <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
+                {/* <Grid item xs={10}>
+                    <Typography sx={{fontSize: "50px"}}>
+                        Hello
+                    </Typography>
+                    TEACHER
+                    <ClassesList classes={cls.data} isTeacher/>
+                    STUDENT
+                    <ClassesList classes={scls.data} isTeacher={false}/>
+                </Grid> */}
+                <div className={`w-full pt-[10%] pb-[5%] px-40 gap-5 bg-slate-800 flex justify-start ${montserrat.variable} font-sans`}>
+                    <div className="w-[60%]"><p className="text-6xl text-white font-medium">Welcome back, {us.data.username}!</p></div>
+                </div>
+                <div className="w-[40%]">
+                    <Image src="/undraw_bookshelves_re_lxoy.svg" alt="epic image of school yayayayya"/>
+                </div>
+            </MiniDrawer>
             <Tooltip placement="left" title="New Class" arrow>
                 <IconButton sx={{backgroundColor: colors.main, color: colors.white, position: "fixed", bottom: "5%", right: "4%", boxShadow: "2px 2px 6px #777", "&:hover": {boxShadow: "0", backgroundColor: colors.light}}} onClick={handleNewClass}>
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>

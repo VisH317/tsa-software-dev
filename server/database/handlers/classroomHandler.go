@@ -66,6 +66,7 @@ func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 
 	var classes[] Classroom
 
@@ -74,7 +75,8 @@ func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
 		var nm string
 		var teacher string
 		var students []string
-		rows.Scan(&id, &nm, &teacher, &students)
+		rows.Scan(&id, &nm, &teacher, (*pq.StringArray)(&students))
+		fmt.Println("students: ", students)
 		c := Classroom{id, nm, teacher, students}
 		classes = append(classes, c)
 	}
@@ -92,6 +94,7 @@ func GetClassByID(c *fiber.Ctx, db *sql.DB) error {
 	if err!=nil {
 		fmt.Println(err)
 	}
+	defer rows.Close()
 	fmt.Println("newid: ", id)
 
 	var class Classroom
@@ -101,7 +104,8 @@ func GetClassByID(c *fiber.Ctx, db *sql.DB) error {
 		var nm string
 		var teacher string
 		var students []string
-		rows.Scan(&id, &nm, &teacher, &students)
+		rows.Scan(&id, &nm, &teacher, (*pq.StringArray)(&students))
+		fmt.Println(students)
 		class = Classroom{id, nm, teacher, students}
 	}
 

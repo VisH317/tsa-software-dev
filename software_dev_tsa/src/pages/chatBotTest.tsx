@@ -11,6 +11,11 @@ import { Grid, Box, TextField, Button, Typography, Divider, Avatar, Stack } from
 import GoogleIcon from '@mui/icons-material/Google';
 
 
+interface Message {
+    role: string;
+    message: string;
+};
+
 export default function test() {
 
   const router = useRouter();
@@ -18,6 +23,9 @@ export default function test() {
   // form states
   const [prompt, setPrompt] = useState("")
   const [result, setResult] = useState("")
+  const [disable, setDisable] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [context, setContext] = useState("The assignment is writing a five paragraph essay on the second president of the United States of America")
 
   const loginFunction = () => {
     router.push('/auth/google')
@@ -26,16 +34,24 @@ export default function test() {
   const homeHandler = () => {
     router.push("/")
   }
+
+ 
   
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    setDisable(true)
     event.preventDefault();
+    const newPrompt: Message = { role: "Human", message: prompt }; 
+    messages.push(newPrompt)
+    const finalPrompt = messages.map((message:Message) => message.role + ": " + message.message).join("\n")
+    console.log("final",finalPrompt)
+    
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt:prompt }),
+        body: JSON.stringify({ prompt: "You are a tutor that always responds in the Socratic style. You *never* give the student the answer, but always try to nudge them learn to think for themselves. You should always tune your suggestion to the interest & knowledge of the student. Currently, you are helping a student with an assignment." + context + "\n" + finalPrompt + "\n AI:"  }),
       });
 
       const data = await response.json();
@@ -44,13 +60,21 @@ export default function test() {
       }
 
       setResult(data.result);
+   
+
+     
+      const newResult: Message = { role: "AI", message: data.result};
+      setMessages(prevMessage => [...prevMessage, newResult]);
+      console.log(messages)
       setPrompt("");
+      setDisable(false)
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
     //   alert(error.message);
     }
   }
+
 
   return (
   <>
@@ -69,7 +93,7 @@ export default function test() {
             <TextField type="text" id="em" value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Prompt:" sx={{width: "200%"}}></TextField>
             <br/>
         
-            <Button type="submit" variant="contained" sx={{width: "100%", height: "40px", backgroundColor: colors.main, marginTop: "30px", marginBottom: "20px"}}>Submit</Button>
+            <Button disabled={disable} type="submit" variant="contained" sx={{width: "100%", height: "40px", backgroundColor: colors.main, marginTop: "30px", marginBottom: "20px"}}>Submit</Button>
           </form>
           <br/><br/>
           <Divider style={{width: "90%"}}/>
@@ -77,10 +101,11 @@ export default function test() {
 
         </Grid>
         <Grid item xs={7} sx={{backgroundColor: colors.dark}}>
-          <Stack direction="row" spacing={2}>
-            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
-            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
-            <Avatar variant="square" sx={{bgcolor: colors.main}}> </Avatar>
+          <Stack direction="column" spacing={2}>
+            {messages.map(message=>
+              <Typography key={message.message} variant="h5" sx={{color: "white", fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px"}}>{message.message}</Typography>
+              )}
+          {/* <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "10px"}}>{messages}</Typography> */}
           </Stack>
         </Grid>
       </Grid>

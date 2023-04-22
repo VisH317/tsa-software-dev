@@ -2,7 +2,7 @@ import { Configuration, OpenAIApi } from "openai";
 
 
 const configuration = new Configuration({
-    apiKey: "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"
+    apiKey: "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"
     //Guys, I can't make a Api KEY and push to github. So go to this link https://platform.openai.com/docs/quickstart/build-your-application, and scroll down and make your own API KEY.
 });
 
@@ -33,9 +33,13 @@ export default async function generatePrompt (req, res) {
         const completion = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: prompt,
-            temperature: 0.6,
+            temperature: 0.5,
+            max_tokens: 60,
+            top_p: 0.3,
+            frequency_penalty: 0.5,
+            presence_penalty: 0.0,
         });
-        console.log("completion", completion, "completion.data", completion.data,"completion.data.choices", completion.data.choices )
+        // console.log("completion", completion, "completion.data", completion.data,"completion.data.choices", completion.data.choices )
         res.status(200).json({  result: completion.data.choices[0].text });
     } catch (error) {
         // Consider adjusting the error handling logic for your use case

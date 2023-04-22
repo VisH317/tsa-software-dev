@@ -51,8 +51,8 @@ export default function NewClass() {
             <Box sx={{width: "50%", padding: "30px", backgroundColor: colors.white}}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={tab} onChange={handleTab} aria-label="basic tabs example">
-                        <Tab label="Join Class" {...a11yProps(0)} />
-                        <Tab label="Create Class" {...a11yProps(1)} />
+                        <Tab label="Create Class" {...a11yProps(0)} />
+                        <Tab label="Join Class" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={tab} index={0}>

@@ -9,6 +9,7 @@ import DashNav from '@/components/Dashboard/DashNav';
 import MiniDrawer from '@/components/Dashboard/Drawer';
 import LecturesHome from '@/components/ClassHome/Lectures';
 import { isConstructorDeclaration } from 'typescript';
+import Assignments from '@/components/ClassHome/Assignments';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
@@ -73,7 +74,7 @@ export default function TeacherClassHome() {
                         <Tab label="About" {...a11yProps(0)}/>
                         <Tab label="Lectures" {...a11yProps(1)}/>
                         <Tab label="Assignments" {...a11yProps(2)}/>
-                        <Tab label="Tests" {...a11yProps(3)}/>
+                        <Tab label="Chat" {...a11yProps(3)}/>
                     </Tabs>
                     <TabPanel value={tab} index={0}>
                         Welcome to {curClass.Nm} {"\n"}
@@ -82,6 +83,9 @@ export default function TeacherClassHome() {
                     </TabPanel>
                     <TabPanel value={tab} index={1}>
                         <LecturesHome lectures={data} classID={curClass.Id}/>
+                    </TabPanel>
+                    <TabPanel value={tab} index={2}>
+                        <Assignments classID={curClass.Id}/>
                     </TabPanel>
                 </div>
             </MiniDrawer>

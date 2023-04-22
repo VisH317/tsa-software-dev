@@ -27,7 +27,7 @@ func CreateNote(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
-	return c.Redirect("/")
+	return c.SendString("success")
 }
 
 func GetNote(c *fiber.Ctx, db *sql.DB) error {
@@ -43,6 +43,7 @@ func GetNote(c *fiber.Ctx, db *sql.DB) error {
 		if err!=nil {
 			fmt.Println(err)
 		}
+		defer rows.Close()
 
 		var notes []Note
 		for rows.Next() {

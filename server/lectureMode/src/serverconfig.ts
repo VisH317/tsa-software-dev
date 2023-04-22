@@ -2,18 +2,23 @@ export interface ServerToClientEvents {
     // room management & error events
     roomClosed: () => void
     unauthorized: () => void
+
+    // notifications for people joining and leaving rooms
+    studentJoins: (students: number) => void
+    studentLeaves: (students: number) => void
     
     // sends question to student client
     receiveTeacherQuestion: (questionPrompt: string) => void
     // sends question responses from students to teacher client
-    sendTeacherQuestionResponse: (questionAnwer: string) => void
+    sendTeacherQuestionResponse: (email: string, questionAnwer: string, question: string) => void
 
     // sends question asked by student to teacher socket ID
-    receiveStudentQuestion: (questionPrompt: string, socketID: string) => void
+    receiveStudentQuestion: (email: string, questionPrompt: string, socketID: string) => void
     // sends student question response from teacher back to student
-    sendStudentQuestionResponse: (questionAnswer: string) => void
+    sendStudentQuestionResponse: (questionAnswer: string, question: string) => void
 
-    sendDisturbance: () => void
+    sendDisturbance: (email: string) => void
+    sendJoin: (email: string) => void
 }
 
 export interface ClientToServerEvents {
@@ -25,11 +30,11 @@ export interface ClientToServerEvents {
 
     // teacher questions
     createTeacherQuestion: (userEmail: string, lectureID: number, questionPrompt: string) => void
-    answerTeacherQuestion: (userEmail: string, lectureID: number, questionAnswer: string) => void
+    answerTeacherQuestion: (userEmail: string, lectureID: number, questionAnswer: string, question: string) => void
 
     // student questions
     createStudentQuestion: (userEmail: string, lectureID: number, questionPrompt: string) => void
-    answerStudentQuestion: (userEmail: string, lectureID: number, questionAnswer: string, socketID: string) => void
+    answerStudentQuestion: (userEmail: string, lectureID: number, questionAnswer: string, socketID: string, question: string) => void
 
     // disturbance detection
     checkDisturbance: (userEmail: string, lectureID: number) => void

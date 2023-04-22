@@ -89,6 +89,7 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 			fmt.Println("brh")
 			fmt.Println(err)
 		}
+		defer rows.Close()
 
 		var lectures []Lecture
 
@@ -114,6 +115,8 @@ func GetLectureByID(c *fiber.Ctx, db *sql.DB) error {
 			fmt.Println("classes")
 			fmt.Println(err)
 		}
+		defer rows.Close()
+		
 		var lecture Lecture
 
 		for rows.Next() {

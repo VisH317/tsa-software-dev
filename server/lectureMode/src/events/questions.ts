@@ -10,7 +10,8 @@ import { convertToLectureType } from "../redis.js"
 
 export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
     socket.on("createTeacherQuestion", async (userEmail: string, lectureID: number, questionPrompt: string) => {
-        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
+        console.log("creating teacher question!!")
+        const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkTeacher(socket, userEmail, classroomID)) return
         
         socket.to(String(lectureID)).emit("receiveTeacherQuestion", questionPrompt)
@@ -18,32 +19,34 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     })
 
     
-    socket.on("answerTeacherQuestion", async (userEmail: string, lectureID: number, questionAnswer: string) => {
-        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
+    socket.on("answerTeacherQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, question: string) => {
+        console.log("answering teacher question!")
+        const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
-        const res = await client.hGetAll(`classroom:lectures${lectureID}`)
-        const lecture: Lecture = convertToLectureType(res.data)
+        const socketID = await client.hGet(`lectures:${lectureID}`, "socketID")
         
-        io.sockets[lecture.socketID].emit("sendTeacherQuestionResponse", questionAnswer)
+        io.to(socketID).emit("sendTeacherQuestionResponse", userEmail, questionAnswer, question)
     })
 
 
     socket.on("createStudentQuestion", async (userEmail: string, lectureID: number, questionPrompt: string) => {
-        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
+        console.log("creating student question")
+        const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkStudent(socket, userEmail, classroomID)) return
 
-        const res = await client.hGetAll(`classroom:lectures${lectureID}`)
-        const lecture: Lecture = convertToLectureType(res.data)
+        const socketID = await client.hGet(`lectures:${lectureID}`, "socketID")
+        console.log("socketID: ",socketID)
 
-        io.sockets[lecture.socketID].emit("receiveStudentQuestion", questionPrompt, socket.id)
+        console.log("available sockets: ", io.sockets)
+        io.to(socketID).emit("receiveStudentQuestion", userEmail, questionPrompt, socket.id)
     })
 
 
-    socket.on("answerStudentQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, socketID: string) => {
-        const classroomID = await client.hGet(`classroom:lectures:${lectureID}`, "classroomID")
+    socket.on("answerStudentQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, socketID: string, question: string) => {
+        const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         if(!await checkTeacher(socket, userEmail, classroomID)) return
 
-        io.sockets[socketID].emit("sendStudentQuestionResponse", questionAnswer)
+        io.to(socketID).emit("sendStudentQuestionResponse", questionAnswer, question)
     })
 }

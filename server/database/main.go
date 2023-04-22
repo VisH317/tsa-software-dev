@@ -112,12 +112,28 @@ func main() {
 		return handlers.GetAssignmentsForClass(c, db)
 	})
 
+	app.Delete("/api/assignments", func(c *fiber.Ctx) error {
+		return handlers.DeleteAssignment(c, db)
+	})
+
+	app.Get("/api/assignments/id", func(c *fiber.Ctx) error {
+		return handlers.GetAssignmentByID(c, db)
+	})
+
 	app.Post("/api/responses", func (c *fiber.Ctx) error {
 		return handlers.CreateAssignmentResponse(c, db)
 	})
 
 	app.Get("/api/responses", func (c *fiber.Ctx) error {
 		return handlers.GetAssignmentResponses(c, db)
+	})
+
+	app.Patch("/api/responses", func (c *fiber.Ctx) error {
+		return handlers.UpdateAssignmentResponse(c, db)
+	})
+
+	app.Get("/api/responses/student", func (c *fiber.Ctx) error {
+		return handlers.GetAssignmentResponsesStudent(c, db)
 	})
 
 	port :=  os.Getenv("PORT")
