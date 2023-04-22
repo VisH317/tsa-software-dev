@@ -1,7 +1,7 @@
 export default {
-    main: "#3aa5a9",
+    main: "#22c55e",
     white: "white",
-    light: "#d2d9d9",
+    light: "#e2e8f0",
     dark: "#17252A",
     gray: "#5f6666"
 }

@@ -10,6 +10,8 @@ import MiniDrawer from '@/components/Dashboard/Drawer';
 import LecturesHome from '@/components/ClassHome/Lectures';
 import { isConstructorDeclaration } from 'typescript';
 import Assignments from '@/components/ClassHome/Assignments';
+import colors from '@/styles/colors';
+import { montserrat } from '@/styles/fonts';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
@@ -63,31 +65,48 @@ export default function TeacherClassHome() {
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
 
+    const mapStudents = () => {
+        return curClass?.Students.map(s => (
+            <div className={`px-10 py-5 border-b-2 border-slate-200 w-full`}><a href={`mailto:${s}`} className={`font-sans ${montserrat.variable} font-light text-slate-600`}>{s}</a></div>
+        ))
+    }
+
     if(status!=="success") return <div>loading...</div>
 
     if (curClass!==null) return (
         <>
-            <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/>
             <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
-                <div>
-                    <Tabs value={tab} onChange={handleTab}>
-                        <Tab label="About" {...a11yProps(0)}/>
-                        <Tab label="Lectures" {...a11yProps(1)}/>
-                        <Tab label="Assignments" {...a11yProps(2)}/>
-                        <Tab label="Chat" {...a11yProps(3)}/>
-                    </Tabs>
-                    <TabPanel value={tab} index={0}>
-                        Welcome to {curClass.Nm} {"\n"}
-                        teacher: {curClass.Teacher}
-                        <Button variant="contained" onClick={handleDelete}>Delete Class</Button>
-                    </TabPanel>
-                    <TabPanel value={tab} index={1}>
-                        <LecturesHome lectures={data} classID={curClass.Id}/>
-                    </TabPanel>
-                    <TabPanel value={tab} index={2}>
-                        <Assignments classID={curClass.Id}/>
-                    </TabPanel>
-                </div>
+                <div className="">
+                    <div className="w-full pt-[2%] flex flex-row justify-center bg-slate-100">
+                        <Tabs value={tab} onChange={handleTab} sx={{width: "50%", borderColor: colors.main, justifyContent: "center", display: "flex", flexDirection: "row", alignItems: "center"}} textColor="primary" indicatorColor="primary">
+                            <Tab label="About" {...a11yProps(0)} sx={{width: "25%", height: "100%", borderColor: colors.main, borderWidth: 2}}/>
+                            <Tab label="Lectures" {...a11yProps(1)} sx={{width: "25%"}}/>
+                            <Tab label="Assignments" {...a11yProps(2)} sx={{width: "25%"}}/>
+                            <Tab label="Chat" {...a11yProps(3)} sx={{width: "25%"}}/>
+                        </Tabs>
+                    </div>
+                        <TabPanel value={tab} index={0}>
+                            <div className="flex flex-row pb-10 h-full">
+                                <div className="w-[60%] bg-white p-10">
+                                    <p className={`font-sans ${montserrat.variable} text-7xl font-normal text-slate-700`}>Welcome to {curClass.Nm} {"\n"}</p>
+                                    <div className="h-10"/>
+                                    <p className={`font-sans ${montserrat.variable} text-2xl font-normal text-slate-500`}>Teacher: {curClass.Teacher}</p>
+                                    <Button variant="contained" onClick={handleDelete}>Delete Class</Button>
+                                </div>
+                                <div className="w-[40%] p-10">
+                                    <p className={`font-sans ${montserrat.variable} text-5xl font-light text-slate-700`}>Students</p>
+                                    <div className="h-8"/>
+                                    {mapStudents()}
+                                </div>
+                            </div>
+                        </TabPanel>
+                        <TabPanel value={tab} index={1}>
+                            <LecturesHome lectures={data} classID={curClass.Id}/>
+                        </TabPanel>
+                        <TabPanel value={tab} index={2}>
+                            <Assignments classID={curClass.Id}/>
+                        </TabPanel>
+                    </div>
             </MiniDrawer>
         </>
     )

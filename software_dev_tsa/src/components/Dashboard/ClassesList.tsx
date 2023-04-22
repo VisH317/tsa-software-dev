@@ -22,19 +22,21 @@ export default function ClassesList(props: ClassesListProps) {
     }
 
     const mapClasses = () => {
-        return classes.map((c: any) => (
-            <Link href={`${isTeacher ? "/teacher/" : "/student/"}`+String(c.Id)}>
-            <Box sx={{width: "100%", position: "relative", border: "1px solid black"}}>
-                <Typography variant='h1'>{c.Nm}</Typography>
-                <Typography variant='body2'><em>{c.Teacher}</em></Typography>
-            </Box>
+        return classes.map((c: any) => ( 
+            <Link href={`${isTeacher ? "/teacher/" : "/student/"}`+String(c.Id)} className="w-[25%] bg-white">
+                <div className="w-full overflow-hidden rounded-lg shadow-lg aspect-[5/4] relative p-10 hover:shadow-xl duration-300 hover:-translate-y-1">
+                    <div className="w-full h-[40%] bg-slate-400 absolute top-0 left-0"/>
+                    <p className="text-4xl font-medium mt-[35%]">{c.Nm}</p>
+                    <div className="h-[3%]"/>
+                    <p>Teacher: <a href={`mailto:{c.Teacher}`} className="hover:text-green-500 duration-150">{c.Teacher}</a></p>
+                </div>
             </Link>
         ))
     }
 
     return (
-        <Box sx={{display: "flex", flexDirection: "column"}}>
+        <div className="w-full flex flex-row gap-5 flex-wrap">
             {mapClasses()}
-        </Box>
+        </div>
     )
 }

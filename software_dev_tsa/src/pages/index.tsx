@@ -10,7 +10,7 @@ import { Box, Grid, Typography, Divider, Stack, TextField, Button } from '@mui/m
 import PersonIcon from "@mui/icons-material/Person"
 import colors from '@/styles/colors'
 
-const inter = Inter({ subsets: ['latin'] })
+// const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 

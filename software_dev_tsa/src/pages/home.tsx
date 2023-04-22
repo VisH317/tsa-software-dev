@@ -24,7 +24,7 @@ export default function Home() {
     const [cls, scls] = useClasses()
     const router = useRouter()
     const handleNewClass = () => router.push("/newClass")
-    
+    if(us.state==="hasData" && us.data==="") void router.push("/")
 
     const [open, setOpen] = useState(false)
 
@@ -55,11 +55,29 @@ export default function Home() {
                     STUDENT
                     <ClassesList classes={scls.data} isTeacher={false}/>
                 </Grid> */}
-                <div className={`w-full pt-[10%] pb-[5%] px-40 gap-5 bg-slate-800 flex justify-start ${montserrat.variable} font-sans`}>
-                    <div className="w-[60%]"><p className="text-6xl text-white font-medium">Welcome back, {us.data.username}!</p></div>
+                <div className={`w-full pb-[5%] px-40 gap-5 bg-slate-900 flex justify-start ${montserrat.variable} font-sans`}>
+                    <div className="w-[60%] mt-[15%]"><p className="text-6xl text-white font-medium">Welcome back, {us.data.username}!</p></div>
+                    <div className="w-[40%] mt-[4%] ml-[20%]">
+                        <Image src="/undraw_exams_re_4ios.svg" alt="epic image of school yayayayya" width={450} height={350}/>
+                    </div>
                 </div>
-                <div className="w-[40%]">
-                    <Image src="/undraw_bookshelves_re_lxoy.svg" alt="epic image of school yayayayya"/>
+                <div className={`w-full ${montserrat.variable} font-sans flex flex-row bg-slate-50 min-h-screen`}>
+                    <div className="w-[60%] p-10">
+                        <div className={`w-full`}>
+                            <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Classes</p>
+                            <div className="h-8"/>
+                            <ClassesList classes={cls.data} isTeacher/>
+                        </div>
+                        <div className="h-16"/>
+                        <div className={`w-full`}>
+                            <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Student Classes</p>
+                            <div className="h-8"/>
+                            <ClassesList classes={scls.data} isTeacher/>
+                        </div>
+                    </div>
+                    <div className="w-[40%] p-10">
+                        <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Assignments</p>
+                    </div>
                 </div>
             </MiniDrawer>
             <Tooltip placement="left" title="New Class" arrow>

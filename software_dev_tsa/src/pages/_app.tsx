@@ -7,13 +7,23 @@ import "../styles/globals.css"
 
 const client = new QueryClient()
 
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    primary: { main: "#22c55e" }
+  }
+})
+
 export default function App({ Component, pageProps }: AppProps) {
 
   return (
-    <QueryClientProvider client={client}>
-      <Provider>
-        <Component {...pageProps} />
-      </Provider>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={client}>
+        <Provider>
+          <Component {...pageProps} />
+        </Provider>
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }
