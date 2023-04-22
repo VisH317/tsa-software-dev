@@ -88,9 +88,9 @@ export default function AssignmentView() {
         if(Object.keys(responseQuery.data).length===0) return (
             <div className="w-full">
                 no response submitted yet
-                <textarea rows={10} cols={40} className="w-[40%] border-slate-400 border-2" placeholder={"Submit a response..."} value={resp} onChange={e => setResp(e.target.value)}/>
+                <textarea rows={30} cols={40} value={resp} className="w-full h-full border-slate-400 border-2 rounded-lg p-5" onChange={e => setResp(e.target.value)}/>
                 <input type="text" placeholder="Emails of other classmates you worked with" value={team} onChange={e => setTeam(e.target.value)}/>
-                <button onClick={() => void createResponse.mutateAsync()}>Submit Response</button>
+                <button className="w-full border-green-500 border-2 p-5 rounded-lg text-green-500 hover:-translate-y-1 duration-150 hover:bg-green-500 hover:text-white" onClick={() => void createResponse.mutateAsync()}>Update Response</button>
             </div>
         )
         return (
