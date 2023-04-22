@@ -97,10 +97,10 @@ export default function AssignmentView() {
             <div className="h-full">
                 <div className="w-[100%] h-[50%] flex flex-col gap-5">
                     <p className="text-xl text-slate-700 font-medium">Update your response:</p>
-                    <textarea rows={30} cols={40} value={resp} className="w-full h-full border-slate-400 border-2" onChange={e => setResp(e.target.value)}/>
+                    <textarea rows={30} cols={40} value={resp} className="w-full h-full border-slate-400 border-2 rounded-lg p-5" onChange={e => setResp(e.target.value)}/>
                 </div>
                 <div className="h-8"/>
-                <button className="w-full border-slate-400 border-2 p-5 rounded-lg text-slate-400 hover:-translate-y-1 duration-150" onClick={() => void updateResponse.mutateAsync()}>Update Response</button>
+                <button className="w-full border-green-500 border-2 p-5 rounded-lg text-green-500 hover:-translate-y-1 duration-150 hover:bg-green-500 hover:text-white" onClick={() => void updateResponse.mutateAsync()}>Update Response</button>
             </div>
         )
     }
@@ -112,7 +112,7 @@ export default function AssignmentView() {
 
     return (
         <MiniDrawer open={open} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}>
-            <div className="w-screen h-screen bg-slate-400 flex justify-center items-center">
+            <div className="w-screen h-screen bg-slate-200 flex justify-center items-center">
                 <div className={`p-10 font-sans ${montserrat.variable} w-screen bg-white w-1/2 rounded-lg`}>
                     <p className="text-5xl">Assignment: {assignment?.Title}</p>
                     <div className="h-8"/>
