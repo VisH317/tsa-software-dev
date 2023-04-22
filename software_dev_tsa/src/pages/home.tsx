@@ -72,7 +72,7 @@ export default function Home() {
                         <div className={`w-full`}>
                             <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Student Classes</p>
                             <div className="h-8"/>
-                            <ClassesList classes={scls.data} isTeacher/>
+                            <ClassesList classes={scls.data}/>
                         </div>
                     </div>
                     <div className="w-[40%] p-10">

@@ -1,5 +1,5 @@
 import styles from "@/styles/Home.module.css";
-import "../styles/login.module.css";
+import "../styles/Login.module.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";

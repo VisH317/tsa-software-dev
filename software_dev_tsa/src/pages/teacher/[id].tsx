@@ -67,7 +67,13 @@ export default function TeacherClassHome() {
 
     const mapStudents = () => {
         return curClass?.Students.map(s => (
-            <div className={`px-10 py-5 border-b-2 border-slate-200 w-full`}><a href={`mailto:${s}`} className={`font-sans ${montserrat.variable} font-light text-slate-600`}>{s}</a></div>
+            <div className={`px-10 py-5 border-b-2 border-slate-200 w-full flex flex-row align-center`}>
+                <div><a href={`flex-none mailto:${s}`} className={`font-sans ${montserrat.variable} font-light text-slate-600`}>{s}</a></div>
+                <div className={`grow flex flex-row justify-end gap-6 font-sans ${montserrat.variable}`}>
+                    <button className="bg-slate-200 text-slate-800 font-medium px-5 py-2 text-lg rounded-lg duration-300 hover:text-white border-white border-4 hover:-translate-y-1 hover:border-slate-200 hover:bg-slate-400">Email</button>
+                    <button className="bg-red-500 text-white font-medium px-5 py-2 text-lg rounded-lg duration-300 hover:text-white border-white border-4 hover:-translate-y-1 hover:border-red-200 hover:bg-red-400">Remove</button>
+                </div>
+            </div>
         ))
     }
 
@@ -85,28 +91,29 @@ export default function TeacherClassHome() {
                             <Tab label="Chat" {...a11yProps(3)} sx={{width: "25%"}}/>
                         </Tabs>
                     </div>
-                        <TabPanel value={tab} index={0}>
-                            <div className="flex flex-row pb-10 h-full">
-                                <div className="w-[60%] bg-white p-10">
-                                    <p className={`font-sans ${montserrat.variable} text-7xl font-normal text-slate-700`}>Welcome to {curClass.Nm} {"\n"}</p>
-                                    <div className="h-10"/>
-                                    <p className={`font-sans ${montserrat.variable} text-2xl font-normal text-slate-500`}>Teacher: {curClass.Teacher}</p>
-                                    <Button variant="contained" onClick={handleDelete}>Delete Class</Button>
-                                </div>
-                                <div className="w-[40%] p-10">
-                                    <p className={`font-sans ${montserrat.variable} text-5xl font-light text-slate-700`}>Students</p>
-                                    <div className="h-8"/>
-                                    {mapStudents()}
-                                </div>
+                    <TabPanel value={tab} index={0}>
+                        <div className="flex flex-row pb-10 h-full">
+                            <div className="w-[60%] bg-white p-10">
+                                <p className={`font-sans ${montserrat.variable} text-7xl font-normal text-slate-700`}>Welcome to {curClass.Nm} {"\n"}</p>
+                                <div className="h-10"/>
+                                <p className={`font-sans ${montserrat.variable} text-2xl font-normal text-slate-500`}>Teacher: {curClass.Teacher}</p>
+                                <div className="h-8"/>
+                                <button className={`bg-green-500 px-5 py-3 text-xl text-white font-sans ${montserrat.variable} duration-300 hover:-translate-y-1 hover:bg-green-500 border-4 border-white hover:border-green-200 rounded-lg`} onClick={handleDelete}>Delete Class</button>
                             </div>
-                        </TabPanel>
-                        <TabPanel value={tab} index={1}>
-                            <LecturesHome lectures={data} classID={curClass.Id}/>
-                        </TabPanel>
-                        <TabPanel value={tab} index={2}>
-                            <Assignments classID={curClass.Id}/>
-                        </TabPanel>
-                    </div>
+                            <div className="w-[40%] p-10">
+                                <p className={`font-sans ${montserrat.variable} text-5xl font-light text-slate-700`}>Students</p>
+                                <div className="h-8"/>
+                                {mapStudents()}
+                            </div>
+                        </div>
+                    </TabPanel>
+                    <TabPanel value={tab} index={1}>
+                        <LecturesHome lectures={data} classID={curClass.Id}/>
+                    </TabPanel>
+                    <TabPanel value={tab} index={2}>
+                        <Assignments classID={curClass.Id}/>
+                    </TabPanel>
+                </div>
             </MiniDrawer>
         </>
     )
