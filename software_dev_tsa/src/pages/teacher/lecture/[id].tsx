@@ -8,6 +8,8 @@ import { useUser, Email } from '@/lib/user'
 import Modal from '@/components/Modal/Modal'
 import { createSocket } from 'dgram'
 import type { Socket } from 'socket.io-client'
+import MiniDrawer from '@/components/Dashboard/Drawer'
+import { montserrat } from '@/styles/fonts'
 
 // IMPORTANT FOR LATER: add check for lecture being accessed is in the right class
 
@@ -170,34 +172,50 @@ export default function TeacherLecture() {
         ))
     }
 
+    // drawer props
+    const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+    const openDrawer = () => setDrawerOpen(true)
+    const closeDrawer = () => setDrawerOpen(false)
+
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
     
     return (
-        <>
-            <p>{students}</p>
-            <button onClick={closeRoom}>Close Room</button>
-            <div>Questions from Students!!!!:
-                {mapQuestions()}
-            </div>
-            <div>
-                Ask a question to your students!!!!!
-                <form onSubmit={createTeacherQuestion}>
-                    <textarea value={teacherQuestion.question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setTeacherQuestion({ question: e.target.value, answer: [] })}/>
-                    <button type="submit">Ask Question</button>
-                </form>
-            </div>
+        <div className={`${montserrat.variable} font-sans`}>
+            <MiniDrawer open={drawerOpen} handleDrawerOpen={openDrawer} handleDrawerClose={closeDrawer}>
+                <div className="w-full h-screen relative p-10">
+                    {/* <p>{students}</p>
+                    <button onClick={closeRoom}>Close Room</button> */}
+                    <div>Questions from Students!!!!:
+                        {mapQuestions()}
+                    </div>
+                    <div>
+                        Ask a question to your students!!!!!
+                        <form onSubmit={createTeacherQuestion}>
+                            <textarea value={teacherQuestion.question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setTeacherQuestion({ question: e.target.value, answer: [] })}/>
+                            <button type="submit">Ask Question</button>
+                        </form>
+                    </div>
 
-            <div>
-                see answers to previous questions:  
-                {mapTeacherQuestions()}
-            </div>
+                    <div>
+                        see answers to previous questions:  
+                        {mapTeacherQuestions()}
+                    </div>
 
-            <div>
-                Activity: {message}
-            </div>
-
-            <Modal open={modal} close={() => setModal(false)}>
+                    <div>
+                        Activity: {message}
+                    </div>
+                    <div className="bg-slate-100 w-full h-32 absolute bottom-0 left-0 flex flex-row p-10 align-center">
+                        <div className="w-1/2 flex justify-start align-center">
+                            <p className="text-4xl font-medium text-slate-700">Students in Session: {students}</p>
+                        </div>
+                        <div className="w-1/2 flex justify-end align-center pr-[100px]">
+                            <button onClick={closeRoom}>Close Room</button>
+                        </div>
+                    </div>
+                </div>
+            </MiniDrawer>
+            <Modal open={modal} close={() => setModal(false)} height="50vh">
                 <form onSubmit={submitQuestionResponse}>
                     <h4>Submit your response</h4><br/>
                     <p>Question: {currentModal?.question}</p>
@@ -205,12 +223,12 @@ export default function TeacherLecture() {
                     <button type="submit">Answer Question</button>
                 </form>
             </Modal>
-            <Modal open={openAnswers} close={() => setOpenAnswers(false)}>
+            <Modal open={openAnswers} close={() => setOpenAnswers(false)} height="50vh">
                 <h1>Question Answers</h1>
                 <p>Question: {currentTeacherQuestion?.question}</p>
                 {mapAnswers()}
             </Modal>
-        </>
+        </div>
     )
     // NOTES: events to emit - createRoom, deleteRoom, for student: joinRoom leaveRoom (with notes UI)
     // render a list of people in the meeting and change when receiving a leave or join room

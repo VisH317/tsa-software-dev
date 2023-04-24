@@ -34,7 +34,7 @@ export default function LecturesHome(props: LecturesProps) {
         if(lectures.length===0) return <div className={`${montserrat.variable} font-sans text-2xl text-slate-500`}>You currently have no previous or ongoing lectures</div>
         return lectures.map(l => {
             return (
-                <div key={l.Id} className={`${montserrat.variable} font-sans p-10 border-slate-200 border-2 hover:bg-slate-100 rounded-lg duration-300 relative w-[15%] aspect-[4/3]`}>
+                <div key={l.Id} className={`${montserrat.variable} font-sans p-10 border-slate-200 border-2 hover:bg-slate-100 rounded-lg duration-300 relative w-[17%] aspect-[4/3]`}>
                     <p className="text-5xl text-slate-700 font-normal">{l.Name}</p>
                     <div className='h-4'/>
                     <p className="text-md text-slate-500">{l.Description}</p>
