@@ -49,7 +49,7 @@ export default function StudentLecture() {
         socket.on("studentLeaves", num => setStudents(num))
         socket.on("roomClosed", leave)
         socket.on("roomClosed", closeRoom)
-        socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(response))
+        socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(ans => [...ans, { question, answer: response }]))
 
         socket.on("receiveTeacherQuestion", prompt => {
             console.log("oldTeacherQuestions: ", teacherQuestions)
@@ -91,12 +91,13 @@ export default function StudentLecture() {
     // question asking stuff
 
     const [question, setQuestion] = useState<string>("")
-    const [answer, setAnswer] = useState<string>("")
+    const [answer, setAnswer] = useState<Answer[]>([])
 
-    const submitQuestion = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const submitQuestion = async (e?: any): Promise<void> => {
         if(user.state!=="hasData") return 
-        e.preventDefault()
+        e?.preventDefault()
         ws.current?.emit("createStudentQuestion", user.data.email, lec?.Id, question)
+        setQuestion("")
     }
 
     // question answering stuff
@@ -111,6 +112,18 @@ export default function StudentLecture() {
         setOpen(true)
     }
 
+    const mapAnswers = () => {
+        return answer.map(a => (
+            <div className="border-b-2 border-slate-300">
+                <div className="w-full h-full hover:bg-slate-300 p-10 rounded-lg duration-150">
+                    <p><span className="font-medium">Question:</span> {a.question}</p>
+                    <div className="h-2"/>
+                    <p><span className="font-medium">Answer:</span> {a.answer}</p>
+                </div>
+            </div>
+        ))
+    }
+
     const submitAnswer = () => {
         if(user.state!=="hasData") return
         ws.current?.emit("answerTeacherQuestion", user.data.email, lec?.Id, studentAnswer, currentTeacherQuestion?.prompt)
@@ -121,9 +134,15 @@ export default function StudentLecture() {
     const mapTeacherQuestions = () => {
         console.log("teacher questions: ", teacherQuestions)
         return teacherQuestions.map((q: TeacherQuestion) => (
-            <div>
-                <p>Question: {q.prompt}</p>
-                <button onClick={() => openModal(q)}>Answer Question</button>
+            <div className="border-b-2 border-slate-300">
+                <div className="p-10 flex flex-row">
+                    <div className="w-3/4 flex items-center">
+                        <p className="text-xl"><span className="font-medium">Question:</span> {q.prompt}</p>
+                    </div>
+                    <div className="w-1/4 flex justify-center items-center">
+                        <button onClick={() => openModal(q)} className="px-4 py-3 rounded-lg text-white bg-green-500 duration-300 hover:bg-green-400 hover:-translate-y-1 hover:shadow-lg">Answer Question</button>
+                    </div>
+                </div>
             </div>
         ))
     }
@@ -134,11 +153,10 @@ export default function StudentLecture() {
 
     // modal states
     const [drawer, setDrawer] = useState<boolean>(false)
+    const [seeResponsesModal, setSeeResponsesModal] = useState<boolean>(false)
 
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
-
-    const [seeResponsesModal, setSeeResponsesModal] = useState<boolean>(false)
     
     return (
         <div className={`${montserrat.variable} font-sans`}>
@@ -153,12 +171,11 @@ export default function StudentLecture() {
                                 </div>
                             </div>
                             <div className="h-[40%] p-10 bg-slate-100">
-                                <p className="text-4xl font-medium text-slate-700">Have a Question?</p>  
-                                <p>Answer to your last question: {answer}</p>
-                                <form onSubmit={submitQuestion}>
-                                    <textarea value={question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setQuestion(e.target.value)}/>
-                                    <button type="submit">Ask Question</button>
-                                </form>
+                                <p className="text-4xl font-medium text-slate-700">Answer to your last question: </p>
+                                <div className="h-4"/>
+                                <div>
+                                    {mapAnswers()}
+                                </div>
                             </div>
                         </div>
 
@@ -177,19 +194,31 @@ export default function StudentLecture() {
                             <p className="text-4xl font-medium text-slate-200">Students in Session: {students}</p>
                         </div>
                         <div className="w-1/2 flex justify-end align-center pr-[100px] gap-10">
-                            {/* <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-green-200 hover:bg-green-600 duration-300' onClick={closeRoom}>Ask Question</button> */}
-                            <button className="bg-red-600 px-3 py-2 text-white font-medium rounded-lg border-slate-700 hover:-translate-y-1 hover:bg-red-700 duration-300" onClick={leave}>Leave Lecture</button>
+                            <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-green-200 hover:bg-green-600 duration-300' onClick={() => setSeeResponsesModal(true)}>Ask Question</button>
+                            <button className="bg-red-600 px-3 py-2 text-white font-medium rounded-lg border-slate-700 hover:-translate-y-1 hover:bg-red-700 duration-300" onClick={closeRoom}>Leave Lecture</button>
                         </div>
                     </div>
                 </div>
             </MiniDrawer>
-            <Modal open={open} close={() => setOpen(false)} height="50vh">
-                <h1>Submit answer to question</h1>
-                <p>Question: {currentTeacherQuestion?.prompt}</p>
-                <textarea rows={5} cols={30} value={studentAnswer} onChange={e => setStudentAnswer(e.target.value)}/>
-                <button onClick={submitAnswer}>Submit Answer</button>
+            <Modal open={open} close={() => setOpen(false)} height="42vh">
+                <div className="p-10 flex flex-col gap-7 items-center">
+                    <h1 className='font-medium text-4xl text-slate-800'>Submit answer to question</h1>
+                    <p><span className="font-medium">Question:</span> {currentTeacherQuestion?.prompt}</p>
+                    <textarea rows={6} cols={40} value={studentAnswer} onChange={e => setStudentAnswer(e.target.value)} className="p-5 border-slate-400 border-2 duration-300 hover:border-green-500"/>
+                    <hr className="w-48 h-1 mx-auto my-2 bg-slate-400 border-0 rounded dark:bg-gray-700"/>
+                    <button onClick={submitAnswer} className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg hover:-translate-y-1 hover:bg-green-600 duration-300'>Submit Answer</button>
+                </div>
             </Modal>
-
+            <Modal open={seeResponsesModal} close={() => setSeeResponsesModal(false)} height="30vh">
+                <div className="p-10 flex flex-col gap-7 items-center">
+                    <p className="font-medium text-4xl text-slate-800">Have a Question?</p>
+                    <form className="flex flex-col gap-5 w-[80%]">
+                        <textarea value={question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setQuestion(e.target.value)} className="p-5 border-slate-400 border-2 duration-300 hover:border-green-500"/>
+                        <hr className="w-48 h-1 mx-auto my-2 bg-slate-400 border-0 rounded dark:bg-gray-700"/>
+                        <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg hover:-translate-y-1 hover:bg-green-600 duration-300' onClick={submitQuestion}>Ask</button>
+                    </form> 
+                </div>
+            </Modal>
         </div>
     )
     // NOTES: events to emit - createRoom, deleteRoom, for student: joinRoom leaveRoom (with notes UI)
@@ -217,4 +246,9 @@ const useWindowUnloadEffect = (handler: () => unknown, callOnCleanup: boolean = 
   
 interface TeacherQuestion {
     prompt: string
+}
+
+interface Answer {
+    question: string
+    answer: string
 }
