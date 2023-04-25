@@ -18,12 +18,14 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Head from 'next/head';
-import { Classes } from '@/lib/classes';
+import { Classes, useClasses } from '@/lib/classes';
 
 import colors from '@/styles/colors';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import ClassesList from './ClassesList';
 import DashNav from './DashNav';
+import { useRouter } from 'next/router';
+import { montserrat } from '@/styles/fonts';
 
 const drawerWidth = 240;
 
@@ -88,10 +90,12 @@ interface DrawerProps {
 
 export default function MiniDrawer(props: DrawerProps) {
   const theme = useTheme();
+  const [cls, scls] = useClasses()
+  const router = useRouter()
 
   const { open, handleDrawerOpen, handleDrawerClose, children } = props
 
-  return (
+  return cls.state==="hasData" && scls.state==="hasData" ? (
     <>
         <Head>
             <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
@@ -106,15 +110,15 @@ export default function MiniDrawer(props: DrawerProps) {
             </DrawerHeader>
             <Divider />
             <List>
-            {['Classes', 'Account'].map((text, index) => (
-                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+            {[{ text: 'Home', path: "/home" }, { text: 'Account', path: "/home" }].map((text, index) => (
+                <ListItem key={text.text} disablePadding sx={{ display: 'block' }} onClick={() => void router.push(text.path)}>
                 <ListItemButton
                     sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                     transition: "0.25s",
-                    "&:hover": {backgroundColor: colors.main, opacity: "1", color: colors.main}
+                    "&:hover": {backgroundColor: colors.main, opacity: "1"}
                     }}
                 >
                     <ListItemIcon
@@ -128,22 +132,23 @@ export default function MiniDrawer(props: DrawerProps) {
                     >
                     {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                     </ListItemIcon>
-                    <ListItemText primary={<Typography variant={"body2"} sx={{fontFamily: "'Titillium Web', sans-serif", fontSize: "20px"}}>{text}</Typography>} sx={{ opacity: open ? 1 : 0, fontFamily: "'Titillium Web', sans-serif" }} />
+                    <ListItemText primary={<Typography variant={"body2"} sx={{fontFamily: "'Titillium Web', sans-serif", fontSize: "20px"}}>{text.text}</Typography>} sx={{ opacity: open ? 1 : 0, fontFamily: "'Titillium Web', sans-serif" }} />
                 </ListItemButton>
                 </ListItem>
             ))}
             </List>
             <Divider />
             <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              {/* <p className={`ml-10 text-xl ${montserrat.variable} font-sans`}>Yay</p> */}
+            {cls.data.map((text: Classes, index: number) => (
+                <ListItem key={text.Nm} disablePadding sx={{ display: 'block' }} onClick={() => void router.push(`/teacher/${text.Id}`)}>
                 <ListItemButton
                     sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                     transition: "0.25s",
-                    "&:hover": {backgroundColor: colors.main, opacity: "1", color: colors.main}
+                    "&:hover": {backgroundColor: colors.main, opacity: "1"}
                     }}
                 >
                     <ListItemIcon
@@ -156,7 +161,36 @@ export default function MiniDrawer(props: DrawerProps) {
                     >
                     {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                     </ListItemIcon>
-                    <ListItemText primary={<Typography variant={"body2"} sx={{fontFamily: "'Titillium Web', sans-serif", fontSize: "20px"}}>{text}</Typography>} sx={{ opacity: open ? 1 : 0, fontFamily: "'Titillium Web', sans-serif" }} />
+                    <ListItemText primary={<Typography variant={"body2"} sx={{fontFamily: "'Titillium Web', sans-serif", fontSize: "20px"}}>{text.Nm}</Typography>} sx={{ opacity: open ? 1 : 0, fontFamily: "'Titillium Web', sans-serif" }} />
+                </ListItemButton>
+                </ListItem>
+            ))}
+            </List>
+            <Divider />
+            <List>
+              {/* <p className={`ml-10 text-xl ${montserrat.variable} font-sans`}>Yay</p> */}
+            {scls.data.map((text: Classes, index: number) => (
+                <ListItem key={text.Nm} disablePadding sx={{ display: 'block' }} onClick={() => void router.push(`/student/${text.Id}`)}>
+                <ListItemButton
+                    sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                    transition: "0.25s",
+                    "&:hover": {backgroundColor: colors.secondary, opacity: "1"}
+                    }}
+                >
+                    <ListItemIcon
+                    sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                        color: colors.light
+                    }}
+                    >
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary={<Typography variant={"body2"} sx={{fontFamily: "'Titillium Web', sans-serif", fontSize: "20px"}}>{text.Nm}</Typography>} sx={{ opacity: open ? 1 : 0, fontFamily: "'Titillium Web', sans-serif" }} />
                 </ListItemButton>
                 </ListItem>
             ))}
@@ -167,5 +201,5 @@ export default function MiniDrawer(props: DrawerProps) {
         </div>
         </Box>
     </>
-  );
+  ) : <div></div>
 }
