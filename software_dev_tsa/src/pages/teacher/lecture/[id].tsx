@@ -116,8 +116,8 @@ export default function TeacherLecture() {
     }
 
     // teacher responses to student questions
-    const submitQuestionResponse = (e:React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const submitQuestionResponse = (e?:any) => {
+        e?.preventDefault()
         ws.current?.emit("answerStudentQuestion", currentModal?.email, lec?.Id, answer, currentModal?.id, currentModal?.question)
         // alert("submitted answer!!")
     }
@@ -174,9 +174,11 @@ export default function TeacherLecture() {
 
     const mapAnswers = () => {
         return currentTeacherQuestion?.answer.map((a: Answer) => (
-            <div>
-                <h5>Email: {a.email}</h5>
-                <p>Answer: {a.answer}</p>
+            <div className="w-full border-b-2 border-slate-100">
+                <div className="w-full h-full flex gap-2 flex-col rounded-lg p-5 hover:bg-slate-100 duration-150">
+                    <p><span className="font-medium">Answer:</span> {a.answer}</p>
+                    <h5 className="text-xs text-right text-slate-400"><span className="font-medium">From:</span> {a.email}</h5>
+                </div>
             </div>
         ))
     }
@@ -241,18 +243,20 @@ export default function TeacherLecture() {
                     </form> 
                 </div>
             </Modal>
-            <Modal open={modal} close={() => setModal(false)} height="50vh">
-                <form onSubmit={submitQuestionResponse}>
-                    <h4>Submit your response</h4><br/>
-                    <p>Question: {currentModal?.question}</p>
-                    <textarea cols={3} rows={25} value={answer} onChange={e => setAnswer(e.target.value)}  placeholder="your answer:"/>
-                    <button type="submit">Answer Question</button>
+            <Modal open={modal} close={() => setModal(false)} height="40vh">
+                <form className="p-10 flex flex-col gap-7 items-center">
+                    <h4 className="font-medium text-4xl text-slate-800">Submit your response</h4>
+                    <p><span className="font-medium">Question:</span> {currentModal?.question}</p>
+                    <textarea cols={40} rows={6} value={answer} onChange={e => setAnswer(e.target.value)}  placeholder="your answer:" className="p-5 border-slate-400 border-2 duration-300 hover:border-green-500"/>
+                    <button onClick={submitQuestionResponse} className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg hover:-translate-y-1 hover:bg-green-600 duration-300'>Answer Question</button>
                 </form>
             </Modal>
             <Modal open={openAnswers} close={() => setOpenAnswers(false)} height="50vh">
-                <h1>Question Answers</h1>
-                <p>Question: {currentTeacherQuestion?.question}</p>
-                {mapAnswers()}
+                <div className="p-10 flex flex-col gap-7 items-center">
+                    <h1 className="font-medium text-4xl text-slate-800">Question Answers</h1>
+                    <p><span className="font-medium">Question:</span> {currentTeacherQuestion?.question}</p>
+                    {mapAnswers()}
+                </div>
             </Modal>
         </div>
     )

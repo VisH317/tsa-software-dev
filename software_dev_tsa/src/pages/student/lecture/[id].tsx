@@ -165,10 +165,7 @@ export default function StudentLecture() {
                     <div className="grow flex flex-row">
                         <div className="w-[60%] h-full flex flex-col">
                             <div className="h-[60%]">
-                                <div>
-                                    Notes to take:
-                                    <textarea value={note} onChange={e => setNote(e.target.value)} rows={20} cols={50}/>
-                                </div>
+                                    <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full h-full p-10 outline-none" placeholder="Notes:" style={{resize: "none"}}/>
                             </div>
                             <div className="h-[40%] p-10 bg-slate-100">
                                 <p className="text-4xl font-medium text-slate-700">Answer to your last question: </p>
