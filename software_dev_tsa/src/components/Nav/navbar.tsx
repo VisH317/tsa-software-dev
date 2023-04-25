@@ -45,7 +45,7 @@ export default function Navbar() {
     };
 
     return (
-    <AppBar position="sticky" sx={{backgroundColor: '#17252A', color: "#3aa5a9", boxShadow: "none", width: "100%"}}>
+    <AppBar position="sticky" sx={{backgroundColor: '#1f2937', color: "#22c55e", boxShadow: "none", width: "100%"}}>
       <Container maxWidth="xl" sx={{width: "70%", }}>
         <Toolbar disableGutters variant="dense">
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -163,7 +163,7 @@ export default function Navbar() {
               ))}
             </Menu> */}
             <Link href="/login" style={{textDecoration: "none"}}>
-              <Button variant="contained" startIcon={<PersonIcon/>} sx={{backgroundColor: "#2b7a78", textDecoration: "none"}}>
+              <Button variant="contained" startIcon={<PersonIcon/>} sx={{backgroundColor: "#2b7a78", textDecoration: "none", color: "white"}}>
                 Sign In
               </Button>
             </Link>

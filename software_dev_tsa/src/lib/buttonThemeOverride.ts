@@ -20,7 +20,7 @@ declare module '@mui/material/styles' {
     };
   }
 
-  interface Palette extends CustomPalette {};
+  interface Palette extends CustomPalette {}
 
   interface PaletteOptions extends CustomPalette {};
 }
@@ -65,9 +65,9 @@ export const theme = createTheme({
       text: '#000000',
     },
     teal: {
-      primary: '#3aa5a9',
-      hover: '#308083',
-      text: '#FFFFFF',
+      primary: '#fff',
+      hover: '#22c55e',
+      text: '#000',
     }
   },
 });

@@ -178,6 +178,7 @@ export default function Login() {
                     height: "40px",
                     marginTop: "30px",
                     marginBottom: "20px",
+                    backgroundColor: "black"
                   }}
                 >
                   Submit
@@ -254,7 +255,7 @@ export default function Login() {
               </Button>
             </ThemeProvider>
           </Grid>
-          <Grid item xs={7} sx={{ backgroundColor: colors.dark }}>
+          <Grid item xs={7} sx={{ backgroundColor: "#1f2937" }}>
             <Stack direction="row" spacing={2}>
               <Avatar variant="square" sx={{ bgcolor: colors.main }}>
                 {" "}
