@@ -22,7 +22,7 @@ export default function TeacherLecture() {
     const [questions, setQuestions] = useState<Question[]>([])
     const [currentModal, setCurrentModal] = useState<Question>()
     const [modal, setModal] = useState<boolean>(false)
-    const [message, setMessage] = useState<string>("")
+    const [message, setMessage] = useState<string[]>([])
     const ws = useRef<Socket>()
 
     // fetch list of lectures with react-query
@@ -70,11 +70,11 @@ export default function TeacherLecture() {
         })
 
         socket.on("sendDisturbance", (email: string) => {
-            setMessage(`${email} has left the session`)
+            setMessage(msg => [...msg, `${email} has left the session`])
         })
         
         socket.on("sendJoin", (email: string) => {
-            setMessage(`${email} has joined the session`)
+            setMessage(msg => [...msg, `${email} has joined the session`])
         })
 
         ws.current = socket
@@ -183,6 +183,12 @@ export default function TeacherLecture() {
         ))
     }
 
+    const mapMessages = () => {
+        return message.map(m => (
+            <p>{m}</p>
+        ))
+    }
+
     // drawer props
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const openDrawer = () => setDrawerOpen(true)
@@ -200,8 +206,10 @@ export default function TeacherLecture() {
                 <div className="w-full h-screen relative flex flex-col">
                     <div className="grow flex flex-row">
                         <div className="w-[60%] h-full flex flex-col">
-                            <div className="h-[60%]">
-                                Activity: {message}
+                            <div className="h-[60%] p-10">
+                                <p className="text-6xl text-slate-600 font-medium">Activity:</p>
+                                <div className="h-4"/>
+                                {mapMessages()}
                             </div>
                             <div className="h-[40%] p-10 bg-slate-100">
                                 <p className="text-4xl font-medium text-slate-700">Teacher Question Responses:</p>  
