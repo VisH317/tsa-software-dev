@@ -41,7 +41,7 @@ export default function LecturesHome(props: LecturesProps) {
                     <div className='h-2'/>
                     <p className="text-lg text-slate-400">{l.Isstopped ? "stopped" : "started"}</p>
                     <div className='absolute bottom-0 left-0 w-full bg-slate-100 py-3 px-5 flex flex-row gap-5 justify-end'>
-                        <button className='bg-slate-800 px-3 py-2 text-white font-medium rounded-lg border-slate-100 border-4 hover:-translate-y-1 hover:border-green-200 hover:bg-green-500 duration-300' onClick={() => startLectureHandler(l.Id, false)}>{l.Isstopped ? "Start lecture" : "Open Lecture"}</button>
+                        <button className={`${l.Isstopped ? "bg-slate-800" : "bg-green-500"} px-3 py-2 text-white font-medium rounded-lg border-slate-100 border-4 hover:-translate-y-1 hover:border-green-200 hover:${l.Isstopped ? "bg-green-500" : "bg-green-400"} duration-300`} onClick={() => startLectureHandler(l.Id, false)}>{l.Isstopped ? "Start lecture" : "Open Lecture"}</button>
                         <button className="bg-red-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 border-4 hover:-translate-y-1 hover:border-red-100 hover:bg-red-400 duration-300" onClick={() => deleteLectureHandler(l.Id)}>Delete Lecture</button>
                     </div>
                 </div>

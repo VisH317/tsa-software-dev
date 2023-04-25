@@ -59,6 +59,7 @@ export default function StudentLecture() {
         ws.current = socket
 
         return () => {
+            // closeRoom()
             socket.disconnect()
         }
     }, [])

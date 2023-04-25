@@ -196,7 +196,7 @@ export default function MiniDrawer(props: DrawerProps) {
             ))}
             </List>
         </Drawer>
-        <div className="w-full h-full">
+        <div className="w-screen h-screen">
           {children}
         </div>
         </Box>

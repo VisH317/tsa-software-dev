@@ -39,7 +39,7 @@ func GetNote(c *fiber.Ctx, db *sql.DB) error {
 
 	studentEmail := c.Query("studentemail", "")
 	if studentEmail!="" {
-		rows, err := db.Query("SELECT (id, lectureID, studentemail, title, content) FROM notes WHERE lectureid=$1 AND studentemail=$2", lectureID, studentEmail)
+		rows, err := db.Query("SELECT id, lectureID, studentemail, title, content FROM notes WHERE lectureid=$1 AND studentemail=$2", lectureID, studentEmail)
 		if err!=nil {
 			fmt.Println(err)
 		}
@@ -63,7 +63,7 @@ func GetNote(c *fiber.Ctx, db *sql.DB) error {
 		return c.JSON(notes[0])
 	}
 
-	rows, err := db.Query("SELECT (id, lectureID, studentemail, title, content) FROM notes WHERE lectureid=$1", lectureID)
+	rows, err := db.Query("SELECT id, lectureID, studentemail, title, content FROM notes WHERE lectureid=$1", lectureID)
 	if err!=nil {
 		fmt.Println(err)
 	}
