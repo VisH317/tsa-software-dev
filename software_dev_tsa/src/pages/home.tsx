@@ -46,37 +46,31 @@ export default function Home() {
             </Head>
             {/* <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/> */}
             <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
-                {/* <Grid item xs={10}>
-                    <Typography sx={{fontSize: "50px"}}>
-                        Hello
-                    </Typography>
-                    TEACHER
-                    <ClassesList classes={cls.data} isTeacher/>
-                    STUDENT
-                    <ClassesList classes={scls.data} isTeacher={false}/>
-                </Grid> */}
+            <div className="w-full h-full flex flex-col">
                 <div className={`w-full pb-[5%] px-40 gap-5 bg-slate-900 flex justify-start ${montserrat.variable} font-sans`}>
                     <div className="w-[60%] mt-[15%]"><p className="text-6xl text-white font-medium">Welcome back, {us.data.username}!</p></div>
                     <div className="w-[40%] mt-[4%] ml-[20%]">
                         <Image src="/undraw_exams_re_4ios.svg" alt="epic image of school yayayayya" width={450} height={350}/>
                     </div>
                 </div>
-                <div className={`w-full ${montserrat.variable} font-sans flex flex-row bg-slate-50 min-h-screen`}>
-                    <div className="w-[60%] p-10">
-                        <div className={`w-full`}>
-                            <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Classes</p>
-                            <div className="h-8"/>
-                            <ClassesList classes={cls.data} isTeacher/>
+                    <div className={`w-full ${montserrat.variable} font-sans flex flex-row bg-slate-50 h- overflow-y-scroll`}>
+                        <div className="w-[60%] p-10">
+                            <div className={`w-full`}>
+                                <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Classes</p>
+                                <div className="h-8"/>
+                                <ClassesList classes={cls.data} isTeacher/>
+                            </div>
+                            <div className="h-16"/>
+                            <div className={`w-full`}>
+                                <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Student Classes</p>
+                                <div className="h-8"/>
+                                <ClassesList classes={scls.data} isTeacher={false}/>
+                                <div className="h-8"/>
+                            </div>
                         </div>
-                        <div className="h-16"/>
-                        <div className={`w-full`}>
-                            <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Student Classes</p>
-                            <div className="h-8"/>
-                            <ClassesList classes={scls.data}/>
+                        <div className="w-[40%] p-10">
+                            <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Assignments</p>
                         </div>
-                    </div>
-                    <div className="w-[40%] p-10">
-                        <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Assignments</p>
                     </div>
                 </div>
             </MiniDrawer>
