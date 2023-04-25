@@ -38,7 +38,6 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
         const socketID = await client.hGet(`lectures:${lectureID}`, "socketID")
         console.log("socketID: ",socketID)
 
-        console.log("available sockets: ", io.sockets)
         io.to(socketID).emit("receiveStudentQuestion", userEmail, questionPrompt, socket.id)
     })
 

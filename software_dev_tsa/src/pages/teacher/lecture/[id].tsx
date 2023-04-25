@@ -53,7 +53,7 @@ export default function TeacherLecture() {
 
         socket.on("receiveStudentQuestion", (email: Email, question: string, id: string): void => {
             const q: Question = { email, question, id }
-            setQuestions([...questions, q])
+            setQuestions(questions => [...questions, q])
         })
 
         socket.on("sendTeacherQuestionResponse", (email: Email, answer: string, question: string) => { // can refactor into a useEffect callback if this doesnt work
@@ -116,17 +116,23 @@ export default function TeacherLecture() {
     }
 
     // teacher responses to student questions
-    const submitQuestionResponse = () => {
+    const submitQuestionResponse = (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         ws.current?.emit("answerStudentQuestion", currentModal?.email, lec?.Id, answer, currentModal?.id, currentModal?.question)
         // alert("submitted answer!!")
     }
 
     const mapQuestions = () => {
+        console.log("Questions: ", questions.length)
         return questions.map(q => (
-            <div>
-                <h4>{q.email}</h4>
-                <p>Question: {q.question}</p>
-                <button onClick={() => openQuestionResponse(q)}>Respond to Question</button>
+            <div className="flex flex-row p-10 items-center w-full border-b-2 border-slate-200 gap-10 duration-150">
+                <div className="grow flex flex-col gap-5">
+                    <p className="text-lg text-slate-700 font-normal">Question: {q.question}</p>
+                    <h4 className="text-md text-slate-400 font-light">From: {q.email}</h4>
+                </div>
+                <div className="flex-none w-[30%] flex justify-center items-center">
+                    <button onClick={() => openQuestionResponse(q)} className="bg-green-500 px-3 rounded-lg py-3 text-white duration-300 hover:-translate-y-1 hover:bg-green-400 hover:shadow-lg">Respond to Question</button>
+                </div>
             </div>
         ))
     }
@@ -136,14 +142,15 @@ export default function TeacherLecture() {
     const [allTeacherQuestions, setAllTeacherQuestions] = useState<TeacherQuestion[]>([]) // need a map, adding 
     const [currentTeacherQuestion, setCurrentTeacherQuestion] = useState<TeacherQuestion>()
 
-    const createTeacherQuestion = (e: any) => {
-        e.preventDefault()
+    const createTeacherQuestion = (e?: any) => {
+        e?.preventDefault()
         if(user.state!=="hasData") return
         console.log("teacherquestion: ", teacherQuestion)
         setAllTeacherQuestions(allTeacherQuestions => [...allTeacherQuestions, teacherQuestion])
         console.log("allTeacherQuestions: ", allTeacherQuestions)
         ws.current?.emit("createTeacherQuestion", user.data.email, lec?.Id, teacherQuestion.question)
         setTeacherQuestion({ question: "", answer: [] })
+        setResponsesOpen(false)
     }
 
     const [openAnswers, setOpenAnswers] = useState<boolean>(false)
@@ -156,9 +163,11 @@ export default function TeacherLecture() {
     const mapTeacherQuestions = () => {
         console.log("mapTeacherQuestions: ", allTeacherQuestions)
         return allTeacherQuestions.map(q => (
-            <div>
-                <p>Question: {q.question}</p>
-                <button onClick={() => openAnswersModal(q)}>See Answers</button>
+            <div className="w-full border-b-2 border-slate-300">
+                <div className="p-10 hover:bg-slate-300 duration-150 rounded-md flex flex-row ">
+                    <div className="w-3/4 flex items-center"><p className="text-xl text-slate-600 font-light">{q.question}</p></div>
+                    <div className="w-1/4 flex justify-center items-center"><button className="px-4 py-3 bg-green-500 text-md text-white font-medium rounded-lg duration-300 hover:shadow-lg hover:-translate-y-1 hover:bg-green-400" onClick={() => openAnswersModal(q)}>See Answers</button></div>
+                </div>
             </div>
         ))
     }
@@ -177,44 +186,61 @@ export default function TeacherLecture() {
     const openDrawer = () => setDrawerOpen(true)
     const closeDrawer = () => setDrawerOpen(false)
 
+    // responses modal
+    const [responsesOpen, setResponsesOpen] = useState<boolean>(false)
+
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
     
     return (
         <div className={`${montserrat.variable} font-sans`}>
             <MiniDrawer open={drawerOpen} handleDrawerOpen={openDrawer} handleDrawerClose={closeDrawer}>
-                <div className="w-full h-screen relative p-10">
-                    {/* <p>{students}</p>
-                    <button onClick={closeRoom}>Close Room</button> */}
-                    <div>Questions from Students!!!!:
-                        {mapQuestions()}
-                    </div>
-                    <div>
-                        Ask a question to your students!!!!!
-                        <form onSubmit={createTeacherQuestion}>
-                            <textarea value={teacherQuestion.question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setTeacherQuestion({ question: e.target.value, answer: [] })}/>
-                            <button type="submit">Ask Question</button>
-                        </form>
-                    </div>
-
-                    <div>
-                        see answers to previous questions:  
-                        {mapTeacherQuestions()}
-                    </div>
-
-                    <div>
-                        Activity: {message}
-                    </div>
-                    <div className="bg-slate-100 w-full h-32 absolute bottom-0 left-0 flex flex-row p-10 align-center">
-                        <div className="w-1/2 flex justify-start align-center">
-                            <p className="text-4xl font-medium text-slate-700">Students in Session: {students}</p>
+                <div className="w-full h-screen relative flex flex-col">
+                    <div className="grow flex flex-row">
+                        <div className="w-[60%] h-full flex flex-col">
+                            <div className="h-[60%]">
+                                Activity: {message}
+                            </div>
+                            <div className="h-[40%] p-10 bg-slate-100">
+                                <p className="text-4xl font-medium text-slate-700">Teacher Question Responses:</p>  
+                                <div className="h-8"/>
+                                <div className="flex flex-col">
+                                    {mapTeacherQuestions()}
+                                </div>
+                            </div>
                         </div>
-                        <div className="w-1/2 flex justify-end align-center pr-[100px]">
-                            <button onClick={closeRoom}>Close Room</button>
+
+                        <div className="w-[40%] h-full bg-slate-200 p-10">
+                            <div>
+                                <p className="text-5xl font-medium">Student Questions</p>
+                                <div className="h-16"/>
+                                <div className="w-full h-full flex flex-col">
+                                    {mapQuestions()}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-none bg-slate-700 w-full h-32 flex flex-row p-10 align-center">
+                        <div className="w-1/2 flex justify-start align-center">
+                            <p className="text-4xl font-medium text-slate-200">Students in Session: {students}</p>
+                        </div>
+                        <div className="w-1/2 flex justify-end align-center pr-[100px] gap-10">
+                            <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-green-200 hover:bg-green-600 duration-300' onClick={() => setResponsesOpen(true)}>Ask Question</button>
+                            <button className="bg-red-600 px-3 py-2 text-white font-medium rounded-lg border-slate-700 hover:-translate-y-1 hover:bg-red-700 duration-300" onClick={closeRoom}>Close Lecture</button>
                         </div>
                     </div>
                 </div>
             </MiniDrawer>
+            <Modal open={responsesOpen} close={() => setResponsesOpen(false)} height="30vh">
+                <div className="p-10 flex flex-col gap-7 items-center">
+                    <p className="font-medium text-4xl text-slate-800">Ask Question</p>
+                    <form className="flex flex-col gap-5 w-[80%]">
+                        <textarea value={teacherQuestion.question} placeholder="Question:" rows={3} cols={25} onChange={(e) => setTeacherQuestion({ question: e.target.value, answer: [] })} className="p-5 border-slate-400 border-2 duration-300 hover:border-green-500"/>
+                        <hr className="w-48 h-1 mx-auto my-2 bg-slate-400 border-0 rounded dark:bg-gray-700"/>
+                        <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg hover:-translate-y-1 hover:bg-green-600 duration-300' onClick={createTeacherQuestion}>Ask</button>
+                    </form> 
+                </div>
+            </Modal>
             <Modal open={modal} close={() => setModal(false)} height="50vh">
                 <form onSubmit={submitQuestionResponse}>
                     <h4>Submit your response</h4><br/>
