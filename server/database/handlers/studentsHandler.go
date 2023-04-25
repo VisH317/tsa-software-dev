@@ -29,12 +29,11 @@ func AddStudent(c *fiber.Ctx, db *sql.DB) error {
 }
 
 func DeleteStudent(c *fiber.Ctx, db *sql.DB) error {
-	student := Student{}
-	if err := c.BodyParser(&student); err!=nil {
-		c.SendString("error")
-	}
+	student := c.Query("student")
+	class := c.Query("class")
+	fmt.Println("deleting student!! ", student, ", ", class)
 
-	_, err := db.Exec("UPDATE classes SET students = array_remove(students, $1) where id = $2", student.Stud, student.Class)
+	_, err := db.Exec("UPDATE classes SET students = array_remove(students, $1) where id = $2", student, class)
 	if err!=nil {
 		c.SendString("db error")
 	}

@@ -56,6 +56,15 @@ export const joinClass = async (cls: number, student: string | null): Promise<vo
     })
 }
 
+export const leaveClass = async (cls: number, student: string): Promise<void> => {
+    await axios.delete("/api/classes/students", {
+        params: {
+            student,
+            class: cls
+        }
+    })
+}
+
 const loadableClasses = loadable(classes)
 const loadableStudentClasses = loadable(studentClasses)
 

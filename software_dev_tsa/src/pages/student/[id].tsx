@@ -12,9 +12,12 @@ import { Lecture } from '@/lib/classData';
 import AssignmentsStudent from '@/components/ClassHome/AssignmentsStudent';
 import { montserrat } from '@/styles/fonts';
 import colors from '@/styles/colors';
+import { leaveClass } from '@/lib/classes';
+import user, { useUser } from '@/lib/user';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
+    const us = useUser()
     const router = useRouter();
     const [cls, scls] = useClasses()
     const { id } = router.query
@@ -71,6 +74,12 @@ export default function TeacherClassHome() {
         ))
     }
 
+    const leaveClassUI = async () => {
+        if(us.state!=="hasData") return
+        await leaveClass(curClass?.Id as number, us.data.email)
+        router.push("/home")
+    }
+
     if(status!=="success") return <div>loading...</div>
 
     return curClass!==null ? (
@@ -92,7 +101,7 @@ export default function TeacherClassHome() {
                                 <div className="h-10"/>
                                 <p className={`font-sans ${montserrat.variable} text-2xl font-normal text-slate-500`}>Teacher: {curClass.Teacher}</p>
                                 <div className="h-8"/>
-                                <button className={`bg-green-500 px-5 py-3 text-xl text-white font-sans ${montserrat.variable} duration-300 hover:-translate-y-1 hover:bg-green-500 border-4 border-white hover:border-green-200 rounded-lg`}>Leave Class</button>
+                                <button className={`bg-green-500 px-5 py-3 text-xl text-white font-sans ${montserrat.variable} duration-300 hover:-translate-y-1 hover:bg-green-500 border-4 border-white hover:border-green-200 rounded-lg`} onClick={leaveClassUI}>Leave Class</button>
                             </div>
                             <div className="w-[40%] p-10">
                                 <p className={`font-sans ${montserrat.variable} text-5xl font-light text-slate-700`}>Students</p>

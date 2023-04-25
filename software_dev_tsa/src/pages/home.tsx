@@ -53,7 +53,7 @@ export default function Home() {
                         <Image src="/undraw_exams_re_4ios.svg" alt="epic image of school yayayayya" width={450} height={350}/>
                     </div>
                 </div>
-                    <div className={`w-full ${montserrat.variable} font-sans flex flex-row bg-slate-50 h- overflow-y-scroll`}>
+                    <div className={`w-full ${montserrat.variable} font-sans flex flex-row bg-slate-50 h-screen overflow-y-scroll`}>
                         <div className="w-[60%] p-10">
                             <div className={`w-full`}>
                                 <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Classes</p>
