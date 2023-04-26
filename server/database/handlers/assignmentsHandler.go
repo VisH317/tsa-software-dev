@@ -153,7 +153,8 @@ func CreateAssignmentResponse(c *fiber.Ctx, db *sql.DB) error {
 
 func GetAssignmentResponses(c *fiber.Ctx, db *sql.DB) error {
 	assignment := c.Query("assignment")
-	rows, err := db.Query("SELECT assignmentid, users, content FROM assignmentresponse WHERE assignmentid=$1", assignment)
+	fmt.Println("assignment: ", assignment)
+	rows, err := db.Query("SELECT assignmentid, users, content, duedate FROM assignmentresponse WHERE assignmentid=$1", assignment)
 	if err!=nil {
 		fmt.Println(err)
 	}
@@ -166,6 +167,7 @@ func GetAssignmentResponses(c *fiber.Ctx, db *sql.DB) error {
 		var users []string
 		var date time.Time
 		rows.Scan(&asid, (*pq.StringArray)(&users), &content, &date)
+		fmt.Println("asid: ", asid)
 		r := AssignmentResponse{asid, users, content, date.Format(time.RFC3339)}
 		resp = append(resp, r)
 	}
