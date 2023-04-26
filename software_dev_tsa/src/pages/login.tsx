@@ -249,11 +249,13 @@ export default function Login() {
                   fontFamily: "'Titillium Web', sans-serif",
                   padding: "0.5rem 2rem",
                   borderRadius: "12.5px",
+                  marginBottom: "1rem",
                 }}
               >
                 Sign in with Google
               </Button>
             </ThemeProvider>
+            <Link href="/signup">Don't have an account? Sign up here</Link>
           </Grid>
           <Grid item xs={7} sx={{ backgroundColor: "#1f2937" }}>
             <Stack direction="row" spacing={2}>
