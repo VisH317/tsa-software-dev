@@ -16,11 +16,4 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
 
         io.sockets[lecture.socketID].emit("sendDisturbance")
     })
-
-    socket.on('sendTeacherMessage', async (userEmail: string, lectureID: number, message: string) => {
-        const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkTeacher(socket, userEmail, classroomID)) return
-
-        socket.to(String(lectureID)).emit("receiveTeacherMessage", message)
-    })
 }

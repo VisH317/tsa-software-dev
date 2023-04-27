@@ -205,7 +205,9 @@ export default function TeacherLecture() {
     const [teacherMessage, setTeacherMessage] = useState<string>("")
 
     const submitMessage = () => {
+        console.log("test: ", teacherMessage)
         if(user.state!=="hasData" || teacherMessage.length===0) return
+        console.log("submitting message!")
         ws.current?.emit("sendTeacherMessage", user.data.email, lec?.Id, teacherMessage)
         setTeacherMessage("")
         setTeacherMessageOpen(false)
@@ -249,7 +251,7 @@ export default function TeacherLecture() {
                             <p className="text-4xl font-medium text-slate-200">Students in Session: {students}</p>
                         </div>
                         <div className="grow w-1/2 flex pr-[100px] justify-end align-center gap-10">
-                            <button className='bg-slate-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-slate-200 hover:bg-slate-600 duration-300' onClick={() => setTeacherMessageOpen(true)}>Ask Question</button>
+                            <button className='bg-slate-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-slate-200 hover:bg-slate-600 duration-300' onClick={() => setTeacherMessageOpen(true)}>Send Message</button>
                             <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-green-200 hover:bg-green-600 duration-300' onClick={() => setResponsesOpen(true)}>Ask Question</button>
                             <button className="bg-red-600 px-3 py-2 text-white font-medium rounded-lg border-slate-700 hover:-translate-y-1 hover:bg-red-700 duration-300" onClick={closeRoom}>Close Lecture</button>
                         </div>

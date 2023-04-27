@@ -48,4 +48,12 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
 
         io.to(socketID).emit("sendStudentQuestionResponse", questionAnswer, question)
     })
+
+    socket.on('sendTeacherMessage', async (userEmail: string, lectureID: number, message: string) => {
+        const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
+        console.log("testing: ", classroomID)
+        if(!await checkTeacher(socket, userEmail, classroomID)) return
+
+        socket.to(String(lectureID)).emit("receiveTeacherMessage", message)
+    })
 }

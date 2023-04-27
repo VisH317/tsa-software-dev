@@ -9,6 +9,8 @@ import { TextField } from '@mui/material'
 import Modal from '@/components/Modal/Modal'
 import MiniDrawer from '@/components/Dashboard/Drawer'
 import { montserrat } from '@/styles/fonts'
+import { Editor } from '@tinymce/tinymce-react'
+import keys from "../../../../keys/keys"
 
 // IMPORTANT FOR LATER: add check for lecture being accessed is in the right class
 
@@ -19,6 +21,7 @@ export default function StudentLecture() {
     const [lec, setLec] = useState<Lecture>()
     const [students, setStudents] = useState<number>(0)
     const ws = useRef<Socket>()
+    const [teacherMessages, setTeacherMessages] = useState<string[]>([])
 
     // fetch list of lectures with react-query
     const { status, data, error, isFetching } = useQuery({
@@ -51,6 +54,8 @@ export default function StudentLecture() {
         socket.on("roomClosed", closeRoom)
         socket.on("sendStudentQuestionResponse", (response: string, question: string) => setAnswer(ans => [...ans, { question, answer: response }]))
 
+        socket.on("receiveTeacherMessage", (message: string) => setTeacherMessages(m => [...m, message]))
+
         socket.on("receiveTeacherQuestion", prompt => {
             console.log("oldTeacherQuestions: ", teacherQuestions)
             setTeacherQuestions(teacherQuestions => [...teacherQuestions, { prompt }])
@@ -74,10 +79,8 @@ export default function StudentLecture() {
 
     const closeRoom = () => {
         if(user.state!=="hasData") return
-        console.log("lectureID: ", lec?.Id)
-        console.log("classid: ", lec?.ClassID)
-        console.log("note: ", note)
-        ws.current?.emit("leaveRoom", user.data.email, lec?.Id, lec?.Name, note)
+        console.log("content: ", editorRef.current?.getContent())
+        ws.current?.emit("leaveRoom", user.data.email, lec?.Id, lec?.Name, editorRef.current?.getContent())
         leave()
     }
 
@@ -156,6 +159,20 @@ export default function StudentLecture() {
     const [drawer, setDrawer] = useState<boolean>(false)
     const [seeResponsesModal, setSeeResponsesModal] = useState<boolean>(false)
 
+    // teacher messages modal
+    const [teacherMessageOpen, setTeacherMessageOpen] = useState<boolean>(false)
+
+    // tinyMCE ref
+    const editorRef = useRef<any>(null);
+
+    const mapTeacherMessages = () => {
+        return teacherMessages.map(t => (
+            <div className="">
+                <p className="text-xl text-slate-500 font-light">{t}</p>
+            </div>
+        ))
+    }
+
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
     
@@ -166,7 +183,29 @@ export default function StudentLecture() {
                     <div className="grow flex flex-row">
                         <div className="w-[60%] h-full flex flex-col">
                             <div className="h-[60%]">
-                                    <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full h-full p-10 outline-none" placeholder="Notes:" style={{resize: "none"}}/>
+                                    {/* <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full h-full p-10 outline-none" placeholder="Notes:" style={{resize: "none"}}/> */}
+                                    <Editor
+                                        apiKey={keys.TinyMCE}
+                                        value={note}
+                                        onInit={(evt, editor) => editorRef.current = editor}
+                                        onChange={e => setNote(e.target.value)}
+                                        initialValue="<p>This is the initial content of the editor.</p>"
+                                        init={{
+                                        height: "100%",
+                                        menubar: false,
+                                        plugins: [
+                                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                                        ],
+                                        toolbar: 'undo redo | blocks | ' +
+                                            'bold italic forecolor | alignleft aligncenter ' +
+                                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                                            'removeformat | help',
+                                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                                        }}
+                                        
+                                    />
                             </div>
                             <div className="h-[40%] p-10 bg-slate-100">
                                 <p className="text-4xl font-medium text-slate-700">Answer to your last question: </p>
@@ -192,6 +231,7 @@ export default function StudentLecture() {
                             <p className="text-4xl font-medium text-slate-200">Students in Session: {students}</p>
                         </div>
                         <div className="w-1/2 flex justify-end align-center pr-[100px] gap-10">
+                            <button className='bg-slate-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-slate-200 hover:bg-slate-600 duration-300' onClick={() => setTeacherMessageOpen(true)}>See Messages</button>
                             <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-green-200 hover:bg-green-600 duration-300' onClick={() => setSeeResponsesModal(true)}>Ask Question</button>
                             <button className="bg-red-600 px-3 py-2 text-white font-medium rounded-lg border-slate-700 hover:-translate-y-1 hover:bg-red-700 duration-300" onClick={closeRoom}>Leave Lecture</button>
                         </div>
@@ -215,6 +255,14 @@ export default function StudentLecture() {
                         <hr className="w-48 h-1 mx-auto my-2 bg-slate-400 border-0 rounded dark:bg-gray-700"/>
                         <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg hover:-translate-y-1 hover:bg-green-600 duration-300' onClick={submitQuestion}>Ask</button>
                     </form> 
+                </div>
+            </Modal>
+            <Modal open={teacherMessageOpen} close={() => setTeacherMessageOpen(false)} height="50vh">
+                <div className="p-10 flex flex-col gap-7 items-center">
+                <p className="font-medium text-4xl text-slate-800">Teacher Messages</p>
+                <div className="flex flex-col gap-5 ml-[5%] w-[80%]">
+                    {mapTeacherMessages()}
+                </div>
                 </div>
             </Modal>
         </div>
