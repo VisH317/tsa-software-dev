@@ -83,6 +83,6 @@ export default function Home() {
     ) : <div>BRUH LOADING</div>
 }
 
-// export const getServerSideProps: GetServerSideProps = async context => {
-
-// }
+export function useAllAssignments() {
+    
+}

@@ -3,7 +3,7 @@ import { Box, Tabs, Tab, Button } from '@mui/material'
 import axios from 'axios'
 import {useRouter} from 'next/router';
 import { Classes, useClasses } from '@/lib/classes';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import TabPanel, { a11yProps } from '@/components/Tabs';
 import DashNav from '@/components/Dashboard/DashNav';
 import MiniDrawer from '@/components/Dashboard/Drawer';
@@ -12,6 +12,7 @@ import { isConstructorDeclaration } from 'typescript';
 import Assignments from '@/components/ClassHome/Assignments';
 import colors from '@/styles/colors';
 import { montserrat } from '@/styles/fonts';
+import { Email } from '@/lib/user';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
@@ -22,15 +23,20 @@ export default function TeacherClassHome() {
     console.log(id)
     const [tab, setTab] = useState(0)
 
-    const handleTab = (e: React.SyntheticEvent, newVal: number) => {
-        setTab(newVal)
-    }
+    const handleTab = (e: React.SyntheticEvent, newVal: number) => { setTab(newVal) }
 
     const handleDelete = async () => {
         if(curClass===null) return
         const res = await axios.delete("/api/classes", {params: {class: curClass.Id}})
         router.push("/home")
     }
+
+    const queryClient = useQueryClient()
+
+    const handleUserRemove = useMutation({
+        mutationFn: async (email: string) => await axios.delete("/api/classes/students", { params: { student: email, class: id } }),
+        onSuccess: () => { queryClient.invalidateQueries(['teacherClasses', id]) }
+    })
 
     useEffect(() => {
         if(cls.state==="hasData") {
@@ -68,10 +74,10 @@ export default function TeacherClassHome() {
     const mapStudents = () => {
         return curClass?.Students.map(s => (
             <div className={`px-10 py-5 border-b-2 border-slate-200 w-full flex flex-row align-center`}>
-                <div><a href={`flex-none mailto:${s}`} className={`font-sans ${montserrat.variable} font-light text-slate-600`}>{s}</a></div>
+                <div><a href={`mailto:${s}`} className={`flex-none font-sans ${montserrat.variable} font-light text-slate-600`}>{s}</a></div>
                 <div className={`grow flex flex-row justify-end gap-6 font-sans ${montserrat.variable}`}>
                     <button className="bg-slate-200 text-slate-800 font-medium px-5 py-2 text-lg rounded-lg duration-300 hover:text-white border-white border-4 hover:-translate-y-1 hover:border-slate-200 hover:bg-slate-400">Email</button>
-                    <button className="bg-red-500 text-white font-medium px-5 py-2 text-lg rounded-lg duration-300 hover:text-white border-white border-4 hover:-translate-y-1 hover:border-red-200 hover:bg-red-400">Remove</button>
+                    <button className="bg-red-500 text-white font-medium px-5 py-2 text-lg rounded-lg duration-300 hover:text-white border-white border-4 hover:-translate-y-1 hover:border-red-200 hover:bg-red-400" onClick={() => handleUserRemove.mutateAsync(s)}>Remove</button>
                 </div>
             </div>
         ))
