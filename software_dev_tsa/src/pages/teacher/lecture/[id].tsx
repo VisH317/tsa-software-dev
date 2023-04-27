@@ -200,6 +200,14 @@ export default function TeacherLecture() {
     // responses modal
     const [responsesOpen, setResponsesOpen] = useState<boolean>(false)
 
+    // teacherMessage modal
+    const [teacherMessageOpen, setTeacherMessageOpen] = useState<boolean>(false)
+    const [teacherMessage, setTeacherMessage] = useState<string>("")
+
+    const submitMessage = () => {
+        
+    }
+
     if(status==="loading") return <div>LOADING</div>
     if(status==='error') return <div>error</div>
     
@@ -267,6 +275,13 @@ export default function TeacherLecture() {
                     <h1 className="font-medium text-4xl text-slate-800">Question Answers</h1>
                     <p><span className="font-medium">Question:</span> {currentTeacherQuestion?.question}</p>
                     {mapAnswers()}
+                </div>
+            </Modal>
+            <Modal open={teacherMessageOpen} close={() => setTeacherMessageOpen(false)} height="30vh">
+                <div className="p-10 flex flex-col gap-7 items-center">
+                    <h1 className="font-medium text-4xl text-slate-800">Send a message:</h1>
+                    <textarea className='p-5 border-slate-400 border-2 duration-300 hover:border-green-500' value={teacherMessage} onChange={e => setTeacherMessage(e.target.value)}/>
+                    <button onClick={submitMessage} className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg hover:-translate-y-1 hover:bg-green-600 duration-300'>Send Message</button>
                 </div>
             </Modal>
         </div>
