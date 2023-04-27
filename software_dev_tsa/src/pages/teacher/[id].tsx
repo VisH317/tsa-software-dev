@@ -88,7 +88,7 @@ export default function TeacherClassHome() {
                             <Tab label="About" {...a11yProps(0)} sx={{width: "25%", height: "100%", borderColor: colors.main, borderWidth: 2}}/>
                             <Tab label="Lectures" {...a11yProps(1)} sx={{width: "25%"}}/>
                             <Tab label="Assignments" {...a11yProps(2)} sx={{width: "25%"}}/>
-                            <Tab label="Chat" {...a11yProps(3)} sx={{width: "25%"}}/>
+                            {/* <Tab label="Chat" {...a11yProps(3)} sx={{width: "25%"}}/> */}
                         </Tabs>
                     </div>
                     <TabPanel value={tab} index={0}>

@@ -112,7 +112,7 @@ export default function AssignmentView() {
 
     return (
         <MiniDrawer open={open} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}>
-            <div className="w-screen h-screen bg-slate-200 flex justify-center items-center">
+            <div className="w-[90%] h-screen bg-slate-200 flex justify-center items-center">
                 <div className={`p-10 font-sans ${montserrat.variable} w-screen bg-white w-1/2 rounded-lg`}>
                     <p className="text-5xl">Assignment: {assignment?.Title}</p>
                     <div className="h-8"/>

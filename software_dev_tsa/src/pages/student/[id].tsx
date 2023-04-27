@@ -14,6 +14,7 @@ import { montserrat } from '@/styles/fonts';
 import colors from '@/styles/colors';
 import { leaveClass } from '@/lib/classes';
 import user, { useUser } from '@/lib/user';
+import Chat from '@/components/Chat';
 
 export default function TeacherClassHome() {
     const client = useQueryClient()
@@ -115,6 +116,9 @@ export default function TeacherClassHome() {
                     </TabPanel>
                     <TabPanel value={tab} index={2}>
                         <AssignmentsStudent classID={curClass?.Id}/>
+                    </TabPanel>
+                    <TabPanel value={tab} index={3}>
+                        <Chat/>
                     </TabPanel>
                 </div>
             </MiniDrawer>
