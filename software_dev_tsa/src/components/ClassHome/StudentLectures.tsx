@@ -84,7 +84,7 @@ export default function StudentLecturesHome(props: LecturesProps) {
     }
 
     return (
-        <div className={`font-sans ${montserrat.variable}`}>
+        <div className={`font-sans ${montserrat.variable} p-10`}>
             <p className="text-7xl text-slate-800">Current Lectures</p>
             <div className="h-16"/>
             <div className="flex flex-row flex-wrap">

@@ -53,7 +53,7 @@ export default function AssignmentsStudent({ classID }: AssignmentsStudentProps)
     }
 
     return (
-        <div className={`h-full ${montserrat.variable} font-sans`}>
+        <div className={`h-full ${montserrat.variable} font-sans p-10`}>
             <h1 className="text-5xl text-slate-700 font-medium">Your Assignments</h1>
             <div className="h-8"/>
             <div className="flex flex-row flex-wrap">
