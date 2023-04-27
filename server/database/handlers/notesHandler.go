@@ -20,6 +20,8 @@ func CreateNote(c *fiber.Ctx, db *sql.DB) error {
 		fmt.Println(err)
 	}
 
+	db.Exec("DELETE FROM notes WHERE lectureID=$1 AND studentemail=$2", newNote.LectureID, newNote.StudentEmail)
+
 	fmt.Println("newnote: ",newNote)
 
 	_, err := db.Exec("INSERT INTO notes (lectureID, studentEmail, title, content) VALUES ($1, $2, $3, $4)", newNote.LectureID, newNote.StudentEmail, newNote.Title, newNote.Content)
