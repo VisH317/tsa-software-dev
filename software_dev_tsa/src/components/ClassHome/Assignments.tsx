@@ -86,7 +86,7 @@ export default function Assignments({ classID }: AssignmentsProps) {
                     <div className="h-4"/>
                     <p className='ml-[5%] text-slate-400 text-lg'>Max Group Size: {a.MaxGroup}</p>
                     <div className="h-2"/>
-                    <h6 className='ml-[5%] text-slate-400 text-lg'>Due: {a.Duedate}{isOverdue ? ", OVERDUE" : ""}</h6>
+                    <h6 className='ml-[5%] text-slate-400 text-lg'>Due: {a.Duedate}{isOverdue ? <p className="text-lg text-green-500 font-medium">Due date passed</p> : ""}</h6>
                     <div className="h-2"/>
                     <p className="ml-[5%] text-md">Desc: {a.Descr}</p>
                     <div className="absolute bottom-0 left-0 p-5 bg-slate-100 w-full flex flex-row justify-end gap-2 pr-10">
@@ -122,7 +122,7 @@ export default function Assignments({ classID }: AssignmentsProps) {
     }
 
     return (
-        <div className={`h-full ${montserrat.variable} font-sans`}>
+        <div className={`h-full ${montserrat.variable} font-sans p-10`}>
             <h1 className="text-5xl text-slate-700 font-medium">Your Assignments</h1>
             <div className="h-8"/>
             <div className="flex flex-row flex-wrap">

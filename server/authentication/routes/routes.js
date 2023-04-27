@@ -28,8 +28,9 @@ router.get("/auth/signup", (req, res) => res.send("bruh"))
 
 router.get('/auth/logout', (req, res) => {
     req.session.destroy()
-    req.logout()
-    res.redirect('/')
+    req.logout(err => {
+        res.redirect('/')
+    })
 })
 
 

@@ -72,7 +72,7 @@ export default function TeacherClassHome() {
     const handleDrawerClose = () => setOpen(false)
 
     const mapStudents = () => {
-        return curClass?.Students.map(s => (
+        return curClass?.Students.length!==0 ? curClass?.Students.map(s => (
             <div className={`px-10 py-5 border-b-2 border-slate-200 w-full flex flex-row align-center`}>
                 <div><a href={`mailto:${s}`} className={`flex-none font-sans ${montserrat.variable} font-light text-slate-600`}>{s}</a></div>
                 <div className={`grow flex flex-row justify-end gap-6 font-sans ${montserrat.variable}`}>
@@ -80,7 +80,7 @@ export default function TeacherClassHome() {
                     <button className="bg-red-500 text-white font-medium px-5 py-2 text-lg rounded-lg duration-300 hover:text-white border-white border-4 hover:-translate-y-1 hover:border-red-200 hover:bg-red-400" onClick={() => handleUserRemove.mutateAsync(s)}>Remove</button>
                 </div>
             </div>
-        ))
+        )) : (<div className={`w-full flex justify-center align-center h-full ${montserrat.variable} font-sans`}><p className="text-2xl text-slate-300">No students</p></div>)
     }
 
     if(status!=="success") return <div>loading...</div>

@@ -26,6 +26,7 @@ import ClassesList from './ClassesList';
 import DashNav from './DashNav';
 import { useRouter } from 'next/router';
 import { montserrat } from '@/styles/fonts';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -95,6 +96,11 @@ export default function MiniDrawer(props: DrawerProps) {
 
   const { open, handleDrawerOpen, handleDrawerClose, children } = props
 
+  const logout = async () => {
+    await axios.get("/auth/logout")
+    await router.push("/")
+  }
+
   return cls.state==="hasData" && scls.state==="hasData" ? (
     <>
         <Head>
@@ -110,8 +116,8 @@ export default function MiniDrawer(props: DrawerProps) {
             </DrawerHeader>
             <Divider />
             <List>
-            {[{ text: 'Home', path: "/home" }, { text: 'Account', path: "/home" }].map((text, index) => (
-                <ListItem key={text.text} disablePadding sx={{ display: 'block' }} onClick={() => void router.push(text.path)}>
+            {[{ text: 'Home', onClick: () => void router.push("/home") }, { text: 'Account', onClick: () => void router.push("/account") }, { text: "Logout", onClick: () => void logout() }].map((text, index) => (
+                <ListItem key={text.text} disablePadding sx={{ display: 'block' }} onClick={text.onClick}>
                 <ListItemButton
                     sx={{
                     minHeight: 48,
