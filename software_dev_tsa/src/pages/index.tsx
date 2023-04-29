@@ -36,21 +36,33 @@ export default function Home() {
         <Grid container spacing={1} sx={{backgroundColor: "#1f2937"}}>
           <Grid item xs={6} sx={{display: "flex", width: "70%", justifyContent: "center", alignItems: "center", height: "72.5vh"}}>
             <Stack sx={{width: "70%"}} spacing={3}>
-              <Typography variant="h3" sx={{fontSize: "50px", fontFamily: "'Titillium Web', sans-serif", fontWeight: "700", color: colors.main}}>WELCOME TO THIS THING</Typography>
+              <Typography variant="h3" sx={{fontSize: "50px", fontFamily: "'Titillium Web', sans-serif", fontWeight: "700", color: colors.main}}>Learnify</Typography>
               <Divider sx={{backgroundColor: colors.gray}}/>
-              <Typography variant="body1" sx={{fontFamily: "'Titillium Web', sans-serif", color: colors.light, fontWeight: "300"}}>lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet.</Typography>
+              <Typography variant="body1" sx={{fontFamily: "'Titillium Web', sans-serif", color: colors.light, fontWeight: "300"}}>
+                Welcome to Learnify! Our platform utilizes cutting-edge AI technology to provide personalized learning experiences for students. With our app, educators can efficiently identify areas where students may need additional support, leading to improved academic outcomes for all learners.
+              </Typography>
               <Stack direction="row" spacing={2}>
                 <form onSubmit={() => console.log("empty for now")} style={{display: "flex", flexDirection: "row", flexWrap: "nowrap", width: "100%"}}>
                   <TextField id="outlined-basic" label="Email:" variant="outlined" sx={{backgroundColor: "white", borderRadius: "5px", width: "150%"}}/>
-                  <Button variant="contained" sx={{backgroundColor: "#2b7a78", width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>} onClick={()=> {signUpRoute()}}>
+
+                  {/* <div className="w-64 bg-green-500 rounded-lg ml-2 font-normal flex justify-content justify-center item-middle align-middle" style={{fontFamily: "'Titillium Web', sans-serif", verticalAlign: "middle", justifyContent:"center", alignContent:"flex"}} onClick={signUpRoute}>
                     Sign Up
-                  </Button>
+                  </div> */}
+                  <button className="w-64 bg-green-500 rounded-lg ml-2 font-normal inline-block rounded px-6 pb-2 pt-2.5 text-xs uppercase leading-normal text-neutral-800" style={{fontFamily: "'Titillium Web', sans-serif", verticalAlign: "middle", justifyContent:"center", alignContent:"flex"}} onClick={signUpRoute}>
+                    Sign Up
+                  </button>
+
+                  {/* <Button variant="contained" sx={{width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>} onClick={()=> {signUpRoute()}}>
+                    Sign Up
+                  </Button> */}
                 </form>
               </Stack>
             </Stack>
           </Grid>
           <Grid item xs={6} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-            EPIC GRAPHIC POG
+          <img 
+            src="/undraw_educator_re_ju47.svg"
+            />
           </Grid>
         </Grid>
         {/* <Stack direction="column" sx={{height: "20%"}}> */}

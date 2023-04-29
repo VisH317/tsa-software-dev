@@ -56,7 +56,10 @@ export default function Signup() {
                     <Box sx={{width: "100%", backgroundColor: colors.light, flexGrow : "1", height: "20%", padding: "5% 5% 7.5% 5%"}}>
                         <Typography variant="h5" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "5%", fontWeight: "700", marginRight: "5%"}}>Terms of Service:</Typography>
                         <br/>
-                        <Typography variant="body1" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "5%", fontWeight: "300", width: "90%"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Typography>
+                        <Typography variant="body1" sx={{fontFamily: "'Titillium Web', sans-serif", marginLeft: "5%", fontWeight: "300", width: "90%"}}>
+                            Our AI classroom app is intended for educational purposes only, and we reserve the right to refuse access to any individual who violates our terms of service. 
+                            Our platform utilizes AI technology to provide personalized learning experiences for students, but we do not guarantee that every student will achieve specific academic outcomes By using our AI classroom app, you agree to these terms of service and any additional policies or guidelines posted on our site.
+                        </Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={6} sx={{backgroundColor: colors.dark}}>
