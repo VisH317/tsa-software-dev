@@ -10,6 +10,9 @@ import { Box, Grid, Typography, Divider, Stack, TextField, Button } from '@mui/m
 import PersonIcon from "@mui/icons-material/Person"
 import colors from '@/styles/colors'
 
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "../lib/buttonThemeOverride";
+
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -42,9 +45,11 @@ export default function Home() {
               <Stack direction="row" spacing={2}>
                 <form onSubmit={() => console.log("empty for now")} style={{display: "flex", flexDirection: "row", flexWrap: "nowrap", width: "100%"}}>
                   <TextField id="outlined-basic" label="Email:" variant="outlined" sx={{backgroundColor: "white", borderRadius: "5px", width: "150%"}}/>
-                  <Button variant="contained" sx={{backgroundColor: "#2b7a78", width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>} onClick={()=> {signUpRoute()}}>
-                    Sign Up
-                  </Button>
+                  <ThemeProvider theme={theme}>
+                    <Button color="teal" variant="contained" sx={{width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>} onClick={()=> {signUpRoute()}}>
+                      Sign Up
+                    </Button>
+                  </ThemeProvider>
                 </form>
               </Stack>
             </Stack>

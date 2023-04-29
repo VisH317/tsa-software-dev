@@ -28,7 +28,7 @@ export default function Home() {
 
     const [open, setOpen] = useState(false)
 
-    console.log(scls)
+    console.log(cls)
 
     const handleDrawerOpen = () => setOpen(true)
     const handleDrawerClose = () => setOpen(false)
