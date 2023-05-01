@@ -48,24 +48,11 @@ export default function Navbar() {
     <AppBar position="sticky" sx={{backgroundColor: '#1f2937', color: "#22c55e", boxShadow: "none", width: "100%"}}>
       <Container maxWidth="xl" sx={{width: "70%", }}>
         <Toolbar disableGutters variant="dense">
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
+          <img 
+           src="/logo.png"
+           style={{height:75, width:190, marginTop:10}}
+
+          />
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
