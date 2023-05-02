@@ -3,6 +3,7 @@ import "../styles/Login.module.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import Image from "next/image";
 
 import user, { loginLocal } from "../lib/user";
 import { useAtom } from "jotai";
@@ -257,11 +258,14 @@ export default function Login() {
             </ThemeProvider>
             <h5>Don't have an account? <a href="/signup">Sign up here</a></h5>
           </Grid>
-          <Grid item xs={7} sx={{ backgroundColor: "#1f2937" }}>
-            <Stack direction="row" spacing={2}>
-              <img 
-              style={{margin:150, justifyContent:"center",width:"70%", height:"70%"}}
-              src="/undraw_education_f8ru (1).svg"
+          <Grid item xs={7} sx={{ backgroundColor: "#1f2937", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Stack direction="row" spacing={2} sx={{}}>
+              <Image 
+                style={{margin:150, justifyContent:"center",width:"70%", height:"70%"}}
+                src="/undraw_education_f8ru (1).svg"
+                alt="image"
+                height={500}
+                width={100}
               />
             </Stack>
           </Grid>

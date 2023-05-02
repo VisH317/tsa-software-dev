@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 // components
 import Navbar from '@/components/Nav/navbar'
@@ -19,8 +20,8 @@ export default function Home() {
 
   const router = useRouter()
 
-  const signUpRoute = () => {
-    router.push("/signup")
+  const signUpRoute = async () => {
+    await router.push("/signup")
   }
 
   return (
@@ -37,7 +38,7 @@ export default function Home() {
       <Box sx={{height: "150vh", overflow: "auto"}}>
         <Navbar/>
         <Grid container spacing={1} sx={{backgroundColor: "#1f2937"}}>
-          <Grid item xs={6} sx={{display: "flex", width: "70%", justifyContent: "center", alignItems: "center", height: "72.5vh"}}>
+          <Grid item xs={6} sx={{display: "flex", width: "70%", justifyContent: "center", alignItems: "center", height: "100vh"}}>
             <Stack sx={{width: "70%"}} spacing={3}>
               <Typography variant="h3" sx={{fontSize: "50px", fontFamily: "'Titillium Web', sans-serif", fontWeight: "700", color: colors.main}}>Learnify</Typography>
               <Divider sx={{backgroundColor: colors.gray}}/>
@@ -51,9 +52,9 @@ export default function Home() {
                   {/* <div className="w-64 bg-green-500 rounded-lg ml-2 font-normal flex justify-content justify-center item-middle align-middle" style={{fontFamily: "'Titillium Web', sans-serif", verticalAlign: "middle", justifyContent:"center", alignContent:"flex"}} onClick={signUpRoute}>
                     Sign Up
                   </div> */}
-                  <button className="w-64 bg-green-500 rounded-lg ml-2 font-normal inline-block rounded px-6 pb-2 pt-2.5 text-xs uppercase leading-normal text-neutral-800" style={{fontFamily: "'Titillium Web', sans-serif", verticalAlign: "middle", justifyContent:"center", alignContent:"flex"}} onClick={signUpRoute}>
+                  <Link href="/signup" className="w-64 text-center bg-green-500 rounded-lg ml-2 font-medium items-center flex inline-block rounded px-6 pb-2 pt-2.5 text-lg uppercase leading-normal text-neutral-800" style={{fontFamily: "'Titillium Web', sans-serif", verticalAlign: "middle", justifyContent:"center", alignContent:"flex"}}>
                     Sign Up
-                  </button>
+                  </Link>
 
                   {/* <Button variant="contained" sx={{width: "50%", marginLeft: "5%"}} startIcon={<PersonIcon/>} onClick={()=> {signUpRoute()}}>
                     Sign Up
@@ -69,8 +70,7 @@ export default function Home() {
           </Grid>
         </Grid>
         {/* <Stack direction="column" sx={{height: "20%"}}> */}
-          <Box sx={{width: "100%", backgroundColor: colors.white, height: "30%"}}>About and Stuff</Box>
-          <Box sx={{width: "100%", backgroundColor: colors.light, height: "50%"}}>Footer</Box>
+          
         {/* </Stack> */}
       </Box>
     </>

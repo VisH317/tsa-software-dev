@@ -15,7 +15,7 @@ export default function Signup() {
     const router = useRouter()
 
     const homeHandler = () => {
-        router.push("/")
+        // router.push("/")
     }
 
     const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
