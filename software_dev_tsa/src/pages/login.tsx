@@ -102,7 +102,7 @@ export default function Login() {
               }}
               onClick={homeHandler}
             >
-              <Avatar sx={{ backgroundColor: colors.main }}>L</Avatar>
+              
               <Typography
                 variant="h5"
                 sx={{
@@ -110,7 +110,7 @@ export default function Login() {
                   marginLeft: "10px",
                 }}
               >
-                Classroom
+                
               </Typography>
             </Stack>
             <Typography
@@ -255,19 +255,14 @@ export default function Login() {
                 Sign in with Google
               </Button>
             </ThemeProvider>
-            <Link href="/signup">Don't have an account? Sign up here</Link>
+            <h5>Don't have an account? <a href="/signup">Sign up here</a></h5>
           </Grid>
           <Grid item xs={7} sx={{ backgroundColor: "#1f2937" }}>
             <Stack direction="row" spacing={2}>
-              <Avatar variant="square" sx={{ bgcolor: colors.main }}>
-                {" "}
-              </Avatar>
-              <Avatar variant="square" sx={{ bgcolor: colors.main }}>
-                {" "}
-              </Avatar>
-              <Avatar variant="square" sx={{ bgcolor: colors.main }}>
-                {" "}
-              </Avatar>
+              <img 
+              style={{margin:150, justifyContent:"center",width:"70%", height:"70%"}}
+              src="/undraw_education_f8ru (1).svg"
+              />
             </Stack>
           </Grid>
         </Grid>
