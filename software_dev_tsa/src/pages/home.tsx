@@ -80,7 +80,9 @@ export default function Home() {
                 </IconButton>
             </Tooltip>
         </>
-    ) : <div>BRUH LOADING</div>
+    ) : (<div className={`bg-slate-700 flex justify-center items-center h-screen ${montserrat.variable} font-sans`}>
+        <p className="text-2xl text-slate-100">Loading just give me one second...</p>
+    </div>)
 }
 
 export function useAllAssignments() {

@@ -202,7 +202,8 @@ export default function StudentLecture() {
                                             'bold italic forecolor | alignleft aligncenter ' +
                                             'alignright alignjustify | bullist numlist outdent indent | ' +
                                             'removeformat | help',
-                                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                                        resize: false
                                         }}
                                         
                                     />
@@ -230,7 +231,7 @@ export default function StudentLecture() {
                         <div className="w-1/2 flex justify-start align-center">
                             <p className="text-4xl font-medium text-slate-200">Students in Session: {students}</p>
                         </div>
-                        <div className="w-1/2 flex justify-end align-center pr-[100px] gap-10">
+                        <div className="w-1/2 flex justify-end align-center pr-[200px] gap-10">
                             <button className='bg-slate-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-slate-200 hover:bg-slate-600 duration-300' onClick={() => setTeacherMessageOpen(true)}>See Messages</button>
                             <button className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg border-slate-100 hover:-translate-y-1 hover:border-green-200 hover:bg-green-600 duration-300' onClick={() => setSeeResponsesModal(true)}>Ask Question</button>
                             <button className="bg-red-600 px-3 py-2 text-white font-medium rounded-lg border-slate-700 hover:-translate-y-1 hover:bg-red-700 duration-300" onClick={closeRoom}>Leave Lecture</button>

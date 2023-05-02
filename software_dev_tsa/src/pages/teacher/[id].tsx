@@ -104,6 +104,8 @@ export default function TeacherClassHome() {
                                 <div className="h-10"/>
                                 <p className={`font-sans ${montserrat.variable} text-2xl font-normal text-slate-500`}>Teacher: {curClass.Teacher}</p>
                                 <div className="h-8"/>
+                                <p className={`font-sans ${montserrat.variable} text-2xl font-normal text-slate-500`}>Id for invite: {curClass.Id}</p>
+                                <div className="h-8"/>
                                 <button className={`bg-green-500 px-5 py-3 text-xl text-white font-sans ${montserrat.variable} duration-300 hover:-translate-y-1 hover:bg-green-500 border-4 border-white hover:border-green-200 rounded-lg`} onClick={handleDelete}>Delete Class</button>
                             </div>
                             <div className="w-[40%] p-10">

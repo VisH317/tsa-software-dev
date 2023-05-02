@@ -71,7 +71,7 @@ export default function StudentLecturesHome(props: LecturesProps) {
                         <div className='p-10 flex items-center flex-col'>
                             <p className="text-4xl text-slate-700">Notes: {l.Name}</p>
                             <div className="h-6"/>
-                            <p className='text-lg text-slate-600'>{note?.Content}</p>
+                            <p className='text-lg text-slate-600'><div dangerouslySetInnerHTML={{__html: note?.Content as string}}/></p>
                         </div>
                     </Modal>
                 </div>

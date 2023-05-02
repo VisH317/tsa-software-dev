@@ -35,3 +35,4 @@ software_dev_tsa/package-lock.json
 software_dev_tsa/yarn.lock
 server/lectureMode/build
 software_dev_tsa/keys
+software_dev_tsa/.env
