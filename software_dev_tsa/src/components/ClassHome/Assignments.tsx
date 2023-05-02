@@ -133,7 +133,7 @@ export default function Assignments({ classID }: AssignmentsProps) {
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>
                 </IconButton>
             </Tooltip>  
-            <Modal open={open} close={close} height="60vh">
+            <Modal open={open} close={close} height="65vh">
                 <form className="flex flex-col gap-10 items-center justify-around p-10 relative w-full">
                     <p className="text-4xl">Create a New Assignment</p>
                     <input className="flex-none p-5 w-[80%] border-2 rounded-lg border-slate-400 hover:border-slate-500 duration-300 focus:border-green-500" type='text' placeholder="Title:" value={title} onChange={e => setTitle(e.target.value)}/>
@@ -145,7 +145,7 @@ export default function Assignments({ classID }: AssignmentsProps) {
                     <button className={`bg-green-500 px-5 py-3 text-xl text-white font-sans ${montserrat.variable} duration-300 hover:-translate-y-1 hover:bg-green-500 border-4 border-slate-100 hover:border-green-200 rounded-lg`} onClick={createAssignment}>Create Assignment</button>
                 </div>
             </Modal>
-            <Modal open={resOpen} close={() => setResOpen(false)} height="60vh">
+            <Modal open={resOpen} close={() => setResOpen(false)} height="65vh">
                 <div className="flex flex-col items-center p-10">
                     <p className='text-4xl text-slate-800'>{curAssignment?.Title}</p>
                     <div className="h-6"/>

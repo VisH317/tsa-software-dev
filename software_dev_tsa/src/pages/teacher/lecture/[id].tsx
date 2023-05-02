@@ -219,7 +219,7 @@ export default function TeacherLecture() {
     return (
         <div className={`${montserrat.variable} font-sans`}>
             <MiniDrawer open={drawerOpen} handleDrawerOpen={openDrawer} handleDrawerClose={closeDrawer}>
-                <div className="w-full h-screen relative flex flex-col">
+                <div className="w-full h-full relative flex flex-col">
                     <div className="grow flex flex-row">
                         <div className="w-[60%] h-full flex flex-col">
                             <div className="h-[60%] p-10">
@@ -258,7 +258,7 @@ export default function TeacherLecture() {
                     </div>
                 </div>
             </MiniDrawer>
-            <Modal open={responsesOpen} close={() => setResponsesOpen(false)} height="30vh">
+            <Modal open={responsesOpen} close={() => setResponsesOpen(false)} height="35vh">
                 <div className="p-10 flex flex-col gap-7 items-center">
                     <p className="font-medium text-4xl text-slate-800">Ask Question</p>
                     <form className="flex flex-col gap-5 w-[80%]">

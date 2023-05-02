@@ -88,7 +88,7 @@ export default function TeacherClassHome() {
     if (curClass!==null) return (
         <>
             <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
-                <div className="">
+                <div className="w-screen">
                     <div className="w-full pt-[2%] flex flex-row justify-center bg-slate-100">
                         <Tabs value={tab} onChange={handleTab} sx={{width: "50%", borderColor: colors.main, justifyContent: "center", display: "flex", flexDirection: "row", alignItems: "center"}} textColor="primary" indicatorColor="primary">
                             <Tab label="About" {...a11yProps(0)} sx={{width: "25%", height: "100%", borderColor: colors.main, borderWidth: 2}}/>

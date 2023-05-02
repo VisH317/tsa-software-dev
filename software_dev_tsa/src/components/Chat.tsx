@@ -46,7 +46,7 @@ export default function Chat() {
       }
 
     return (
-        <div className={`h-screen w-screen flex flex-row divide-x divide-slate-300 bg-slate-50 ${montserrat.variable} font-sans`}>
+        <div className={`h-screen w-full flex flex-row divide-x divide-slate-300 bg-slate-50 ${montserrat.variable} font-sans`}>
             <div className="w-1/2 p-10 relative">
                 <p className="text-6xl text-slate-800">Ask a question: </p>
                 <div className="h-6"/>

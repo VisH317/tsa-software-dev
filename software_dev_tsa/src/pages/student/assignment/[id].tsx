@@ -88,7 +88,7 @@ export default function AssignmentView() {
         if(Object.keys(responseQuery.data).length===0) return (
             <div className="w-full">
                 no response submitted yet
-                <textarea rows={30} cols={40} value={resp} className="w-full h-full border-slate-400 border-2 rounded-lg p-5" onChange={e => setResp(e.target.value)}/>
+                <textarea rows={25} cols={40} value={resp} className="w-full h-[80%] border-slate-400 border-2 rounded-lg p-5" onChange={e => setResp(e.target.value)}/>
                 <input type="text" placeholder="Emails of other classmates you worked with" value={team} onChange={e => setTeam(e.target.value)}/>
                 <button className="w-full border-green-500 border-2 p-5 rounded-lg text-green-500 hover:-translate-y-1 duration-150 hover:bg-green-500 hover:text-white" onClick={() => void createResponse.mutateAsync()}>Update Response</button>
             </div>
@@ -97,7 +97,7 @@ export default function AssignmentView() {
             <div className="h-full">
                 <div className="w-[100%] h-[50%] flex flex-col gap-5">
                     <p className="text-xl text-slate-700 font-medium">Update your response:</p>
-                    <textarea rows={30} cols={40} value={resp} className="w-full h-full border-slate-400 border-2 rounded-lg p-5" onChange={e => setResp(e.target.value)}/>
+                    <textarea rows={25} cols={40} value={resp} className="w-full h-[80%] border-slate-400 border-2 rounded-lg p-5" onChange={e => setResp(e.target.value)}/>
                 </div>
                 <div className="h-8"/>
                 <button className="w-full border-green-500 border-2 p-5 rounded-lg text-green-500 hover:-translate-y-1 duration-150 hover:bg-green-500 hover:text-white" onClick={() => void updateResponse.mutateAsync()}>Update Response</button>

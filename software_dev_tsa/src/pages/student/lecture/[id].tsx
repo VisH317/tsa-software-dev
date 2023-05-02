@@ -179,7 +179,7 @@ export default function StudentLecture() {
     return (
         <div className={`${montserrat.variable} font-sans`}>
             <MiniDrawer open={drawer} handleDrawerClose={() => setDrawer(false)} handleDrawerOpen={() => setDrawer(true)}>
-            <div className="w-full h-screen relative flex flex-col">
+            <div className="w-full h-full relative flex flex-col">
                     <div className="grow flex flex-row">
                         <div className="w-[60%] h-full flex flex-col">
                             <div className="h-[60%]">
@@ -247,7 +247,7 @@ export default function StudentLecture() {
                     <button onClick={submitAnswer} className='bg-green-500 px-3 py-2 text-white font-medium rounded-lg hover:-translate-y-1 hover:bg-green-600 duration-300'>Submit Answer</button>
                 </div>
             </Modal>
-            <Modal open={seeResponsesModal} close={() => setSeeResponsesModal(false)} height="30vh">
+            <Modal open={seeResponsesModal} close={() => setSeeResponsesModal(false)} height="35vh">
                 <div className="p-10 flex flex-col gap-7 items-center">
                     <p className="font-medium text-4xl text-slate-800">Have a Question?</p>
                     <form className="flex flex-col gap-5 w-[80%]">

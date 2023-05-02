@@ -81,7 +81,7 @@ export default function LecturesHome(props: LecturesProps) {
                     <AddIcon fontSize="large" sx={{fontSize: "60px",}}/>
                 </IconButton>
             </Tooltip>
-            <Modal open={open} close={() => setOpen(false)} height="30vh">
+            <Modal open={open} close={() => setOpen(false)} height="40vh">
                 <form onSubmit={createLectureHandler} className={`flex flex-col gap-5 w-full h-full justify-around items-center p-10 ${montserrat.variable} font-sans relative`}>
                     <p className="text-4xl flex-none">Create a Lecture</p>
                     <div className="h-16"/>

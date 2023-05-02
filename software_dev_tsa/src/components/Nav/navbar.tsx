@@ -48,6 +48,12 @@ export default function Navbar() {
             
       <Container maxWidth="xl" sx={{width: "70%", }}>
         <Toolbar disableGutters variant="dense">
+          <img 
+           src="/logo.png"
+           style={{height:75, width:190, marginTop:10}}
+
+          />
+
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 
             

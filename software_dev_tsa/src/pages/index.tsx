@@ -10,6 +10,9 @@ import { Box, Grid, Typography, Divider, Stack, TextField, Button } from '@mui/m
 import PersonIcon from "@mui/icons-material/Person"
 import colors from '@/styles/colors'
 
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "../lib/buttonThemeOverride";
+
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {

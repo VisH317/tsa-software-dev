@@ -62,11 +62,13 @@ func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 
 func GetClassesForStudent(c *fiber.Ctx, db *sql.DB) error {
 	email := c.Query("email")
+	fmt.Println("email: ", email)
 	rows, err := db.Query("SELECT id, nm, teacher, students FROM classes WHERE $1 = ANY(students)", email)
 	if err!=nil {
 		fmt.Println(err)
 	}
 	defer rows.Close()
+
 
 	var classes[] Classroom
 

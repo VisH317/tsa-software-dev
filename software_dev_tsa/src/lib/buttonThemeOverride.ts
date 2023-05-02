@@ -65,9 +65,9 @@ export const theme = createTheme({
       text: '#000000',
     },
     teal: {
-      primary: '#fff',
+      primary: '#FFFFFF',
       hover: '#22c55e',
-      text: '#000',
+      text: '#000000',
     }
   },
 });
