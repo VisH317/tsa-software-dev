@@ -39,7 +39,7 @@ export default function StudentLecture() {
 
     // socket handler setup
     useEffect(() => {
-        const socket = io("ws://localhost:8080", {
+        const socket = io("ws://127.0.0.1:8080", {
             transports: ["websocket"]
         })
         socket.connect()
@@ -185,7 +185,7 @@ export default function StudentLecture() {
                             <div className="h-[60%]">
                                     {/* <textarea value={note} onChange={e => setNote(e.target.value)} className="w-full h-full p-10 outline-none" placeholder="Notes:" style={{resize: "none"}}/> */}
                                     <Editor
-                                        apiKey={keys.TinyMCE}
+                                        apiKey="vbu63no753lpwixab0t5624hznkezvrgdtkzzoptgto78atb"
                                         value={note}
                                         onInit={(evt, editor) => editorRef.current = editor}
                                         onChange={e => setNote(e.target.value)}

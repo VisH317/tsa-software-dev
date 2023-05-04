@@ -38,7 +38,7 @@ export default function Home() {
       <Box sx={{height: "150vh", overflow: "auto"}}>
         <Navbar/>
         <Grid container spacing={1} sx={{backgroundColor: "#1f2937"}}>
-          <Grid item xs={6} sx={{display: "flex", width: "70%", justifyContent: "center", alignItems: "center", height: "100vh"}}>
+          <Grid item xs={6} sx={{display: "flex", width: "70%", justifyContent: "center", position: "relative", top: "125px", height: "100vh"}}>
             <Stack sx={{width: "70%"}} spacing={3}>
               <Typography variant="h3" sx={{fontSize: "50px", fontFamily: "'Titillium Web', sans-serif", fontWeight: "700", color: colors.main}}>Learnify</Typography>
               <Divider sx={{backgroundColor: colors.gray}}/>

@@ -107,7 +107,7 @@ export default function MiniDrawer(props: DrawerProps) {
             <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;700&display=swap" rel="stylesheet"/>
         </Head>
         <CssBaseline />
-        <Box sx={{display: "flex", width: "200vh", height: "100vh"}}>
+        <Box sx={{display: "flex", width: "210vh", height: "100vh"}}>
         <Drawer variant="permanent" open={open} sx={{backgroundColor: colors.light}}>
             <DrawerHeader>
             <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen} sx={{color: colors.light, textAlign: "center"}}>
@@ -202,7 +202,7 @@ export default function MiniDrawer(props: DrawerProps) {
             ))}
             </List>
         </Drawer>
-        <div className="w-full h-full p-0">
+        <div className={`w-full h-full p-0 font-sans ${montserrat.variable}`}>
           {children}
         </div>
         </Box>

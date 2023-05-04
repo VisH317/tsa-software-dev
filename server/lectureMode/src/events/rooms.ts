@@ -10,7 +10,7 @@ import axios from "axios"
 export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
     socket.on("createRoom", async (userEmail: string, lectureID: number, classroomID: number) => {
         console.log("Stuff: ", userEmail, ", ", lectureID, ", ", classroomID)
-        if(!await checkTeacher(socket, userEmail, classroomID)) return
+        // if(!await checkTeacher(socket, userEmail, classroomID)) return
 
         console.log("creating room!!")
         await client.hSet(`lectures:${lectureID}`, { teacher: userEmail, studentCount: 0, socketID: socket.id, classroomID })
@@ -24,7 +24,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     socket.on("deleteRoom", async (userEmail: string, lectureID: number) => {
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         console.log("classroomID: ", classroomID)
-        if(!await checkTeacher(socket, userEmail, classroomID)) return
+        // if(!await checkTeacher(socket, userEmail, classroomID)) return
 
         console.log("deleting room!!")
         await client.hDel(`lectures`, String(lectureID))
@@ -39,7 +39,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     socket.on("joinRoom", async(userEmail: string, lectureID: number) => {
         console.log("joiningroom!")
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkStudent(socket, userEmail, classroomID)) return
+        // if(!await checkStudent(socket, userEmail, classroomID)) return
 
         await client.hIncrBy(`lectures:${lectureID}`, 'studentCount', 1)
         const num = await client.hGet(`lectures:${lectureID}`, "studentCount") // later: show the student's emails by managing the list of people on the teacher's end and making a socket request there and back to reroute back to the person when joining or store on database and get as request
@@ -55,7 +55,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     socket.on("leaveRoom", async (userEmail: string,lectureID: number, title: string, content: string) => {
         console.log("leavingroom!!")
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkStudent(socket, userEmail, classroomID)) return
+        // if(!await checkStudent(socket, userEmail, classroomID)) return
 
         await client.hIncrBy(`lectures:${lectureID}`, 'studentCount', -1)
         const num = await client.hGet(`lectures:${lectureID}`, 'studentCount')

@@ -24,7 +24,7 @@ export default function Chat() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ prompt: "You are a tutor that always responds in the Socratic style. You *never* give the student the answer, but always try to nudge them learn to think for themselves. You should always tune your suggestion to the interest & knowledge of the student. Currently, you are helping a student with an assignment." + context + "\n" + finalPrompt + "\n AI:"  }),
+            body: JSON.stringify({ prompt: "You are a tutor that always responds in the Socratic style. You *never* give the student the answer, but always try to nudge them learn to think for themselves. You should always tune your suggestion to the interest & knowledge of the student. Currently, you are helping a student with an assignment.\n" + finalPrompt + "\n AI:"  }),
           });
     
           const data = await response.json();
@@ -55,7 +55,7 @@ export default function Chat() {
                 <button disabled={disabled} className="w-full enabled:border-green-500 disabled:border-slate-500 disabled:cursor-not-allowed border-2 py-5 text-2xl text-green-500 rounded-lg duration-300 enabled:hover:-translate-y-1 enabled:hover:shadow-lg enabled:hover:text-white enabled:hover:bg-green-500" onClick={sendChat}>Submit Question</button>
             </div>
             <div className="w-1/2 p-10">
-                {response.length===0 ? "Ask a question..." : response}
+                {response.length===0 ? "Ask a question..." : response.split("]")[1]}
             </div>
         </div>
     )

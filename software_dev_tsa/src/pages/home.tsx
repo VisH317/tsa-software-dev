@@ -46,7 +46,7 @@ export default function Home() {
             </Head>
             {/* <DashNav open={open} handleDrawerOpen={handleDrawerOpen}/> */}
             <MiniDrawer open={open} handleDrawerOpen={handleDrawerOpen} handleDrawerClose={handleDrawerClose}>
-            <div className="w-full h-full flex flex-col">
+            <div className="min-w-full h-full flex flex-col">
                 <div className={`w-full pb-[5%] px-40 gap-5 bg-slate-900 flex justify-start ${montserrat.variable} font-sans`}>
                     <div className="w-[60%] mt-[15%]"><p className="text-6xl text-white font-medium">Welcome back, {us.data.username}!</p></div>
                     <div className="w-[40%] mt-[4%] ml-[20%]">
@@ -54,7 +54,7 @@ export default function Home() {
                     </div>
                 </div>
                     <div className={`w-full ${montserrat.variable} font-sans flex flex-row bg-slate-50 h-screen overflow-y-scroll`}>
-                        <div className="w-[60%] p-10">
+                        <div className="w-[100%] p-10">
                             <div className={`w-full`}>
                                 <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Classes</p>
                                 <div className="h-8"/>
@@ -68,9 +68,9 @@ export default function Home() {
                                 <div className="h-8"/>
                             </div>
                         </div>
-                        <div className="w-[40%] p-10">
+                        {/* <div className="w-[40%] p-10">
                             <p className="font-light ml-[5%] text-slate-700 text-5xl">Your Assignments</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </MiniDrawer>

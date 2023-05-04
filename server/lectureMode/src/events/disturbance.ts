@@ -9,7 +9,7 @@ import axios from "axios"
 export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>, client): void => {
     socket.on("checkDisturbance", async(userEmail: string, lectureID: number) => {
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkStudent(socket, userEmail, classroomID)) return
+        // if(!await checkStudent(socket, userEmail, classroomID)) return
 
         const res = await client.hGetAll(`classroom:lectures${lectureID}`)
         const lecture: Lecture = convertToLectureType(res)

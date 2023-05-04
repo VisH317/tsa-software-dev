@@ -12,7 +12,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     socket.on("createTeacherQuestion", async (userEmail: string, lectureID: number, questionPrompt: string) => {
         console.log("creating teacher question!!")
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkTeacher(socket, userEmail, classroomID)) return
+        // if(!await checkTeacher(socket, userEmail, classroomID)) return
         
         socket.to(String(lectureID)).emit("receiveTeacherQuestion", questionPrompt)
         //io.sockets[lecture.socketID].emit("sendTeacherQuestion", questionPrompt)
@@ -22,7 +22,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     socket.on("answerTeacherQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, question: string) => {
         console.log("answering teacher question!")
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkStudent(socket, userEmail, classroomID)) return
+        // if(!await checkStudent(socket, userEmail, classroomID)) return
 
         const socketID = await client.hGet(`lectures:${lectureID}`, "socketID")
         
@@ -33,7 +33,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     socket.on("createStudentQuestion", async (userEmail: string, lectureID: number, questionPrompt: string) => {
         console.log("creating student question")
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkStudent(socket, userEmail, classroomID)) return
+        // if(!await checkStudent(socket, userEmail, classroomID)) return
 
         const socketID = await client.hGet(`lectures:${lectureID}`, "socketID")
         console.log("socketID: ",socketID)
@@ -44,7 +44,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
 
     socket.on("answerStudentQuestion", async (userEmail: string, lectureID: number, questionAnswer: string, socketID: string, question: string) => {
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
-        if(!await checkTeacher(socket, userEmail, classroomID)) return
+        // if(!await checkTeacher(socket, userEmail, classroomID)) return
 
         io.to(socketID).emit("sendStudentQuestionResponse", questionAnswer, question)
     })
@@ -52,7 +52,7 @@ export default (io: Server<ClientToServerEvents, ServerToClientEvents, InterServ
     socket.on('sendTeacherMessage', async (userEmail: string, lectureID: number, message: string) => {
         const classroomID = await client.hGet(`lectures:${lectureID}`, "classroomID")
         console.log("testing: ", classroomID)
-        if(!await checkTeacher(socket, userEmail, classroomID)) return
+        // if(!await checkTeacher(socket, userEmail, classroomID)) return
 
         socket.to(String(lectureID)).emit("receiveTeacherMessage", message)
     })

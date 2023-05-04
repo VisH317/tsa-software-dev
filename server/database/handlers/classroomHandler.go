@@ -41,6 +41,8 @@ func GetClasses(c *fiber.Ctx, db *sql.DB) error {
 	}
 	defer rows.Close()
 
+	fmt.Println("test")
+
 	var classes []Classroom
 
 	for rows.Next() {

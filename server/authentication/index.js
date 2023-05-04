@@ -51,7 +51,7 @@ require('./services/passportLocal')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(session({
-    store: new redisStore({ client: redisClient }),
+    // store: new redisStore({ client: redisClient }),
     secret: keys.JWTSecret,
     resave: false,
     saveUninitialized: false,

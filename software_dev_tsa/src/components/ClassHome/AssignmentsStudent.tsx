@@ -36,7 +36,7 @@ export default function AssignmentsStudent({ classID }: AssignmentsStudentProps)
             const isOverdue = new Date(Date.parse(a.Duedate)).getTime() < Date.now() ? true : false
             console.log("id: ", a.Id)
             return (
-                <div className="p-5 w-[17%] aspect-[4/3.5] rounded-lg border-slate-100 border-2 relative overflow-hidden hover:shadow-lg duration-150">
+                <div className="p-5 w-[25%] aspect-[4/3.5] rounded-lg border-slate-100 border-2 relative overflow-hidden hover:shadow-lg duration-150">
                     <p className="ml-[5%] text-5xl text-slate-700 font-normal">{a.Title}</p>
                     <div className="h-4"/>
                     <p className='ml-[5%] text-slate-400 text-lg'>Max Group Size: {a.MaxGroup}</p>

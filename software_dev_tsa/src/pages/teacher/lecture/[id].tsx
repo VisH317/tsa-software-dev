@@ -40,9 +40,12 @@ export default function TeacherLecture() {
     })
 
     useEffect(() => {
+        console.log("test")
+        if(!lec) return
         const socket = io("ws://localhost:8080", {
             transports: ["websocket"]
         })
+        console.log("socket: ", socket)
 
         socket.on("connect_error", (err) => {
             console.log(`connect_error due to ${err.message}`);
